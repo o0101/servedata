@@ -1,0 +1,30 @@
+{
+  "name": "servedata",
+  "version": "1.0.0",
+  "description": "server for data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node-dev index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cris691/servedata.git"
+  },
+  "keywords": [
+    "server",
+    "data"
+  ],
+  "author": "@dosy",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cris691/servedata/issues"
+  },
+  "homepage": "https://github.com/cris691/servedata#readme",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "node-dev": "^4.0.0"
+  }
+}
