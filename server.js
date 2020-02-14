@@ -6,9 +6,27 @@ const DEFAULT_PORT = 8667;
 const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
 const JSON_ERROR = msg => JSON.stringify({error:msg});
 const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
+
+const Y = (req, res) => req.path + ' ' + req.route.path;
+
+const DISPATCH = {
+  'GET /form/table/:table/:id/with/:view': Y,
+  'GET /form/list/table/:table/with/:view/': Y,
+  'GET /form/list/table/:table/with/:view/order/:props': Y,
+  'GET /form/search/table/:table/with/:view': Y,
+  'GET /form/query/:query/with/:view': Y,
+  'POST /form/table/:table/new/with/:view': Y,
+  'POST /form/table/:table/:id/with/:view': Y,
+  'POST /form/action/:action/with/:view': Y,
+};
+
 const app = express();
 
-const X = (req, res) => res.end(req.path);
+const X = (req, res) => {
+  const way = `${req.method} ${req.route.path}`;
+  const result = DISPATCH[way](req, res);
+  res.end(result);
+}
 
 app.use(express.static(path.resolve(__dirname, 'public')));
 
@@ -39,12 +57,12 @@ app.use(express.static(path.resolve(__dirname, 'public')));
     app.get('/form/list/table/:table/with/:view/order/:props', X);
     app.get('/form/search/table/:table/with/:view', X);
   // create
-  app.post('/form/table/:table/new', X);
+  app.post('/form/table/:table/new/with/:view', X);
   // update
-  app.post('/form/table/:table/:id', X);
+  app.post('/form/table/:table/:id/with/:view', X);
   // stored procedure
   app.get('/form/query/:query/with/:view', X);
-  app.post('/form/action/:action', X);
+  app.post('/form/action/:action/with/:view', X);
 
 app.get('*', (req, res, next) => {
   next(new Error("404 not found"));
