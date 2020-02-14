@@ -1,0 +1,44 @@
+<title>ServeData Console</title>
+<style>
+  form {
+    display: table;
+    margin: 0 auto;
+  }
+</style>
+<form target=get_response method=GET>
+  <fieldset>
+    <legend>Get Table Record</legend>
+    <button
+      formaction=/form/table/pencil/15/with/pencil
+    >Get</button>
+  </fieldset>
+  <fieldset>
+    <legend>Get Table Record List</legend>
+    <button
+      formaction=/form/list/table/pencil/with/pencil 
+    >Get</button>
+  </fieldset>
+  <fieldset>
+    <legend>Get Table Record List</legend>
+    <button
+      formaction=/form/list/table/pencil/with/pencil/order/width
+    >Get</button>
+  </fieldset>
+  <fieldset>
+    <legend>Get Table Record Search</legend>
+    <button
+      formaction=/form/search/table/pencil/with/pencil 
+    >Get</button>
+  </fieldset>
+  <fieldset>
+    <legend>Get Table Record Saved Query</legend>
+    <button
+      formaction=/form/query/demopencilquery/with/pencil 
+    >Get</button>
+  </fieldset>
+  <fieldset>
+    <legend>Get Response Frame</legend>
+    <iframe src=about:blank name=get_response></iframe>
+  </fieldset>
+</form>
+
