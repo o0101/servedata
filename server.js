@@ -9,7 +9,10 @@ const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_POR
 const JSON_ERROR = msg => JSON.stringify({error:msg});
 const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
 const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
-const ROOT = path.resolve(APP_ROOT, "..", "db-servedata");
+const ROOT = path.resolve(APP_ROOT, "db-servedata");
+const ACTIONS = process.env.SD_ACTIONS || path.resolve(ROOT, "_actions");
+const QUERIES = process.env.SD_QUERIES || path.resolve(ROOT, "_queries");
+
 const Tables = new Map();
 
 const Y = (req, res) => req.path + ' ' + req.route.path;
@@ -30,13 +33,13 @@ export default function servedata(opts = {}) {
   const app = express();
   app.use(bodyParser.urlencoded({extended:true}));
 
-  const X = (req, res) => {
+  const X = async (req, res) => {
     const way = `${req.method} ${req.route.path}`;
     const data = {...req.params, item: req.body, _search: req.query};
     if ( data.table ) {
       data.table = _getTable(data.table);
     }
-    const result = DISPATCH[way](data);
+    const result = await DISPATCH[way](data);
     res.end(result);
   }
 
@@ -130,11 +133,27 @@ function getList({table}) {
 function getListSorted({table, prop}) {
   const list = table.getAll();
   list.sort((a,b) => {
-    if ( a[prop] < b[prop] ) {
+    let X,Y;
+    try {
+      X = guardNumber(a[prop]);
+      Y = guardNumber(b[prop]);
+    } catch (e) {
+      X = a[prop];
+      Y = b[prop];
+    }
+    if ( X < Y ) {
       return -1;
     } else return 1;
   });
   return list;
+}
+
+function guardNumber(x) {
+  const parsed = Number(x);
+  if ( Number.isNaN(parsed) ) {
+    throw new Error(`Value ${x} is not a number.`);
+  }
+  return parsed;
 }
 
 function getSearchResult({table, _search}) {
@@ -162,13 +181,17 @@ function setItem({table, id, item}) {
   return item;
 }
 
-function runStoredAction() {
-  throw new Error("Not implemented");
+async function runStoredAction({action, item}) {
+  const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
+  const {default:Action} = await import(actionFileName);
+  const result = Action(item, {getTable, newItem});
+  //console.log(Action, result, item);
+  return result;
 }
 
 function withView(f) {
-  return (...args) => {
-    const raw = f(...args);
+  return async (...args) => {
+    const raw = await f(...args);
     const tempJsonView = JSON.stringify(raw);
     return tempJsonView;
   };
