@@ -11,8 +11,6 @@ const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
 const ROOT = path.resolve(__dirname, "..", "db-servedata");
 const Tables = new Map();
 
-config({root:ROOT});
-
 const Y = (req, res) => req.path + ' ' + req.route.path;
 
 const DISPATCH = {
@@ -26,67 +24,70 @@ const DISPATCH = {
   'POST /form/action/:action/with/:view': withView(runStoredAction),
 };
 
-const app = express();
-app.use(bodyParser.urlencoded({extended:true}));
+export default function servedata() {
+  config({root:ROOT});
+  const app = express();
+  app.use(bodyParser.urlencoded({extended:true}));
 
-const X = (req, res) => {
-  const way = `${req.method} ${req.route.path}`;
-  const data = {...req.params, item: req.body, _search: req.query};
-  if ( data.table ) {
-    data.table = _getTable(data.table);
+  const X = (req, res) => {
+    const way = `${req.method} ${req.route.path}`;
+    const data = {...req.params, item: req.body, _search: req.query};
+    if ( data.table ) {
+      data.table = _getTable(data.table);
+    }
+    const result = DISPATCH[way](data);
+    res.end(result);
   }
-  const result = DISPATCH[way](data);
-  res.end(result);
+
+  app.use(express.static(path.resolve(__dirname, 'public')));
+
+  // views are in './views/:view.js'
+  // queries are in './queries/:query.js'
+  // actions are in './actions/:action.js'
+
+  // JSON
+    // getters
+    app.get('/json/table/:table/:id', X);
+    app.get('/json/list/table/:table/:id/sort/:prop', X);
+    app.get('/json/search/table/:table/:id/sort/:prop', X);
+    // auto id
+    app.post('/json/table/:table', X);    
+    // given id
+    app.put('/json/table/:table/:id', X); 
+    // update 
+    app.patch('/json/table/:table/:id', X); 
+    // stored procedures
+    app.post('/json/action/:action', X);
+    app.get('/json/query/:query', X);
+
+  // FORM
+    // with is render (from ./views/:view.js)
+    // getters 
+      app.get('/form/table/:table/:id/with/:view', X);
+      app.get('/form/list/table/:table/with/:view/', X);
+      app.get('/form/list/table/:table/with/:view/sort/:prop', X);
+      app.get('/form/search/table/:table/with/:view', X);
+    // create
+    app.post('/form/table/:table/new/with/:view', X);
+    // update
+    app.post('/form/table/:table/:id/with/:view', X);
+    // stored procedure
+    app.get('/form/query/:query/with/:view', X);
+    app.post('/form/action/:action/with/:view', X);
+
+  app.get('*', (req, res, next) => {
+    next(new Error("404 not found"));
+  });
+
+  app.use(catchError);
+
+  app.listen(PORT, err => {
+    if ( err ) {
+      throw err;
+    }
+    Log({serverUp:{port:PORT, up:Date.now()}});
+  });
 }
-
-app.use(express.static(path.resolve(__dirname, 'public')));
-
-// views are in './views/:view.js'
-// queries are in './queries/:query.js'
-// actions are in './actions/:action.js'
-
-// JSON
-  // getters
-  app.get('/json/table/:table/:id', X);
-  app.get('/json/list/table/:table/:id/sort/:prop', X);
-  app.get('/json/search/table/:table/:id/sort/:prop', X);
-  // auto id
-  app.post('/json/table/:table', X);    
-  // given id
-  app.put('/json/table/:table/:id', X); 
-  // update 
-  app.patch('/json/table/:table/:id', X); 
-  // stored procedures
-  app.post('/json/action/:action', X);
-  app.get('/json/query/:query', X);
-
-// FORM
-  // with is render (from ./views/:view.js)
-  // getters 
-    app.get('/form/table/:table/:id/with/:view', X);
-    app.get('/form/list/table/:table/with/:view/', X);
-    app.get('/form/list/table/:table/with/:view/sort/:prop', X);
-    app.get('/form/search/table/:table/with/:view', X);
-  // create
-  app.post('/form/table/:table/new/with/:view', X);
-  // update
-  app.post('/form/table/:table/:id/with/:view', X);
-  // stored procedure
-  app.get('/form/query/:query/with/:view', X);
-  app.post('/form/action/:action/with/:view', X);
-
-app.get('*', (req, res, next) => {
-  next(new Error("404 not found"));
-});
-
-app.use(catchError);
-
-app.listen(PORT, err => {
-  if ( err ) {
-    throw err;
-  }
-  Log({serverUp:{port:PORT, up:Date.now()}});
-});
 
 function catchError(err, req, res, next) {
   const errExists = !! err;
