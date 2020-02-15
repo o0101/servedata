@@ -8,7 +8,7 @@ const DEFAULT_PORT = 8667;
 const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
 const JSON_ERROR = msg => JSON.stringify({error:msg});
 const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
-const ROOT = path.resolve(__dirname, "serverdata-db");
+const ROOT = path.resolve(__dirname, "..", "db-servedata");
 const Tables = new Map();
 
 config({root:ROOT});
