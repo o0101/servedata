@@ -25,7 +25,7 @@ const DISPATCH = {
   'POST /form/action/:action/with/:view': withView(runStoredAction),
 };
 
-export default function servedata() {
+export default function servedata(opts = {}) {
   config({root:ROOT});
   const app = express();
   app.use(bodyParser.urlencoded({extended:true}));
@@ -40,7 +40,9 @@ export default function servedata() {
     res.end(result);
   }
 
-  app.use(express.static(path.resolve(__dirname, 'public')));
+  if ( opts.dev_console ) {
+    app.use(express.static(path.resolve(__dirname, 'public')));
+  }
 
   // views are in './views/:view.js'
   // queries are in './queries/:query.js'

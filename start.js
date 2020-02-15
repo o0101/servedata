@@ -1,3 +1,3 @@
 import servedata from './index.js';
 
-servedata();
+servedata({dev_console:true});
