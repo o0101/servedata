@@ -10,8 +10,8 @@ const JSON_ERROR = msg => JSON.stringify({error:msg});
 const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
 const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
 const ROOT = path.resolve(APP_ROOT, "db-servedata");
-const ACTIONS = process.env.SD_ACTIONS || path.resolve(ROOT, "_actions");
-const QUERIES = process.env.SD_QUERIES || path.resolve(ROOT, "_queries");
+const ACTIONS = process.env.SD_ACTIONS || path.resolve(ROOT, "..", "_actions");
+const QUERIES = process.env.SD_QUERIES || path.resolve(ROOT, "..", "_queries");
 
 const Tables = new Map();
 
