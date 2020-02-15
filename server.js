@@ -191,6 +191,7 @@ async function runStoredAction({action, item}) {
     const result = Action(item, {getTable, newItem});
     return result;
   } catch(e) {
+    console.warn(e);
     throw new Error(`Action ${action} is not defined in ${actionFileName}`);
   }
 }
