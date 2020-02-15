@@ -19,13 +19,14 @@
     >Get</button>
   </fieldset>
   <fieldset>
-    <legend>Get Table Record List</legend>
+    <legend>Get Table Record List Sorted</legend>
     <button
-      formaction=/form/list/table/pencil/with/pencil/order/width
+      formaction=/form/list/table/pencil/with/pencil/sort/color
     >Get</button>
   </fieldset>
   <fieldset>
     <legend>Get Table Record Search</legend>
+    <input name=keywords type=search placeholder="search keywords">
     <button
       formaction=/form/search/table/pencil/with/pencil 
     >Get</button>
@@ -39,6 +40,42 @@
   <fieldset>
     <legend>Get Response Frame</legend>
     <iframe src=about:blank name=get_response></iframe>
+  </fieldset>
+</form>
+<form target=post_response method=POST>
+  <fieldset>
+    <legend>Post Table Record</legend>
+    <input type=hidden name=type value=pencil>
+    <input type=hidden name=width value=40>
+    <input type=hidden name=color value=aqaumarine>
+    <button
+      formaction=/form/table/pencil/15/with/pencil
+    >Post</button>
+  </fieldset>
+</form>
+<form target=post_response method=POST>
+  <fieldset>
+    <legend>Post New Table Record</legend>
+    <input type=hidden name=type value=pencil>
+    <input type=hidden name=width value=100>
+    <input type=hidden name=color value=blue>
+    <button
+      formaction=/form/table/pencil/new/with/pencil
+    >Post</button>
+  </fieldset>
+</form>
+<form target=post_response method=POST>
+  <fieldset>
+    <legend>Post Action</legend>
+    <button
+      formaction=/form/action/newbox/with/action_result 
+    >Post</button>
+  </fieldset>
+</form>
+<form target=post_response method=POST>
+  <fieldset>
+    <legend>Post Response Frame</legend>
+    <iframe src=about:blank name=post_response></iframe>
   </fieldset>
 </form>
 
