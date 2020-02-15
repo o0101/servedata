@@ -33,14 +33,18 @@ export default function servedata(opts = {}) {
   const app = express();
   app.use(bodyParser.urlencoded({extended:true}));
 
-  const X = async (req, res) => {
+  const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
     const data = {...req.params, item: req.body, _search: req.query};
     if ( data.table ) {
       data.table = _getTable(data.table);
     }
-    const result = await DISPATCH[way](data);
-    res.end(result);
+    try {
+      const result = await DISPATCH[way](data);
+      res.end(result);
+    } catch(e) {
+      next(e);
+    }
   }
 
   if ( opts.dev_console ) {
@@ -175,7 +179,6 @@ function newItem({table, item}) {
 }
 
 function setItem({table, id, item}) {
-  console.log(item);
   item._id = id;
   table.put(id, item);
   return item;
@@ -183,10 +186,13 @@ function setItem({table, id, item}) {
 
 async function runStoredAction({action, item}) {
   const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
-  const {default:Action} = await import(actionFileName);
-  const result = Action(item, {getTable, newItem});
-  //console.log(Action, result, item);
-  return result;
+  try {
+    const {default:Action} = await import(actionFileName);
+    const result = Action(item, {getTable, newItem});
+    return result;
+  } catch(e) {
+    throw new Error(`Action ${action} is not defined in ${actionFileName}`);
+  }
 }
 
 function withView(f) {
