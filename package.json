@@ -1,6 +1,6 @@
 {
   "name": "servedata",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
