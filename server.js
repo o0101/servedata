@@ -42,7 +42,7 @@ export default function servedata(opts = {}) {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
   });
-  app.use(express.static(STATIC, {extensions:['html'], fallthrough:false}));
+  app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
 
   const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
