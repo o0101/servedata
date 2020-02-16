@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import helmet from 'helmet';
 import {config, getTable} from 'stubdb';
 
 const CONSOLE_ERROR = true;
@@ -33,6 +34,7 @@ export default function servedata(opts = {}) {
   const app = express();
 
   app.set('etag', false);
+  app.use(helmet());
   app.use(express.urlencoded({extended:true}));
   app.use((req,res,next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -122,10 +124,13 @@ function catchError(err, req, res, next) {
   };
   Log(Err, CONSOLE_ERROR);
   if ( req.path.startsWith('/form') ) {
+    res.type('html');
     res.end(HTML_ERROR(msg));
   } else if ( req.path.startsWith('/json') ) {
+    res.type('json');
     res.end(JSON_ERROR(msg));
   } else {
+    res.type('text');
     res.end("Error " + msg);
   }
 }
