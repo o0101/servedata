@@ -34,13 +34,15 @@ export default function servedata(opts = {}) {
   config({root:ROOT});
   const app = express();
 
-  app.set('etag', false);
   app.use(helmet());
+
+  app.set('etag', false);
   app.use(express.urlencoded({extended:true}));
   app.use((req,res,next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
   });
+  app.use(express.static(STATIC, {extensions:['html'], fallthrough:false}));
 
   const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
@@ -59,10 +61,6 @@ export default function servedata(opts = {}) {
     } catch(e) {
       next(e);
     }
-  }
-
-  if ( opts.dev_console ) {
-    app.use(express.static(STATIC));
   }
 
   // views are in './views/:view.js'
