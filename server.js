@@ -4,15 +4,16 @@ import helmet from 'helmet';
 import {config, getTable} from 'stubdb';
 
 const CONSOLE_ERROR = true;
-const DEFAULT_PORT = 8667;
+const DEFAULT_PORT = 8080;
 const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
 const JSON_ERROR = msg => JSON.stringify({error:msg});
 const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
 const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
 const ROOT = path.resolve(APP_ROOT, "db-servedata");
-const ACTIONS = process.env.SD_ACTIONS || path.resolve(ROOT, "..", "_actions");
-const QUERIES = process.env.SD_QUERIES || path.resolve(ROOT, "..", "_queries");
-const  VIEWS = process.env.SD_VIEWS || path.resolve(ROOT, "..", "_views");
+const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
+const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
+const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
+const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
 
 const Tables = new Map();
 
@@ -61,7 +62,7 @@ export default function servedata(opts = {}) {
   }
 
   if ( opts.dev_console ) {
-    app.use(express.static(path.resolve(__dirname, 'public')));
+    app.use(express.static(STATIC));
   }
 
   // views are in './views/:view.js'
