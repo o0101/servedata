@@ -1,6 +1,5 @@
 import path from 'path';
 import express from 'express';
-import bodyParser from 'body-parser';
 import {config, getTable} from 'stubdb';
 
 const CONSOLE_ERROR = true;
@@ -12,6 +11,7 @@ const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
 const ROOT = path.resolve(APP_ROOT, "db-servedata");
 const ACTIONS = process.env.SD_ACTIONS || path.resolve(ROOT, "..", "_actions");
 const QUERIES = process.env.SD_QUERIES || path.resolve(ROOT, "..", "_queries");
+const  VIEWS = process.env.SD_VIEWS || path.resolve(ROOT, "..", "_views");
 
 const Tables = new Map();
 
@@ -31,7 +31,13 @@ const DISPATCH = {
 export default function servedata(opts = {}) {
   config({root:ROOT});
   const app = express();
-  app.use(bodyParser.urlencoded({extended:true}));
+
+  app.set('etag', false);
+  app.use(express.urlencoded({extended:true}));
+  app.use((req,res,next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+  });
 
   const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
@@ -41,6 +47,11 @@ export default function servedata(opts = {}) {
     }
     try {
       const result = await DISPATCH[way](data);
+      if ( req.path.startsWith('/form')) {
+        res.type('html');
+      } else if ( req.path.startsWith('/json')) {
+        res.type('json');
+      }
       res.end(result);
     } catch(e) {
       next(e);
@@ -199,8 +210,20 @@ async function runStoredAction({action, item}) {
 function withView(f) {
   return async (...args) => {
     const raw = await f(...args);
+    const view = args[0].view;
+    let viewFileName, View;
+    //try {
+      viewFileName = path.resolve(VIEWS, `${args[0].view}.js`);
+      ({default:View} = await import(viewFileName));
+    //} catch(e) {
+    //  console.warn(`View ${view} is not in file ${viewFileName}`);
+    //}
+    /**
     const tempJsonView = JSON.stringify(raw);
     return tempJsonView;
+    **/
+    const renderedView = View(raw);
+    return renderedView;
   };
 }
 

@@ -15,22 +15,26 @@
   <fieldset>
     <legend>Get Table Record List</legend>
     <button
-      formaction=/form/list/table/pencil/with/pencil 
+      formaction=/form/list/table/pencil/with/pencil_list
     >Get</button>
   </fieldset>
   <fieldset>
     <legend>Get Table Record List Sorted</legend>
     <button
-      formaction=/form/list/table/pencil/with/pencil/sort/color
+      formaction=/form/list/table/pencil/with/pencil_list/sort/color
     >Get</button>
   </fieldset>
+</form>
+<form target=get_response method=GET>
   <fieldset>
     <legend>Get Table Record Search</legend>
     <input name=keywords type=search placeholder="search keywords">
     <button
-      formaction=/form/search/table/pencil/with/pencil 
+      formaction=/form/search/table/pencil/with/pencil_list
     >Get</button>
   </fieldset>
+</form>
+<form target=get_response method=GET>
   <fieldset>
     <legend>Get Table Record Saved Query</legend>
     <button
@@ -69,7 +73,7 @@
     <legend>Post Action</legend>
     <input type=hidden name=size value=20>
     <button
-      formaction=/form/action/newbox/with/action_result 
+      formaction=/form/action/newbox/with/newbox 
     >Post</button>
   </fieldset>
 </form>
