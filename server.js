@@ -188,13 +188,20 @@ function getStoredQueryResult() {
 
 function newItem({table, item}) {
   const id = nextKey();
-  table.put(id, item);
   item._id = id;
+  table.put(id, item);
   return item;
 }
 
 function setItem({table, id, item}) {
   item._id = id;
+  let existingItem;
+  try {
+    existingItem = table.get(id);
+  } catch(e) {
+    existingItem = {};
+  }
+  item = Object.assign(existingItem, item);
   table.put(id, item);
   return item;
 }
