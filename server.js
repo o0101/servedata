@@ -1,6 +1,9 @@
 import path from 'path';
-import express from 'express';
+
 import helmet from 'helmet';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+
 import {config, getTable} from 'stubdb';
 
 const CONSOLE_ERROR = true;
@@ -37,11 +40,16 @@ export default function servedata(opts = {}) {
   app.use(helmet());
 
   app.set('etag', false);
-  app.use(express.urlencoded({extended:true}));
+
   app.use((req,res,next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
   });
+
+  app.use(cookieParser());
+
+  app.use(express.urlencoded({extended:true}));
+
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
 
   const X = async (req, res, next) => {

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/cris691/servedata#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
