@@ -50,12 +50,17 @@ export default function servedata(opts = {}) {
     if ( data.table ) {
       data.table = _getTable(data.table);
     }
+    let result
     try {
-      const result = await DISPATCH[way](data);
       if ( req.path.startsWith('/form')) {
         res.type('html');
       } else if ( req.path.startsWith('/json')) {
         res.type('json');
+      }
+      if ( req.path.includes('/action/') ) {
+        result = await DISPATCH[way](data, req, res);
+      } else {
+        result = await DISPATCH[way](data);
       }
       res.end(result);
     } catch(e) {
@@ -206,11 +211,11 @@ function setItem({table, id, item}) {
   return item;
 }
 
-async function runStoredAction({action, item}) {
+async function runStoredAction({action, item}, req, res) {
   const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
   try {
     const {default:Action} = await import(actionFileName);
-    const result = Action(item, {getTable, newItem, getSearchResult});
+    const result = Action(item, {getTable, newItem, getSearchResult}, req, res);
     return result;
   } catch(e) {
     console.warn(e);
