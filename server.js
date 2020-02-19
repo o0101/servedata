@@ -40,6 +40,7 @@ export default function servedata(opts = {}) {
   app.use(helmet());
 
   app.set('etag', false);
+  app.set('trust proxy', true);
 
   app.use((req,res,next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -132,7 +133,14 @@ function catchError(err, req, res, next) {
     err,
     stack,
     msg,
-    path: req.path
+    path: req.path,
+    ip: {
+      rip: req.ip,
+      rips: req.ips,
+      rcra: req.connection.remoteAddress,
+      rxff: req.headers['x-forwarded-for'],
+      rxrip: req.headers['x-real-ip']
+    }
   };
   Log(Err, CONSOLE_ERROR);
   if ( req.path.startsWith('/form') ) {
