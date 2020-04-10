@@ -19,6 +19,8 @@ const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : 
 const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
 const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
 const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8');
+const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
+const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
 
 const Tables = new Map();
 
@@ -56,6 +58,7 @@ export default function servedata(opts = {}) {
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
 
   app.use(getSession);
+  app.use(getPermissions);
 
   const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
@@ -132,8 +135,74 @@ export default function servedata(opts = {}) {
 function getSession(req, res, next) {
   const {[COOKIE_NAME]:cookie} = req.cookies;
   const {Authorization:authHeader} = req.headers;
-  console.log("Cookies", cookie); 
-  console.log("Auth Header", authHeader);
+  const noSessionClaim = ! cookie && ! authHeader;
+  const redundantClaim = cookie && authHeader;
+
+  let token;
+  let session;
+
+  let tokenIsInvalid;
+  let sessionIsExpired;
+  
+  switch(true) {
+    case noSessionClaim:
+      console.warn("No session claim");
+      break;
+    case redundantClaim:
+      console.warn("Both cookie and header used for session. Invalid.");
+      res.abort(400);
+      break;
+    case cookie:
+      token = cookie;
+      break;
+    case authHeader: 
+      token = authHeader;
+      token = token.replace("Bearer ", "");
+      break;
+    default:
+      // No need as the 4 possible cases are above
+      throw "This should never happen"
+  }
+
+  if ( token ) {
+    const sessions = _getTable(SESSION_TABLE);
+
+    try {
+      session = sessions.get(token);
+    } catch(e) {
+      console.warn({msg:"Token is invalid because there is no session associated with it", token, error:e});
+      tokenIsInvalid = true;
+    }
+
+    if ( ! tokenIsInvalid ) {
+      if ( session.expiresAt >= Date.now() ) {
+        console.warn({msg:"Expired session", token, session});
+        sessionIsExpired = true;
+      }
+    }
+
+    const authorization = {
+      token, 
+      session, 
+      tokenIsInvalid,
+      sessionIsExpired,
+      // as an object, 'permissions' properties are *not* frozen
+      permissions: {}
+    };
+
+    Object.freeze(authorization);
+    Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
+
+    console.log({authorization});
+  }
+
+  next();
+}
+
+function getPermissions(req, res, next) {
+  if ( req.authorization ) {
+
+  }
   next();
 }
 

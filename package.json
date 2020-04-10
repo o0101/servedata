@@ -4,7 +4,8 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "test": "node-dev -r esm start.js"
+    "test": "npm run dev-db",
+    "dev-db": "node-dev -r esm start.js"
   },
   "repository": {
     "type": "git",
