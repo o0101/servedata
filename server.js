@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 
 import helmet from 'helmet';
 import express from 'express';
@@ -17,6 +18,7 @@ const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : 
 const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
 const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
 const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
+const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8');
 
 const Tables = new Map();
 
@@ -52,6 +54,8 @@ export default function servedata(opts = {}) {
   app.use(express.urlencoded({extended:true}));
 
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
+
+  app.use(getSession);
 
   const X = async (req, res, next) => {
     const way = `${req.method} ${req.route.path}`;
@@ -123,6 +127,14 @@ export default function servedata(opts = {}) {
     }
     Log({serverUp:{port:PORT, up:Date.now()}});
   });
+}
+
+function getSession(req, res, next) {
+  const {[COOKIE_NAME]:cookie} = req.cookies;
+  const {Authorization:authHeader} = req.headers;
+  console.log("Cookies", cookie); 
+  console.log("Auth Header", authHeader);
+  next();
 }
 
 function catchError(err, req, res, next) {
