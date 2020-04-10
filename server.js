@@ -203,7 +203,12 @@ export default function servedata(opts = {}) {
         tokenIsInvalid,
         sessionIsExpired,
         // as an object, 'permissions' properties are *not* frozen
-        permissions: {}
+        permissions: {
+          excise: false,
+          view: false,
+          alter: false,
+          create: false
+        }
       };
 
       Object.freeze(authorization);
@@ -216,8 +221,65 @@ export default function servedata(opts = {}) {
   }
 
   function getPermissions(req, res, next) {
-    if ( req.authorization ) {
+    let userid;
+    let user;
 
+    if ( req.authorization ) {
+      const {tokenIsInvalid,sessionIsExpired} = req.authorization;
+
+      if ( tokenIsInvalid || sessionIsExpired ) {
+        req.errors = {tokenIsInvalid, sessionIsExpired};
+        return next();
+      }
+
+      const {userid} = req.authorization.session;
+
+      try {
+        const table = _getTable("users");
+        user = getItem({table, id:userid});
+      } catch(e) {
+        DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid});
+        req.errors = {noUser:true};
+        return next();
+      }
+
+      const {accountDisabled, accountDeleted} = user;
+
+      if ( accountDisabled || accountDeleted ) {
+        DEBUG.WARN && console.warn({msg:"Account not active", accountDisabled, accountDeleted});
+        req.errors = {accountDisabled, accountDeleted};
+        return next();
+      }
+
+      let endpoint_permissions;
+      let instance_permissions;
+
+      try {
+        const table = _getTable("permissions");
+        const endpoint_key = `${userid}:${req.route.path}`;
+        endpoint_permissions = getItem({table, id:endpoint_key});
+      } catch(e) {
+        DEBUG.WARN && console.warn(e);
+      }
+
+      try {
+        const table = _getTable("permissions");
+        const instance_key = `${userid}:${req.path}`;
+        instance_permissions = getItem({table, id:instance_key});
+      } catch(e) {
+        DEBUG.WARN && console.warn(e);
+      }
+
+      if ( endpoint_permissions ) {
+        Object.assign(req.authorization.permissions, endpoint_permissions);
+      }
+
+      if ( instance_permissions ) {
+        Object.assign(req.authorization.permissions, instance_permissions);
+      }
+
+      Object.assign(req.authorization.permissions, permissions);
+      Object.freeze(req.authorization.permissions);
     }
     next();
   }
