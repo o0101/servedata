@@ -19,7 +19,7 @@ import {config, getTable} from 'stubdb';
   const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
   const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
   const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
-  const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8');
+  export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
   const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
 
@@ -40,6 +40,7 @@ import {config, getTable} from 'stubdb';
 
 // Logging
   const DEBUG = {
+    NOAUTH: false,
     WARN: true,
     ERROR: true,
     INFO: true
@@ -76,6 +77,20 @@ export default function servedata(opts = {}) {
   app.use(getPermissions);
 
   const X = async (req, res, next) => {
+    if ( ! DEBUG.NOAUTH ) {
+      if ( ! req.authorization ) {
+        return res.status(401).send('401 Not authorized');
+      }
+
+      if ( req.method == 'GET' && !req.authorization.permissions.view ) {
+        return res.status(401).send('401 Not authorized. User has no view permission.');
+      }
+
+      if ( req.method == 'POST' && !req.authorization.permissions.create ) {
+        return res.status(401).send('401 Not authorized. User has no create permission.');
+      }
+    }
+
     const way = `${req.method} ${req.route.path}`;
     const data = {...req.params, item: req.body, _search: req.query};
     if ( data.table ) {
@@ -168,10 +183,10 @@ export default function servedata(opts = {}) {
         DEBUG.WARN && console.warn("Both cookie and header used for session. Invalid.");
         res.abort(400);
         break;
-      case cookie:
+      case !!cookie:
         token = cookie;
         break;
-      case authHeader: 
+      case !!authHeader: 
         token = authHeader;
         token = token.replace("Bearer ", "");
         break;
@@ -278,7 +293,6 @@ export default function servedata(opts = {}) {
         Object.assign(req.authorization.permissions, instance_permissions);
       }
 
-      Object.assign(req.authorization.permissions, permissions);
       Object.freeze(req.authorization.permissions);
     }
     next();
@@ -379,7 +393,7 @@ export default function servedata(opts = {}) {
       const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
       return result;
     } catch(e) {
-      DEBUG.WARN && console.warn(e);
+      DEBUG.WARN && console.warn('wtf', e);
       throw new Error(`Action ${action} is not defined in ${actionFileName}`);
     }
   }

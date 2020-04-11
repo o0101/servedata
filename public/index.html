@@ -5,6 +5,22 @@
     margin: 0 auto;
   }
 </style>
+<h1>Permission Test Setup</h1>
+<form target=test_response method=POST>
+  <fieldset>
+    <legend>Create Test Session</legend>
+    <input type=hidden name=userid value=test>
+    <button
+      formaction=/form/action/create_permission/with/session_permission_test
+    >Post</button>
+  </fieldset>
+  <fieldset>
+    <legend>Test Response Frame</legend>
+    <iframe src=about:blank name=test_response></iframe>
+  </fieldset>
+</form>
+<hr>
+<h1>Get Tests</h1>
 <form target=get_response method=GET>
   <fieldset>
     <legend>Get Table Record</legend>
@@ -46,6 +62,8 @@
     <iframe src=about:blank name=get_response></iframe>
   </fieldset>
 </form>
+<hr>
+<h1>Post Tests</h1>
 <form target=post_response method=POST>
   <fieldset>
     <legend>Post Table Record</legend>
