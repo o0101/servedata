@@ -40,7 +40,7 @@ import {config, getTable} from 'stubdb';
 
 // Logging
   const DEBUG = {
-    NOAUTH: false,
+    AUTH: true,
     WARN: true,
     ERROR: true,
     INFO: true
@@ -76,10 +76,11 @@ export default function servedata(opts = {}) {
   app.use(getSession);
 
   const X = async (req, res, next) => {
-    getPermissions(req, res);
-    if ( ! DEBUG.NOAUTH ) {
+    if ( DEBUG.AUTH ) {
+      getPermissions(req, res);
+
       if ( ! req.authorization ) {
-        return res.status(401).send('401 Not authorized');
+        return res.status(401).send('401 Not authorized. No valid user identified.');
       }
 
       if ( req.method == 'GET' && !req.authorization.permissions.view ) {
@@ -270,9 +271,23 @@ export default function servedata(opts = {}) {
       let endpoint_permissions;
       let instance_permissions;
 
+      let active;
+
+      switch(true) {
+        case !!req.params.table:
+          active = `table/${req.params.table}`;
+          break;
+        case !!req.params.action:
+          active = `action/${req.params.action}`;
+          break;
+        case !!req.params.query:
+          active = `query/${req.params.query}`;
+          break;
+      }
+
       try {
         const table = _getTable("permissions");
-        const endpoint_key = `${userid}:${req.params.table || req.params.action}`;
+        const endpoint_key = `${userid}:${active}`;
         endpoint_permissions = getItem({table, id:endpoint_key});
       } catch(e) {
         DEBUG.WARN && console.warn(e);
@@ -280,7 +295,7 @@ export default function servedata(opts = {}) {
 
       try {
         const table = _getTable("permissions");
-        const instance_key = `${userid}:${req.params.table}:${req.params.id}`;
+        const instance_key = `${userid}:${active}:${req.params.id}`;
         instance_permissions = getItem({table, id:instance_key});
       } catch(e) {
         DEBUG.WARN && console.warn(e);

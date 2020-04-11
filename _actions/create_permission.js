@@ -6,8 +6,8 @@ export default function action({userid}, {getTable, newItem}, req, res) {
   const ptable = getTable('permissions');
   const session = newItem({table:stable, item: {userid}});
   res.cookie(COOKIE_NAME, session._id);
-  const scope1 = `${userid}:pencil`;
-  const scope2 = `${userid}:newbox`;
+  const scope1 = `${userid}:table/pencil`;
+  const scope2 = `${userid}:action/newbox`;
   const permissions = {create:true, view:true};
   utable.put(userid, {userid});
   ptable.put(scope1, permissions);
