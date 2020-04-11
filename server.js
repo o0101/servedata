@@ -74,20 +74,20 @@ export default function servedata(opts = {}) {
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
 
   app.use(getSession);
-  app.use(getPermissions);
 
   const X = async (req, res, next) => {
+    getPermissions(req, res);
     if ( ! DEBUG.NOAUTH ) {
       if ( ! req.authorization ) {
         return res.status(401).send('401 Not authorized');
       }
 
       if ( req.method == 'GET' && !req.authorization.permissions.view ) {
-        return res.status(401).send('401 Not authorized. User has no view permission.');
+        return res.status(401).send('401 Not authorized. User has no view permission on this scope.');
       }
 
       if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-        return res.status(401).send('401 Not authorized. User has no create permission.');
+        return res.status(401).send('401 Not authorized. User has no create permission on this scope.');
       }
     }
 
@@ -147,6 +147,7 @@ export default function servedata(opts = {}) {
     // stored procedure
     app.get('/form/query/:query/with/:view', X);
     app.post('/form/action/:action/with/:view', X);
+
 
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
@@ -235,7 +236,7 @@ export default function servedata(opts = {}) {
     next();
   }
 
-  function getPermissions(req, res, next) {
+  function getPermissions(req, res) {
     let userid;
     let user;
 
@@ -244,7 +245,7 @@ export default function servedata(opts = {}) {
 
       if ( tokenIsInvalid || sessionIsExpired ) {
         req.errors = {tokenIsInvalid, sessionIsExpired};
-        return next();
+        return;
       }
 
       const {userid} = req.authorization.session;
@@ -255,7 +256,7 @@ export default function servedata(opts = {}) {
       } catch(e) {
         DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid});
         req.errors = {noUser:true};
-        return next();
+        return;
       }
 
       const {accountDisabled, accountDeleted} = user;
@@ -263,7 +264,7 @@ export default function servedata(opts = {}) {
       if ( accountDisabled || accountDeleted ) {
         DEBUG.WARN && console.warn({msg:"Account not active", accountDisabled, accountDeleted});
         req.errors = {accountDisabled, accountDeleted};
-        return next();
+        return;
       }
 
       let endpoint_permissions;
@@ -271,7 +272,7 @@ export default function servedata(opts = {}) {
 
       try {
         const table = _getTable("permissions");
-        const endpoint_key = `${userid}:${req.route.path}`;
+        const endpoint_key = `${userid}:${req.params.table || req.params.action}`;
         endpoint_permissions = getItem({table, id:endpoint_key});
       } catch(e) {
         DEBUG.WARN && console.warn(e);
@@ -279,7 +280,7 @@ export default function servedata(opts = {}) {
 
       try {
         const table = _getTable("permissions");
-        const instance_key = `${userid}:${req.path}`;
+        const instance_key = `${userid}:${req.params.table}:${req.params.id}`;
         instance_permissions = getItem({table, id:instance_key});
       } catch(e) {
         DEBUG.WARN && console.warn(e);
@@ -295,7 +296,6 @@ export default function servedata(opts = {}) {
 
       Object.freeze(req.authorization.permissions);
     }
-    next();
   }
 
   function catchError(err, req, res, next) {

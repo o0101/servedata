@@ -6,9 +6,12 @@ export default function action({userid}, {getTable, newItem}, req, res) {
   const ptable = getTable('permissions');
   const session = newItem({table:stable, item: {userid}});
   res.cookie(COOKIE_NAME, session._id);
-  const scope = `${userid}:/form/table/pencil/new/with/pencil`;
-  const permissions = {create:true};
+  const scope1 = `${userid}:pencil`;
+  const scope2 = `${userid}:newbox`;
+  const permissions = {create:true, view:true};
   utable.put(userid, {userid});
-  ptable.put(scope, permissions);
+  ptable.put(scope1, permissions);
+  ptable.put(scope2, permissions);
+  const scope = JSON.stringify([scope1, scope2]);
   return {session, permissions, scope};
 }
