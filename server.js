@@ -20,9 +20,10 @@ import {config, getTable} from 'stubdb';
   const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
   const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
   export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
+  const USER_TABLE = process.env.SD_USER_TABLE ? process.env.SD_USER_TABLE : "users";
   const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
-
+  const GROUPS_TABLE = process.env.SD_GROUPS_TABLE ? process.env.SD_GROUPS_TABLE : "groups";
 // cache
   const Tables = new Map();
 
@@ -252,7 +253,7 @@ export default function servedata(opts = {}) {
       const {userid} = req.authorization.session;
 
       try {
-        const table = _getTable("users");
+        const table = _getTable(USER_TABLE);
         user = getItem({table, id:userid});
       } catch(e) {
         DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid});
