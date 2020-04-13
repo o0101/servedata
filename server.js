@@ -58,7 +58,7 @@ import {config, getTable} from 'stubdb';
   }
 
 export async function initializeDB() {
-  const initialize = await import(INIT_SCRIPT);
+  const {default:initialize} = await import(INIT_SCRIPT);
   initialize();
 }
 
