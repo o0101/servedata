@@ -64,6 +64,7 @@ export async function initializeDB() {
 
 export function servedata({callConfig: callConfig = false} = {}) {
   if ( callConfig ) {
+    DEBUG.WARN && console.warn("Calling config in servedata with default DB_ROOT");
     config({root:DB_ROOT});
   }
   const app = express();
