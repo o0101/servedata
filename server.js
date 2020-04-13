@@ -62,7 +62,7 @@ export async function initializeDB() {
   initialize();
 }
 
-export default function servedata(opts = {}) {
+export function servedata(opts = {}) {
   config({root:ROOT});
   const app = express();
 
