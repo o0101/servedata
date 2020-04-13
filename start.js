@@ -1,3 +1,8 @@
-import {servedata} from './index.js';
+import {servedata, initializeDB} from './index.js';
 
-servedata({dev_console:true, callConfig: true});
+start();
+
+async function start() {
+  await initializeDB();
+  servedata({dev_console:true});
+}
