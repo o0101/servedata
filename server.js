@@ -225,26 +225,29 @@ export function servedata({callConfig: callConfig = false} = {}) {
           sessionIsExpired = true;
         }
       }
-
-      const authorization = {
-        token, 
-        session, 
-        tokenIsInvalid,
-        sessionIsExpired,
-        // as an object, 'permissions' properties are *not* frozen
-        permissions: {
-          excise: false,
-          view: false,
-          alter: false,
-          create: false
-        }
-      };
-
-      Object.freeze(authorization);
-      Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
-
-      console.log({authorization});
+    } else if ( noSessionClaim ) {
+      session = {userid:NOUSER_ID};
     }
+
+    const authorization = {
+      token, 
+      session, 
+      noSessionClaim,
+      tokenIsInvalid,
+      sessionIsExpired,
+      // as an object, 'permissions' properties are *not* frozen
+      permissions: {
+        excise: false,
+        view: false,
+        alter: false,
+        create: false
+      }
+    };
+
+    Object.freeze(authorization);
+    Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
+
+    DEBUG.INFO && console.log({authorization});
 
     next();
   }
