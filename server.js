@@ -18,12 +18,15 @@ import {config, getTable} from 'stubdb';
   const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
   const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
   const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
-  const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.STATIC_FILES) : path.resolve(APP_ROOT, "public");
+  const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.SD_STATIC_FILES) : path.resolve(APP_ROOT, "public");
+  const INIT_SCRIPT = process.env.SD_INIT_SCRIPT ? path.resolve(process.env.SD_INIT_SCRIPT) : path.resolve(APP_ROOT, "sd_init.js");
   export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
   const USER_TABLE = process.env.SD_USER_TABLE ? process.env.SD_USER_TABLE : "users";
   const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
   const GROUPS_TABLE = process.env.SD_GROUPS_TABLE ? process.env.SD_GROUPS_TABLE : "groups";
+  export const NOUSER_ID = 'nouser';
+
 // cache
   const Tables = new Map();
 
@@ -53,6 +56,11 @@ import {config, getTable} from 'stubdb';
       console.error(obj);
     }
   }
+
+export async function initializeDB() {
+  const initialize = await import(INIT_SCRIPT);
+  initialize();
+}
 
 export default function servedata(opts = {}) {
   config({root:ROOT});
