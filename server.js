@@ -13,8 +13,8 @@ import {config, getTable} from 'stubdb';
   const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
   const JSON_ERROR = msg => JSON.stringify({error:msg});
   const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
-  const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
-  const ROOT = path.resolve(APP_ROOT, "db-servedata");
+  export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
+  export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
   const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
   const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
   const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
@@ -59,11 +59,13 @@ import {config, getTable} from 'stubdb';
 
 export async function initializeDB() {
   const {default:initialize} = await import(INIT_SCRIPT);
-  initialize();
+  initialize({getTable, config});
 }
 
-export function servedata(opts = {}) {
-  config({root:ROOT});
+export function servedata(opts = {callConfig: callConfig = false}) {
+  if ( opts.callConfig ) {
+    config({root:DB_ROOT});
+  }
   const app = express();
 
   app.use(helmet());
