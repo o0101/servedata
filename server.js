@@ -24,8 +24,14 @@ import {config, getTable} from 'stubdb';
   export const USER_TABLE = process.env.SD_USER_TABLE ? process.env.SD_USER_TABLE : "users";
   export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
-  export const GROUPS_TABLE = process.env.SD_GROUPS_TABLE ? process.env.SD_GROUPS_TABLE : "groups";
+  export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
   export const NOUSER_ID = 'nouser';
+  const PermNames = [
+    'excise',
+    'view',
+    'alter',
+    'create'
+  ];
 
 // cache
   const Tables = new Map();
@@ -47,7 +53,7 @@ import {config, getTable} from 'stubdb';
     AUTH: true,
     WARN: true,
     ERROR: true,
-    INFO: true
+    INFO: false
   };
 
   function Log(obj, stdErr = false) {
@@ -236,12 +242,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
       tokenIsInvalid,
       sessionIsExpired,
       // as an object, 'permissions' properties are *not* frozen
-      permissions: {
-        excise: false,
-        view: false,
-        alter: false,
-        create: false
-      }
+      permissions: blankPerms()
     };
 
     Object.freeze(authorization);
@@ -283,8 +284,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
         return;
       }
 
-      let endpoint_permissions;
-      let instance_permissions;
+      const Endpoint_permissions = blankPerms();
+      const Instance_permissions = blankPerms();
 
       let active;
 
@@ -300,29 +301,46 @@ export function servedata({callConfig: callConfig = false} = {}) {
           break;
       }
 
+      for( const group of user.groups ) {
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const endpoint_key = `group/${group}:${active}`;
+          const endpoint_permissions = getItem({table, id:endpoint_key});
+          grant(Endpoint_permissions, endpoint_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn(e);
+        }
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const instance_key = `group/${group}:${active}:${req.params.id}`;
+          const instance_permissions = getItem({table, id:instance_key});
+          grant(Instance_permissions, instance_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn(e);
+        }
+      }
+
       try {
-        const table = _getTable("permissions");
+        const table = _getTable(PERMISSION_TABLE);
         const endpoint_key = `${userid}:${active}`;
-        endpoint_permissions = getItem({table, id:endpoint_key});
+        const endpoint_permissions = getItem({table, id:endpoint_key});
+        grant(Endpoint_permissions, endpoint_permissions);
       } catch(e) {
-        DEBUG.WARN && console.warn(e);
+        DEBUG.INFO && console.warn(e);
       }
 
       try {
-        const table = _getTable("permissions");
+        const table = _getTable(PERMISSION_TABLE);
         const instance_key = `${userid}:${active}:${req.params.id}`;
-        instance_permissions = getItem({table, id:instance_key});
+        const instance_permissions = getItem({table, id:instance_key});
+        grant(Instance_permissions, instance_permissions);
       } catch(e) {
-        DEBUG.WARN && console.warn(e);
+        DEBUG.INFO && console.warn(e);
       }
 
-      if ( endpoint_permissions ) {
-        Object.assign(req.authorization.permissions, endpoint_permissions);
-      }
-
-      if ( instance_permissions ) {
-        Object.assign(req.authorization.permissions, instance_permissions);
-      }
+      grant(req.authorization.permissions, Endpoint_permissions);
+      grant(req.authorization.permissions, Instance_permissions);
 
       Object.freeze(req.authorization.permissions);
     }
@@ -457,6 +475,20 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
 // helpers
+  function blankPerms() {
+    const perm = {};
+    for( const name of PermNames ) {
+      perm[name] = false;
+    }
+    return perm;
+  }
+
+  function grant(perms, new_perms) {
+    for( const name of PermNames ) {
+      perms[name] |= new_perms[name];
+    }
+  }
+
   function guardNumber(x) {
     const parsed = Number(x);
     if ( Number.isNaN(parsed) ) {
