@@ -62,8 +62,8 @@ export async function initializeDB() {
   initialize({getTable, config});
 }
 
-export function servedata(opts = {callConfig: callConfig = false}) {
-  if ( opts.callConfig ) {
+export function servedata({callConfig: callConfig = false} = {}) {
+  if ( callConfig ) {
     config({root:DB_ROOT});
   }
   const app = express();
