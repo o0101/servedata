@@ -1,4 +1,8 @@
-import {NOUSER_ID, DB_ROOT, GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE} from './server.js';
+import {
+  NOUSER_ID, DB_ROOT, 
+  GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE,
+  addUser
+} from './server.js';
 import Perms from './permissions.js';
 
 export default function init({getTable, newItem, config}) {
@@ -17,9 +21,9 @@ export default function init({getTable, newItem, config}) {
   utable.put(NOUSER_ID, {userid:NOUSER_ID, groups:['nousers']});
   gtable.put('nousers', {name:'nousers', users: [NOUSER_ID], description:'not logged in users'});
 
-  newItem({table:utable, item:{name:'test', groups:['users']});
-  newItem({table:utable, item:{name:'useradmin', groups:['users', 'useradmins']});
-  newItem({table:utable, item:{name:'globaladmin', groups:['users', 'globaladmins']});
+  addUser({username:'test', email:'cris7fe@gmail.com', password:'abc123'}, 'users');
+  addUser({username:'useradmin', email:'cris7fe@gmail.com', password:'abc123'}, 'users', 'useradmins');
+  addUser({username:'globaladmin', email:'cris7fe@gmail.com', password:'abc123'}, 'users', 'globaladmins');
 
   // add perms
 

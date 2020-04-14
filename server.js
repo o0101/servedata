@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
+import xen from 'xen';
+
 import {config, getTable} from 'stubdb';
 
 // constants and config
@@ -15,6 +17,7 @@ import {config, getTable} from 'stubdb';
   const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
   export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
   export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
+  const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
   const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
   const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
   const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
@@ -25,8 +28,9 @@ import {config, getTable} from 'stubdb';
   export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
   export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
+
   export const NOUSER_ID = 'nouser';
-  const PermNames = [
+  export const PermNames = [
     'excise',
     'view',
     'alter',
@@ -35,6 +39,7 @@ import {config, getTable} from 'stubdb';
 
 // cache
   const Tables = new Map();
+  const SchemaValidators = {};
 
 // paths dispatch
   const DISPATCH = {
@@ -65,6 +70,7 @@ import {config, getTable} from 'stubdb';
 
 export async function initializeDB() {
   const {default:initialize} = await import(INIT_SCRIPT);
+  await loadSchemas();
   initialize({getTable, config});
 }
 
@@ -422,6 +428,10 @@ export function servedata({callConfig: callConfig = false} = {}) {
   function newItem({table, item}) {
     const id = nextKey();
     item._id = id;
+    const errors = SchemaValidators[table.tableInfo.name](item);
+    if ( errors.length ) {
+      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
+    }
     table.put(id, item);
     return item;
   }
@@ -433,6 +443,10 @@ export function servedata({callConfig: callConfig = false} = {}) {
       existingItem = table.get(id);
     } catch(e) {
       existingItem = {};
+    }
+    const errors = SchemaValidators[table.name](item);
+    if ( errors.length ) {
+      throw new TypeError(`Addition to table ${table.name} has errors: ${JSON.stringify(errors)}`);
     }
     item = Object.assign(existingItem, item);
     table.put(id, item);
@@ -480,17 +494,29 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
 // helpers
-  function addUser({email, password}, ...groups) {
+  async function loadSchemas() {
+    const entries = fs.readdirSync(SCHEMAS);
+
+    for( const file of entries ) {
+      if ( file.startsWith('.') || ! file.endsWith('.js') ) continue;
+      const {default:validator} = await import(path.resolve(SCHEMAS, file));  
+      const tableName = file.replace(/\.js$/, '');
+      SchemaValidators[tableName] = validator;
+    }
+  }
+
+  export function addUser({username, email, password}, ...groups) {
     const user = {
+      username, 
       email,
-      passwordHash: xen.hash(password, 8)
+      passwordHash: xen.hash(password, 8),
       groups
     }
     const userObject = newItem({table:getTable(USER_TABLE), item:user});
     const gtable = getTable(GROUP_TABLE);
     for( const group of groups ) {
       const groupObject = gtable.get(group);
-      groupObject.users.push(userObject._id);
+      groupObject.users[userObject._id] = true;
       gtable.put(group, groupObject);
     }
   }

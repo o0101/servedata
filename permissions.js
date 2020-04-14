@@ -25,7 +25,7 @@ const Perms = [
   // user admins, and global admins
     // regular user role
       [
-        `group/users:table/deposit`,
+        `group/users:table/deposits`,
         {
           create:true, 
           view:true
@@ -45,7 +45,7 @@ const Perms = [
 
     // global admin role
       [
-        `group/global_admins:table/deposit`,
+        `group/global_admins:table/deposits`,
         {
           excise:true,
           view:true,
@@ -55,6 +55,15 @@ const Perms = [
       ],
       [
         `group/global_admins:table/users`,
+        {
+          excise:true,
+          view:true,
+          alter:true,
+          create:true, 
+        }
+      ],
+      [
+        `group/global_admins:table/permissions`,
         {
           excise:true,
           view:true,
