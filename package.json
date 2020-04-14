@@ -27,6 +27,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.2",
     "jtype-system": "^1.1.2",
+    "nodemailer": "^6.4.6",
     "stubdb": "^1.0.10",
     "xen": "^1.1.1"
   },

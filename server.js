@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import url from 'url';
 
 import helmet from 'helmet';
 import express from 'express';
@@ -429,12 +430,12 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
   function newItem({table, item}) {
-    const id = nextKey();
-    item._id = id;
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
     }
+    const id = nextKey();
+    item._id = id;
     table.put(id, item);
     return item;
   }
@@ -526,8 +527,11 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
   export function newLoginLink(req) {
-    const url = new URL(req.originalUrl);
-    return `${url.origin}/action/loginwithlink/with/app`;
+    return url.format({
+      protocol: req.protocol,
+      host: req.get('host'),
+      pathname: '/action/loginwithlink/with/app'
+    });
   }
 
   function blankPerms() {
