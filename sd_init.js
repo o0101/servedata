@@ -21,6 +21,10 @@ export default function init({getTable, newItem, config}) {
   utable.put(NOUSER_ID, {userid:NOUSER_ID, groups:['nousers']});
   gtable.put('nousers', {name:'nousers', users: [NOUSER_ID], description:'not logged in users'});
 
+  gtable.put('users', {name:'users', users: [], description:'regular users'});
+  gtable.put('useradmins', {name:'useradmins', users: [], description:'user administrators'});
+  gtable.put('globaladmins', {name:'globaladmins', users: [], description:'global administrators'});
+
   addUser({username:'test', email:'cris7fe@gmail.com', password:'abc123'}, 'users');
   addUser({username:'useradmin', email:'cris7fe@gmail.com', password:'abc123'}, 'users', 'useradmins');
   addUser({username:'globaladmin', email:'cris7fe@gmail.com', password:'abc123'}, 'users', 'globaladmins');

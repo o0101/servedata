@@ -519,6 +519,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
       groupObject.users[userObject._id] = true;
       gtable.put(group, groupObject);
     }
+    return userObject;
   }
 
   function blankPerms() {

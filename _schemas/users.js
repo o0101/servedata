@@ -18,7 +18,7 @@ import {T} from 'jtype-system';
 T.def('User', {
   username: T`Username`,
   email: T`Email`,
-  password: T`Hash`,
+  passwordHash: T`Hash`,
   groups: T`GroupArray`
 });
 

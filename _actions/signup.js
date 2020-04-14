@@ -1,24 +1,12 @@
-import {USER_TABLE, SESSION_TABLE, COOKIE_NAME, GROUP_TABLE} from '../server.js';
+import {
+  USER_TABLE, SESSION_TABLE, COOKIE_NAME, GROUP_TABLE,
+  addUser
+} from '../server.js';
 
-export default function action({userid}, {getTable, newItem}, req, res) {
-  const utable = getTable(USER_TABLE);
-  const stable = getTable(SESSION_TABLE);
-  const gtable = getTable(GROUP_TABLE);
+export default function action({username, password, email}, {getTable, newItem}, req, res) {
+  const user = addUser({username, email, password}, 'users');
 
-  utable.put(userid, {userid, groups:['users']});
-
-  let usersGroup;
-  
-  try {
-    usersGroup = gtable.get('users');
-  } catch(e) {
-    usersGroup = {users:{}, name: 'users', description:'regular users'};
-  }
-
-  usersGroup.users[userid] = true;
-  gtable.put('users', usersGroup);
-
-  const session = newItem({table:stable, item: {userid}});
+  const session = newItem({table:getTable(SESSION_TABLE), item: {userid:user._id}});
   res.cookie(COOKIE_NAME, session._id);
 
   return {session};
