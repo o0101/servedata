@@ -197,7 +197,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     
     switch(true) {
       case noSessionClaim:
-        DEBUG.WARN && console.warn("No session claim");
+        DEBUG.INFO && console.warn("No session claim");
         break;
       case redundantClaim:
         DEBUG.WARN && console.warn("Both cookie and header used for session. Invalid.");
@@ -249,6 +249,11 @@ export function servedata({callConfig: callConfig = false} = {}) {
     Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
 
     DEBUG.INFO && console.log({authorization});
+
+    console.log({
+      path: req.path,
+      authorization
+    });
 
     next();
   }
@@ -475,6 +480,21 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
 // helpers
+  function addUser({email, password}, ...groups) {
+    const user = {
+      email,
+      passwordHash: xen.hash(password, 8)
+      groups
+    }
+    const userObject = newItem({table:getTable(USER_TABLE), item:user});
+    const gtable = getTable(GROUP_TABLE);
+    for( const group of groups ) {
+      const groupObject = gtable.get(group);
+      groupObject.users.push(userObject._id);
+      gtable.put(group, groupObject);
+    }
+  }
+
   function blankPerms() {
     const perm = {};
     for( const name of PermNames ) {

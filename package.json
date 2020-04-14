@@ -26,7 +26,9 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
-    "stubdb": "^1.0.10"
+    "jtype-system": "^1.1.2",
+    "stubdb": "^1.0.10",
+    "xen": "^1.1.1"
   },
   "devDependencies": {
     "node-dev": "^4.0.0"

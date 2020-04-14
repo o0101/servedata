@@ -5,100 +5,29 @@
     margin: 0 auto;
   }
 </style>
-<h1>Permission Test Setup</h1>
-<form target=test_response method=POST>
-  <fieldset>
-    <legend>Create User</legend>
-    <input type=text name=userid value=test>
-    <button
-      formaction=/form/action/create_user/with/session_test
-    >Post</button>
-  </fieldset>
-  <fieldset>
-    <legend>Test Response Frame</legend>
-    <iframe src=about:blank name=test_response></iframe>
-  </fieldset>
+<h1>Signup / Login / Logout Tests</h1>
+<form target=auth_tests method=POST>
+  <input type=email name=email placeholder=email>
+  <input type=password name=password placeholder=password>
+  <button formaction=/form/action/signup/with/verify>Signup</button>
+  <button formaction=/form/action/login/with/app>Login</button>
+  <button formaction=/form/action/logout/with/landing>Logout</button>
 </form>
+<iframe src=about:blank name=auth_tests></iframe>
 <hr>
-<h1>Get Tests</h1>
-<form target=get_response method=GET>
-  <fieldset>
-    <legend>Get Table Record</legend>
-    <button
-      formaction=/form/table/pencil/15/with/pencil
-    >Get</button>
-  </fieldset>
-  <fieldset>
-    <legend>Get Table Record List</legend>
-    <button
-      formaction=/form/list/table/pencil/with/pencil_list
-    >Get</button>
-  </fieldset>
-  <fieldset>
-    <legend>Get Table Record List Sorted</legend>
-    <button
-      formaction=/form/list/table/pencil/with/pencil_list/sort/color
-    >Get</button>
-  </fieldset>
+<h1>Deposit Gets</h1>
+<form target=deposit_gets method=GET>
+  <input type=date name=from_date placeholder=from_date>
+  <input type=date name=to_date placeholder=to_date>
+  <input type=text name=bank_name placeholder=bank_name>
+  <input type=number name=deposit_min placeholder=deposit_min>
+  <input type=number name=deposit_max placeholder=deposit_max>
+  <button formaction=/form/query/filter_deposits>Filter deposits</button>
+  <button formaction=/form/list/table/deposit>List deposits</button>
 </form>
-<form target=get_response method=GET>
-  <fieldset>
-    <legend>Get Table Record Search</legend>
-    <input name=keywords type=search placeholder="search keywords">
-    <button
-      formaction=/form/search/table/pencil/with/pencil_list
-    >Get</button>
-  </fieldset>
-</form>
-<form target=get_response method=GET>
-  <fieldset>
-    <legend>Get Table Record Saved Query</legend>
-    <button
-      formaction=/form/query/demopencilquery/with/pencil 
-    >Get</button>
-  </fieldset>
-  <fieldset>
-    <legend>Get Response Frame</legend>
-    <iframe src=about:blank name=get_response></iframe>
-  </fieldset>
-</form>
+<iframe src=about:blank name=deposit_gets></iframe>
 <hr>
 <h1>Post Tests</h1>
 <form target=post_response method=POST>
-  <fieldset>
-    <legend>Post Table Record</legend>
-    <input type=hidden name=type value=pencil>
-    <input type=hidden name=width value=40>
-    <input type=hidden name=color value=aqaumarine>
-    <button
-      formaction=/form/table/pencil/15/with/pencil
-    >Post</button>
-  </fieldset>
-</form>
-<form target=post_response method=POST>
-  <fieldset>
-    <legend>Post New Table Record</legend>
-    <input type=hidden name=type value=pencil>
-    <input type=hidden name=width value=100>
-    <input type=hidden name=color value=blue>
-    <button
-      formaction=/form/table/pencil/new/with/pencil
-    >Post</button>
-  </fieldset>
-</form>
-<form target=post_response method=POST>
-  <fieldset>
-    <legend>Post Action</legend>
-    <input type=hidden name=size value=20>
-    <button
-      formaction=/form/action/newbox/with/newbox 
-    >Post</button>
-  </fieldset>
-</form>
-<form target=post_response method=POST>
-  <fieldset>
-    <legend>Post Response Frame</legend>
-    <iframe src=about:blank name=post_response></iframe>
-  </fieldset>
 </form>
 
