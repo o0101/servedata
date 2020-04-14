@@ -18,7 +18,6 @@ export default async function action({username, password, email}, {getTable, new
   **/
 
   const loginLink = newItem({table:getTable(LOGINLINKS_TABLE), item: {userid:user._id, href:newLoginLink(req)}});
-  console.log({loginLink});
   await sendLoginMail({email, loginLink});
 
   // email the loginLink to email
