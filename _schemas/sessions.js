@@ -1,7 +1,5 @@
 import {T} from 'jtype-system';
 
-T.defOr('Userid', T`String`, T`Number`);
-
 T.def('Session', {
   userid: T`Userid`
 }, {

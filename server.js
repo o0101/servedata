@@ -9,6 +9,8 @@ import xen from 'xen';
 
 import {config, getTable} from 'stubdb';
 
+import './types.js';
+
 // constants and config
   const CONSOLE_ERROR = true;
   const DEFAULT_PORT = 8080;
@@ -28,6 +30,7 @@ import {config, getTable} from 'stubdb';
   export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
   export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
+  export const LOGINLINKS_TABLE = process.env.SD_LOGINLINKS_TABLE ? process.env.SD_LOGINLINKS_TABLE : "loginlinks";
 
   export const NOUSER_ID = 'nouser';
   export const PermNames = [
@@ -520,6 +523,11 @@ export function servedata({callConfig: callConfig = false} = {}) {
       gtable.put(group, groupObject);
     }
     return userObject;
+  }
+
+  export function newLoginLink(req) {
+    const url = new URL(req.originalUrl);
+    return `${url.origin}/action/loginwithlink/with/app`;
   }
 
   function blankPerms() {
