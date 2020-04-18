@@ -52,6 +52,7 @@ import './types.js';
     'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
     'GET /form/search/table/:table/with/:view': withView(getSearchResult),
     'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
+    'GET /form/action/:action/with/:view': withView(runStoredAction),
     'POST /form/table/:table/new/with/:view': withView(newItem),
     'POST /form/table/:table/:id/with/:view': withView(setItem),
     'POST /form/action/:action/with/:view': withView(runStoredAction),
@@ -111,7 +112,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
         return res.status(401).send('401 Not authorized. No valid user identified.');
       }
 
-      if ( req.method == 'GET' && !req.authorization.permissions.view ) {
+      // sometimes we do an action through get because 'links'
+      if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
         return res.status(401).send('401 Not authorized. User has no view permission on this scope.');
       }
 
@@ -121,7 +123,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     }
 
     const way = `${req.method} ${req.route.path}`;
-    const data = {...req.params, item: req.body, _search: req.query};
+    const data = {...req.params, item: req.body, _search: clone(req.query)};
     if ( data.table ) {
       data.table = _getTable(data.table);
     }
@@ -169,13 +171,15 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.get('/form/list/table/:table/with/:view/', X);
       app.get('/form/list/table/:table/with/:view/sort/:prop', X);
       app.get('/form/search/table/:table/with/:view', X);
+      // special action 'getter' for say email links
+      app.get('/form/action/:action/with/:view', X);
     // create
-    app.post('/form/table/:table/new/with/:view', X);
+      app.post('/form/table/:table/new/with/:view', X);
     // update
-    app.post('/form/table/:table/:id/with/:view', X);
+      app.post('/form/table/:table/:id/with/:view', X);
     // stored procedure
-    app.get('/form/query/:query/with/:view', X);
-    app.post('/form/action/:action/with/:view', X);
+      app.get('/form/query/:query/with/:view', X);
+      app.post('/form/action/:action/with/:view', X);
 
 
   app.get('*', (req, res, next) => {
@@ -458,8 +462,10 @@ export function servedata({callConfig: callConfig = false} = {}) {
     return item;
   }
 
-  async function runStoredAction({action, item}, req, res) {
+  async function runStoredAction({action, item, _search}, req, res) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
+    // this is pretty messy
+    item = Object.assign(_search, item);
     try {
       const {default:Action} = await import(actionFileName);
       const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
@@ -560,4 +566,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
   function nextKey() {
     const v = (Date.now()/1000) + Math.random();
     return v.toString(36);
+  }
+
+  function clone(o) {
+    return JSON.parse(JSON.stringify(o));
   }
