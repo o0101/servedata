@@ -448,9 +448,9 @@ export function servedata({callConfig: callConfig = false} = {}) {
     } catch(e) {
       existingItem = {};
     }
-    const errors = SchemaValidators[table.name](item);
+    const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
-      throw new TypeError(`Addition to table ${table.name} has errors: ${JSON.stringify(errors)}`);
+      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
     }
     item = Object.assign(existingItem, item);
     table.put(id, item);
@@ -530,7 +530,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     return url.format({
       protocol: req.protocol,
       host: req.get('host'),
-      pathname: '/action/loginwithlink/with/app'
+      pathname: '/form/action/loginwithlink/with/app'
     });
   }
 

@@ -1,8 +1,10 @@
 import {T} from 'jtype-system';
 
+
 T.def('LoginLink', {
   userid: T`Userid`,
   href: T`URL`,
+  expired: T`MaybeBoolean`
 }, {
   verify: s => (s.userid+'').length < 200 && 
     s.href.length > 10 && 

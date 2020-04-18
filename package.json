@@ -22,11 +22,11 @@
   },
   "homepage": "https://github.com/cris691/servedata#readme",
   "dependencies": {
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "helmet": "^3.21.2",
-    "jtype-system": "^1.1.2",
+    "helmet": "^3.22.0",
+    "jtype-system": "^1.1.4",
     "nodemailer": "^6.4.6",
     "stubdb": "^1.0.10",
     "xen": "^1.1.1"

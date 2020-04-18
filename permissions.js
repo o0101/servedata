@@ -9,6 +9,12 @@ const Perms = [
       }
     ],
     [
+      `${NOUSER_ID}:action/loginwithlink`,
+      {
+        create:true, 
+      }
+    ],
+    [
       `${NOUSER_ID}:action/login`,
       {
         create:true, 

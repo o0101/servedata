@@ -60,7 +60,7 @@ export async function sendLoginMail({email, loginLink}) {
   const mail = {
     from: MAIL_SENDER,
     to: email,
-    subject: 'Login to PayMe now',
+    subject: 'Login now',
     html: `
       <span>
         Your 1-click login button is:
