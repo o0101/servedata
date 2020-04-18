@@ -430,12 +430,12 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
   function newItem({table, item}) {
+    const id = nextKey();
+    item._id = id;
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
     }
-    const id = nextKey();
-    item._id = id;
     table.put(id, item);
     return item;
   }
@@ -446,13 +446,14 @@ export function servedata({callConfig: callConfig = false} = {}) {
     try {
       existingItem = table.get(id);
     } catch(e) {
+      console.log(`could not get ${id}`, e);
       existingItem = {};
     }
+    item = Object.assign(existingItem, item);
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
     }
-    item = Object.assign(existingItem, item);
     table.put(id, item);
     return item;
   }

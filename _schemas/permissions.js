@@ -1,7 +1,9 @@
 import {T} from 'jtype-system';
 import {PermNames} from '../server.js';
 
-const validationObject = {};
+const validationObject = {
+  _id: T`ID`
+};
 for( const permName of PermNames ) {
   validationObject[permName] = T`Boolean`
 }

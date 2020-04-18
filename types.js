@@ -10,7 +10,7 @@ import {T} from 'jtype-system';
   const HexRegExp = /^[a-f0-9]{8,100}$/i;
 
 T.defOr('MaybeBoolean', T`Boolean`, T`None`);
-T.defOr('Userid', T`String`, T`Number`);
+T.defOr('ID', T`String`, T`Number`);
 
 T.def('URL', null, {
   verify: i => { 

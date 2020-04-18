@@ -1,7 +1,8 @@
 import {T} from 'jtype-system';
 
 T.def('Session', {
-  userid: T`Userid`
+  _id: T`ID`,
+  userid: T`ID`
 }, {
   verify: s => (s.userid+'').length < 200
 });
