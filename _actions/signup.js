@@ -5,7 +5,7 @@ import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
 import {MAIL_SENDER, MAIL_HOST, MAIL_PORT} from '../common.js';
 
 import {
-  LOGINLINKS_TABLE, SESSION_TABLE, COOKIE_NAME,
+  LOGINLINK_TABLE, SESSION_TABLE, COOKIE_NAME,
   addUser, newLoginLink
 } from '../server.js';
 
@@ -17,8 +17,9 @@ export default async function action({username, password, email}, {getTable, new
   res.cookie(COOKIE_NAME, session._id);
   **/
 
-  const loginLink = newItem({table:getTable(LOGINLINKS_TABLE), item: {userid:user._id, href:newLoginLink(req)}});
-  await sendLoginMail({email, loginLink});
+  const loginLink = newItem({table:getTable(LOGINLINK_TABLE), item: {userid:user._id}});
+
+  await sendLoginMail({email, loginLink, req});
 
   // email the loginLink to email
   console.log({emailTask:loginLink});
@@ -26,12 +27,10 @@ export default async function action({username, password, email}, {getTable, new
   return {username, email};
 }
 
-export async function sendLoginMail({email, loginLink}) {
+export async function sendLoginMail({email, loginLink, req}) {
   const loginId = loginLink._id;
-  let getHref = new URL(loginLink.href);
+  const {linkHref, formAction} = newLoginLink(req, loginId);
   let transporter;
-
-  getHref.search = `loginId=${loginId}`;
 
   try {
     transporter = nodemailer.createTransport({
@@ -60,20 +59,20 @@ export async function sendLoginMail({email, loginLink}) {
   const mail = {
     from: MAIL_SENDER,
     to: email,
-    subject: 'Login now',
+    subject: `Login now ${new Date}`,
     html: `
       <span>
         Your 1-click login button is:
-          <form style="display:inline;" target=_blank method=POST action=${loginLink.href}>
+          <form style="display:inline;" target=_blank method=POST action=${formAction}>
             <input type=hidden name=loginId value=${loginId}>
             <button>Login</button>
           </form>
       </span>
       <br>
-        Alternately, click this <a target=_blank href=${getHref}>link to login.</a>
+        Alternately, click this <a target=_blank href=${linkHref}>link to login.</a>
     `,
     text: `
-      Your login link is: ${getHref}
+      Your login link is: ${linkHref}
     `
   }
   try {

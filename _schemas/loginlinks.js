@@ -4,12 +4,9 @@ import {T} from 'jtype-system';
 T.def('LoginLink', {
   _id: T`ID`,
   userid: T`ID`,
-  href: T`URL`,
   expired: T`MaybeBoolean`
 }, {
-  verify: s => (s.userid+'').length < 200 && 
-    s.href.length > 10 && 
-    s.href.length < 200
+  verify: s => (s.userid+'').length < 200
 });
 
 export default function validate(loginLink) {

@@ -1,4 +1,9 @@
-import {NOUSER_ID} from './server.js';
+import {
+  LOGINLINK_TABLE, SESSION_TABLE,
+  PERMISSION_TABLE, USER_TABLE, 
+  GROUP_TABLE,
+  NOUSER_ID
+} from '../server.js';
 
 const Perms = [
   // permissions for standard auth actions signup, login, logout
@@ -21,6 +26,12 @@ const Perms = [
       }
     ],
     [
+      `${NOUSER_ID}:table/${LOGINLINK_TABLE}`,
+      {
+        view:true, 
+      }
+    ],
+    [
       `group/users:action/logout`,
       {
         create:true, 
@@ -31,7 +42,7 @@ const Perms = [
   // user admins, and global admins
     // regular user role
       [
-        `group/users:table/deposits`,
+        `group/users:table/${DEPOSITS_TABLE}`,
         {
           create:true, 
           view:true
@@ -40,7 +51,7 @@ const Perms = [
 
     // user admin role
       [
-        `group/user_admins:table/users`,
+        `group/user_admins:table/${USERS_TABLE}`,
         {
           excise:true,
           view:true,
@@ -51,7 +62,7 @@ const Perms = [
 
     // global admin role
       [
-        `group/global_admins:table/deposits`,
+        `group/global_admins:table/${DEPOSITS_TABLE}`,
         {
           excise:true,
           view:true,
@@ -60,7 +71,7 @@ const Perms = [
         }
       ],
       [
-        `group/global_admins:table/users`,
+        `group/global_admins:table/${USERS_TABLE}`,
         {
           excise:true,
           view:true,
@@ -69,7 +80,7 @@ const Perms = [
         }
       ],
       [
-        `group/global_admins:table/permissions`,
+        `group/global_admins:table/${PERMISSIONS_TABLE}`,
         {
           excise:true,
           view:true,

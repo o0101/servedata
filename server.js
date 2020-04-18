@@ -31,7 +31,7 @@ import './types.js';
   export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
   export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
   export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
-  export const LOGINLINKS_TABLE = process.env.SD_LOGINLINKS_TABLE ? process.env.SD_LOGINLINKS_TABLE : "loginlinks";
+  export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
 
   export const NOUSER_ID = 'nouser';
   export const PermNames = [
@@ -52,7 +52,6 @@ import './types.js';
     'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
     'GET /form/search/table/:table/with/:view': withView(getSearchResult),
     'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
-    'GET /form/action/:action/with/:view': withView(runStoredAction),
     'POST /form/table/:table/new/with/:view': withView(newItem),
     'POST /form/table/:table/:id/with/:view': withView(setItem),
     'POST /form/action/:action/with/:view': withView(runStoredAction),
@@ -123,7 +122,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     }
 
     const way = `${req.method} ${req.route.path}`;
-    const data = {...req.params, item: req.body, _search: clone(req.query)};
+    const data = {...req.params, item: req.body, _search: req.query};
     if ( data.table ) {
       data.table = _getTable(data.table);
     }
@@ -397,6 +396,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
 // database adapters
   function getItem({table, id}) {
+    console.log({table,id});
     return table.get(id);
   }
 
@@ -438,7 +438,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     item._id = id;
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
-      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
+      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
     table.put(id, item);
     return item;
@@ -456,16 +456,14 @@ export function servedata({callConfig: callConfig = false} = {}) {
     item = Object.assign(existingItem, item);
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
-      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors)}`);
+      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
     table.put(id, item);
     return item;
   }
 
-  async function runStoredAction({action, item, _search}, req, res) {
+  async function runStoredAction({action, item}, req, res) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
-    // this is pretty messy
-    item = Object.assign(_search, item);
     try {
       const {default:Action} = await import(actionFileName);
       const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
@@ -533,12 +531,19 @@ export function servedata({callConfig: callConfig = false} = {}) {
     return userObject;
   }
 
-  export function newLoginLink(req) {
-    return url.format({
-      protocol: req.protocol,
-      host: req.get('host'),
-      pathname: '/form/action/loginwithlink/with/app'
-    });
+  export function newLoginLink(req, loginId) {
+    return {
+      formAction: url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: '/form/action/loginwithlink/with/app'
+      }),
+      linkHref: url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`,
+      })
+    };
   }
 
   function blankPerms() {
@@ -570,4 +575,12 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
   function clone(o) {
     return JSON.parse(JSON.stringify(o));
+  }
+
+  function formatError(e) {
+    if ( e instanceof Error ) {
+      return {error: e.stack.split(/\s*\n\s*/g)};
+    } else if ( ! e.error ) {
+      return {error: e};
+    } else return e;
   }

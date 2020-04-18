@@ -1,11 +1,11 @@
 import {
   USER_TABLE, SESSION_TABLE, 
-  LOGINLINKS_TABLE,
+  LOGINLINK_TABLE,
   COOKIE_NAME, 
 } from '../server.js';
 
 export default function action({loginId}, {getTable, newItem, setItem}, req, res) {
-  const linkTable = getTable(LOGINLINKS_TABLE);
+  const linkTable = getTable(LOGINLINK_TABLE);
   const userTable = getTable(USER_TABLE);
 
   let loginLink;
