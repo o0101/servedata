@@ -28,8 +28,8 @@ export default async function action({username, password, email}, {getTable, new
 }
 
 export async function sendLoginMail({email, loginLink, req}) {
-  const loginId = loginLink._id;
-  const {linkHref, formAction} = newLoginLink(req, loginId);
+  const id = loginLink._id;
+  const {linkHref, formAction} = newLoginLink(req, id);
   let transporter;
 
   try {
@@ -45,14 +45,14 @@ export async function sendLoginMail({email, loginLink, req}) {
       }
     });
   } catch (e) {
-    console.warn("Error creating transport", {email, loginId}, e);
+    console.warn("Error creating transport", {email, id}, e);
     throw e;
   }
   //console.log("Transporter created", transporter);
   try {
     await transporter.verify();
   } catch (e) {
-    console.warn("Error verifying transport", {email, loginId, transporter}, e);
+    console.warn("Error verifying transport", {email, id, transporter}, e);
     throw e;
   }
   //console.log("Transporter verified", transporter);
@@ -64,7 +64,7 @@ export async function sendLoginMail({email, loginLink, req}) {
       <span>
         Your 1-click login button is:
           <form style="display:inline;" target=_blank method=POST action=${formAction}>
-            <input type=hidden name=loginId value=${loginId}>
+            <input type=hidden name=id value=${id}>
             <button>Login</button>
           </form>
       </span>
@@ -78,11 +78,11 @@ export async function sendLoginMail({email, loginLink, req}) {
   try {
     await transporter.sendMail(mail);
   } catch (e) {
-    console.warn("Error sending mail", {email, mail, loginId, transporter}, e);
+    console.warn("Error sending mail", {email, mail, id, transporter}, e);
     throw e;
   }
-  //console.log("Email sent!", {mail, email, loginId, transporter});
+  //console.log("Email sent!", {mail, email, id, transporter});
   console.log("Yay!");
   console.log(`Email sent: ${email}, ${JSON.stringify({mail})}`);
-  return {success: true, email, mail, loginId};
+  return {success: true, email, mail, id};
 }

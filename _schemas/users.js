@@ -4,6 +4,7 @@ T.def('User', {
   _id: T`ID`,
   username: T`Username`,
   email: T`Email`,
+  salt: T`Integer`,
   passwordHash: T`Hash`,
   groups: T`GroupArray`,
   verified: T.maybe(T`Boolean`)

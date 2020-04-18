@@ -4,7 +4,7 @@ import {
   COOKIE_NAME, 
 } from '../server.js';
 
-export default function action({loginId}, {getTable, newItem, setItem}, req, res) {
+export default function action({id}, {getTable, newItem, setItem}, req, res) {
   const linkTable = getTable(LOGINLINK_TABLE);
   const userTable = getTable(USER_TABLE);
 
@@ -12,7 +12,7 @@ export default function action({loginId}, {getTable, newItem, setItem}, req, res
   let user;
 
   try {
-    loginLink = linkTable.get(loginId);
+    loginLink = linkTable.get(id);
   } catch(e) {
     res.status(401).send(`That login link does not exist`);
     throw e;

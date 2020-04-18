@@ -1,12 +1,13 @@
 import path from 'path';
 import fs from 'fs';
 import url from 'url';
+import crypto from 'crypto';
 
 import helmet from 'helmet';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-import xen from 'xen';
+import {beamsplitter} from 'beamsplitter';
 
 import {config, getTable} from 'stubdb';
 
@@ -332,7 +333,15 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
         try {
           const table = _getTable(PERMISSION_TABLE);
-          const instance_key = `group/${group}:${active}:${req.params.id}`;
+
+          let id;
+          if ( active.startsWith('action') ) {
+            id = req.body.id;
+          } else {
+            id = req.params.id;
+          }
+
+          const instance_key = `group/${group}:${active}:${id}`;
           const instance_permissions = getItem({table, id:instance_key});
           grant(Instance_permissions, instance_permissions);
         } catch(e) {
@@ -351,7 +360,13 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
       try {
         const table = _getTable(PERMISSION_TABLE);
-        const instance_key = `${userid}:${active}:${req.params.id}`;
+        let id;
+        if ( active.startsWith('action') ) {
+          id = req.body.id;
+        } else {
+          id = req.params.id;
+        }
+        const instance_key = `${userid}:${active}:${id}`;
         const instance_permissions = getItem({table, id:instance_key});
         grant(Instance_permissions, instance_permissions);
       } catch(e) {
@@ -397,7 +412,6 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
 // database adapters
   function getItem({table, id}) {
-    console.log({table,id});
     return table.get(id);
   }
 
@@ -516,12 +530,16 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
   export function addUser({username, email, password}, ...groups) {
+    const randomSalt = newRandom32BitSeed();
+    console.log({randomSalt});
     const user = {
       username, 
       email,
-      passwordHash: xen.hash(password, 8),
+      salt: randomSalt,
+      passwordHash: beamsplitter(password, randomSalt).toString(16),
       groups
     }
+    console.log({passwordHash:user.passwordHash});
     const userObject = newItem({table:getTable(USER_TABLE), item:user});
     const gtable = getTable(GROUP_TABLE);
     for( const group of groups ) {
@@ -570,7 +588,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
   }
 
   function nextKey() {
-    const v = (Date.now()/1000) + Math.random();
+    const v = crypto.randomBytes(5).readUIntBE(0,5);
     return v.toString(36);
   }
 
@@ -584,4 +602,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
     } else if ( ! e.error ) {
       return {error: e};
     } else return e;
+  }
+
+  function newRandom32BitSeed() {
+    return crypto.randomBytes(4).readUInt32BE();
   }
