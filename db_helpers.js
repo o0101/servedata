@@ -6,8 +6,10 @@ import {config, getTable} from 'stubdb';
 import {beamsplitter} from 'beamsplitter';
 
 import {
+  DEBUG,
   newRandom32BitSeed,
-  nextKey
+  nextKey,
+  formatError
 } from './helpers.js';
 
 
@@ -39,6 +41,10 @@ import {
     'alter',
     'create'
   ];
+  export const SearchControl = new Set([
+    "_keywords",
+    "_and"
+  ]);
 
 // database adapters
   export function getItem({table, id}) {
@@ -69,8 +75,32 @@ import {
 
   export function getSearchResult({table, _search}) {
     const list = getList({table});
-    const keywords = _search['keywords'];
-    const result = list.filter(item => JSON.stringify(item).includes(keywords));
+    let result;
+    if ( _search._keywords ) {
+      const {_keywords} = _search;
+      result = list.filter(item => JSON.stringify(item).includes(_keywords));
+    } else {
+      const attrs = Object.keys(_search).filter(attr => 
+        !SearchControl.has(attr) && 
+        _search[attr] !== undefined && 
+        _search[attr] !== null
+      );
+
+      if ( _search._and ) {
+        result = list.filter(item => attrs.every(attr => {
+          try {
+            return JSON.stringify(item[attr]).includes(_search[attr])
+          } catch(e) {
+            console.warn(e);
+            console.log({item,attr,_search});
+            return false;
+          }
+        }));
+      } else {
+        result = list.filter(item => attrs.some(attr => JSON.stringify(item[attr]).includes(_search[attr])));
+      }
+    }
+
     return result;
   }
 

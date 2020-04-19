@@ -1,7 +1,8 @@
 import {
   NOUSER_ID, DB_ROOT, 
   GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE,
-  addUser
+  setItem,
+  addUser,
 } from './db_helpers.js';
 import Perms from './permissions.js';
 
@@ -18,7 +19,15 @@ export default function init({getTable, newItem, config}) {
   // add basic users 'no user', 'test user' (regular user), 'useradmin' (user admin), 
   // and 'globaladmin' (global admin)
 
-  utable.put(NOUSER_ID, {userid:NOUSER_ID, groups:['nousers']});
+  const noUser = {
+    username: 'nouser',
+    email: 'no-one@nowhere.nothing',
+    salt: 0,
+    passwordHash: '0000000000000000',
+    groups:['nousers'],
+    verified: false
+  };
+  setItem({table:utable, id:NOUSER_ID, item:noUser});
   gtable.put('nousers', {name:'nousers', users: [NOUSER_ID], description:'not logged in users'});
 
   gtable.put('users', {name:'users', users: [], description:'regular users'});

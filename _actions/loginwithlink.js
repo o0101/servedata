@@ -32,6 +32,8 @@ export default function action({id}, {getTable, newItem, setItem}, req, res) {
     throw e;
   }
 
+  setItem({table:userTable, id:user._id, item:{verified:true}});
+
   const session = newItem({table:getTable(SESSION_TABLE), item: {userid:user._id}});
   res.cookie(COOKIE_NAME, session._id);
 
