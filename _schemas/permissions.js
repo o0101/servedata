@@ -1,5 +1,5 @@
 import {T} from 'jtype-system';
-import {PermNames} from '../server.js';
+import {PermNames} from '../helpers.js';
 
 const validationObject = {
   _id: T`ID`

@@ -1,51 +1,42 @@
 import path from 'path';
 import fs from 'fs';
 import url from 'url';
-import crypto from 'crypto';
 
 import helmet from 'helmet';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-import {beamsplitter} from 'beamsplitter';
-
 import {config, getTable} from 'stubdb';
 
 import './types.js';
+import {getSession} from './_middlewares/session.js';
+import {getPermission} from './_middlewares/permission.js';
+import {catchError} from './_middlewares/error.js';
+import {
+  HTML_ERROR, JSON_ERROR, DEBUG,Log, guardNumber, nextKey, clone, formatError, newRandom32BitSeed,
+  PORT, 
+} from './helpers.js';
+
+import {
+  APP_ROOT, DB_ROOT, SCHEMAS, ACTIONS, QUERIES, VIEWS, STATIC, 
+  INIT_SCRIPT, 
+  USER_TABLE, SESSION_TABLE, PERMISSION_TABLE, 
+  GROUP_TABLE, LOGINLINK_TABLE, DEPOSIT_TABLE,
+  SchemaValidators,
+  addUser,
+  getList,
+  getListSorted,
+  getSearchResult,
+  getStoredQueryResult,
+  runStoredAction,
+  grant, blankPerms, loadSchemas,
+  newItem,
+  setItem,
+  getItem,
+  _getTable,
+} from './db_helpers.js';
 
 // constants and config
-  const CONSOLE_ERROR = true;
-  const DEFAULT_PORT = 8080;
-  const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
-  const JSON_ERROR = msg => JSON.stringify({error:msg});
-  const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
-  export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
-  export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
-  const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
-  const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
-  const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
-  const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
-  const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.SD_STATIC_FILES) : path.resolve(APP_ROOT, "public");
-  const INIT_SCRIPT = process.env.SD_INIT_SCRIPT ? path.resolve(process.env.SD_INIT_SCRIPT) : path.resolve(APP_ROOT, "sd_init.js");
-  export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
-  export const USER_TABLE = process.env.SD_USER_TABLE ? process.env.SD_USER_TABLE : "users";
-  export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
-  export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
-  export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
-  export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
-  export const DEPOSIT_TABLE = process.env.SD_DEPOSIT_TABLE ? process.env.SD_DEPOSIT_TABLE : "deposits";
-
-  export const NOUSER_ID = 'nouser';
-  export const PermNames = [
-    'excise',
-    'view',
-    'alter',
-    'create'
-  ];
-
-// cache
-  const Tables = new Map();
-  const SchemaValidators = {};
 
 // paths dispatch
   const DISPATCH = {
@@ -58,21 +49,6 @@ import './types.js';
     'POST /form/table/:table/:id/with/:view': withView(setItem),
     'POST /form/action/:action/with/:view': withView(runStoredAction),
   };
-
-// Logging
-  const DEBUG = {
-    AUTH: true,
-    WARN: true,
-    ERROR: true,
-    INFO: false
-  };
-
-  function Log(obj, stdErr = false) {
-    console.log(JSON.stringify(obj));
-    if( stdErr ) {
-      console.error(obj);
-    }
-  }
 
 export async function initializeDB() {
   const {default:initialize} = await import(INIT_SCRIPT);
@@ -107,7 +83,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
   const X = async (req, res, next) => {
     if ( DEBUG.AUTH ) {
-      getPermissions(req, res);
+      getPermission(req, res);
 
       if ( ! req.authorization ) {
         return res.status(401).send('401 Not authorized. No valid user identified.');
@@ -197,305 +173,6 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
 }
 
-// middleware helpers
-  function getSession(req, res, next) {
-    const {[COOKIE_NAME]:cookie} = req.cookies;
-    const {Authorization:authHeader} = req.headers;
-    const noSessionClaim = ! cookie && ! authHeader;
-    const redundantClaim = cookie && authHeader;
-
-    let token;
-    let session;
-
-    let tokenIsInvalid;
-    let sessionIsExpired;
-    
-    switch(true) {
-      case noSessionClaim:
-        DEBUG.INFO && console.warn("No session claim");
-        break;
-      case redundantClaim:
-        DEBUG.WARN && console.warn("Both cookie and header used for session. Invalid.");
-        res.abort(400);
-        break;
-      case !!cookie:
-        token = cookie;
-        break;
-      case !!authHeader: 
-        token = authHeader;
-        token = token.replace("Bearer ", "");
-        break;
-      default:
-        // No need as the 4 possible cases are above
-        throw "This should never happen"
-    }
-
-    if ( token ) {
-      const sessions = _getTable(SESSION_TABLE);
-
-      try {
-        session = sessions.get(token);
-      } catch(e) {
-        DEBUG.WARN && console.warn({msg:"Token is invalid because there is no session associated with it", token, error:e});
-        tokenIsInvalid = true;
-      }
-
-      if ( ! tokenIsInvalid ) {
-        if ( session.expiresAt >= Date.now() ) {
-          DEBUG.WARN && console.warn({msg:"Expired session", token, session});
-          sessionIsExpired = true;
-        }
-      }
-    } else if ( noSessionClaim ) {
-      session = {userid:NOUSER_ID};
-    }
-
-    const authorization = {
-      token, 
-      session, 
-      noSessionClaim,
-      tokenIsInvalid,
-      sessionIsExpired,
-      // as an object, 'permissions' properties are *not* frozen
-      permissions: blankPerms()
-    };
-
-    Object.freeze(authorization);
-    Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
-
-    DEBUG.INFO && console.log({authorization});
-
-    console.log({
-      path: req.path,
-      authorization
-    });
-
-    next();
-  }
-
-  function getPermissions(req, res) {
-    let userid;
-    let user;
-
-    if ( req.authorization ) {
-      const {tokenIsInvalid,sessionIsExpired} = req.authorization;
-
-      if ( tokenIsInvalid || sessionIsExpired ) {
-        req.errors = {tokenIsInvalid, sessionIsExpired};
-        return;
-      }
-
-      const {userid} = req.authorization.session;
-
-      try {
-        const table = _getTable(USER_TABLE);
-        user = getItem({table, id:userid});
-      } catch(e) {
-        DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid});
-        req.errors = {noUser:true};
-        return;
-      }
-
-      const {accountDisabled, accountDeleted} = user;
-
-      if ( accountDisabled || accountDeleted ) {
-        DEBUG.WARN && console.warn({msg:"Account not active", accountDisabled, accountDeleted});
-        req.errors = {accountDisabled, accountDeleted};
-        return;
-      }
-
-      const Endpoint_permissions = blankPerms();
-      const Instance_permissions = blankPerms();
-
-      let active;
-
-      switch(true) {
-        case !!req.params.table:
-          active = `table/${req.params.table}`;
-          break;
-        case !!req.params.action:
-          active = `action/${req.params.action}`;
-          break;
-        case !!req.params.query:
-          active = `query/${req.params.query}`;
-          break;
-      }
-
-      for( const group of user.groups ) {
-        try {
-          const table = _getTable(PERMISSION_TABLE);
-          const endpoint_key = `group/${group}:${active}`;
-          const endpoint_permissions = getItem({table, id:endpoint_key});
-          grant(Endpoint_permissions, endpoint_permissions);
-        } catch(e) {
-          DEBUG.INFO && console.warn(e);
-        }
-
-        try {
-          const table = _getTable(PERMISSION_TABLE);
-
-          let id;
-          if ( active.startsWith('action') ) {
-            id = req.body.id;
-          } else {
-            id = req.params.id;
-          }
-
-          const instance_key = `group/${group}:${active}:${id}`;
-          const instance_permissions = getItem({table, id:instance_key});
-          grant(Instance_permissions, instance_permissions);
-        } catch(e) {
-          DEBUG.INFO && console.warn(e);
-        }
-      }
-
-      try {
-        const table = _getTable(PERMISSION_TABLE);
-        const endpoint_key = `${userid}:${active}`;
-        const endpoint_permissions = getItem({table, id:endpoint_key});
-        grant(Endpoint_permissions, endpoint_permissions);
-      } catch(e) {
-        DEBUG.INFO && console.warn(e);
-      }
-
-      try {
-        const table = _getTable(PERMISSION_TABLE);
-        let id;
-        if ( active.startsWith('action') ) {
-          id = req.body.id;
-        } else {
-          id = req.params.id;
-        }
-        const instance_key = `${userid}:${active}:${id}`;
-        const instance_permissions = getItem({table, id:instance_key});
-        grant(Instance_permissions, instance_permissions);
-      } catch(e) {
-        DEBUG.INFO && console.warn(e);
-      }
-
-      grant(req.authorization.permissions, Endpoint_permissions);
-      grant(req.authorization.permissions, Instance_permissions);
-
-      Object.freeze(req.authorization.permissions);
-    }
-  }
-
-  function catchError(err, req, res, next) {
-    const errExists = !! err;
-    const stack = errExists ? err.stack || '' : '';
-    const msg = errExists ? err.message || '' : '';
-    const Err = {
-      err,
-      stack,
-      msg,
-      path: req.path,
-      ip: {
-        rip: req.ip,
-        rips: req.ips,
-        rcra: req.connection.remoteAddress,
-        rxff: req.headers['x-forwarded-for'],
-        rxrip: req.headers['x-real-ip']
-      }
-    };
-    Log(Err, CONSOLE_ERROR);
-    if ( req.path.startsWith('/form') ) {
-      res.type('html');
-      res.end(HTML_ERROR(msg));
-    } else if ( req.path.startsWith('/json') ) {
-      res.type('json');
-      res.end(JSON_ERROR(msg));
-    } else {
-      res.type('text');
-      res.end("Error " + msg);
-    }
-  }
-
-// database adapters
-  function getItem({table, id}) {
-    return table.get(id);
-  }
-
-  function getList({table}) {
-    return table.getAll();
-  }
-
-  function getListSorted({table, prop}) {
-    const list = table.getAll();
-    list.sort((a,b) => {
-      let X,Y;
-      try {
-        X = guardNumber(a[prop]);
-        Y = guardNumber(b[prop]);
-      } catch (e) {
-        X = a[prop];
-        Y = b[prop];
-      }
-      if ( X < Y ) {
-        return -1;
-      } else return 1;
-    });
-    return list;
-  }
-
-  function getSearchResult({table, _search}) {
-    const list = getList({table});
-    const keywords = _search['keywords'];
-    const result = list.filter(item => JSON.stringify(item).includes(keywords));
-    return result;
-  }
-
-  function getStoredQueryResult() {
-    throw new Error("Not implemented");
-  }
-
-  function newItem({table, item}) {
-    const id = nextKey();
-    item._id = id;
-    const errors = SchemaValidators[table.tableInfo.name](item);
-    if ( errors.length ) {
-      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
-    }
-    table.put(id, item);
-    return item;
-  }
-
-  function setItem({table, id, item}) {
-    item._id = id;
-    let existingItem;
-    try {
-      existingItem = table.get(id);
-    } catch(e) {
-      console.log(`could not get ${id}`, e);
-      existingItem = {};
-    }
-    item = Object.assign(existingItem, item);
-    const errors = SchemaValidators[table.tableInfo.name](item);
-    if ( errors.length ) {
-      throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
-    }
-    table.put(id, item);
-    return item;
-  }
-
-  async function runStoredAction({action, item}, req, res) {
-    const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
-    try {
-      const {default:Action} = await import(actionFileName);
-      const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
-      return result;
-    } catch(e) {
-      DEBUG.WARN && console.warn('wtf', e);
-      throw new Error(`Action ${action} is not defined in ${actionFileName}`);
-    }
-  }
-
-  function _getTable(table) {
-    if ( !Tables.has(table) ) {
-      Tables.set(table, getTable(table));
-    }
-    return Tables.get(table);
-  }
-
 // views
   function withView(f) {
     return async (...args) => {
@@ -517,93 +194,4 @@ export function servedata({callConfig: callConfig = false} = {}) {
     };
   }
 
-// helpers
-  async function loadSchemas() {
-    const entries = fs.readdirSync(SCHEMAS);
 
-    for( const file of entries ) {
-      if ( file.startsWith('.') || ! file.endsWith('.js') ) continue;
-      const {default:validator} = await import(path.resolve(SCHEMAS, file));  
-      const tableName = file.replace(/\.js$/, '');
-      SchemaValidators[tableName] = validator;
-    }
-  }
-
-  export function addUser({username, email, password}, ...groups) {
-    const randomSalt = newRandom32BitSeed();
-    console.log({randomSalt});
-    const user = {
-      username, 
-      email,
-      salt: randomSalt,
-      passwordHash: beamsplitter(password, randomSalt).toString(16),
-      groups
-    }
-    console.log({passwordHash:user.passwordHash});
-    const userObject = newItem({table:getTable(USER_TABLE), item:user});
-    const gtable = getTable(GROUP_TABLE);
-    for( const group of groups ) {
-      const groupObject = gtable.get(group);
-      groupObject.users[userObject._id] = true;
-      gtable.put(group, groupObject);
-    }
-    return userObject;
-  }
-
-  export function newLoginLink(req, loginId) {
-    return {
-      formAction: url.format({
-        protocol: req.protocol,
-        host: req.get('host'),
-        pathname: '/form/action/loginwithlink/with/app'
-      }),
-      linkHref: url.format({
-        protocol: req.protocol,
-        host: req.get('host'),
-        pathname: `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`,
-      })
-    };
-  }
-
-  function blankPerms() {
-    const perm = {};
-    for( const name of PermNames ) {
-      perm[name] = false;
-    }
-    return perm;
-  }
-
-  function grant(perms, new_perms) {
-    for( const name of PermNames ) {
-      perms[name] |= new_perms[name];
-    }
-  }
-
-  function guardNumber(x) {
-    const parsed = Number(x);
-    if ( Number.isNaN(parsed) ) {
-      throw new Error(`Value ${x} is not a number.`);
-    }
-    return parsed;
-  }
-
-  function nextKey() {
-    const v = crypto.randomBytes(5).readUIntBE(0,5);
-    return v.toString(36);
-  }
-
-  function clone(o) {
-    return JSON.parse(JSON.stringify(o));
-  }
-
-  function formatError(e) {
-    if ( e instanceof Error ) {
-      return {error: e.stack.split(/\s*\n\s*/g)};
-    } else if ( ! e.error ) {
-      return {error: e};
-    } else return e;
-  }
-
-  function newRandom32BitSeed() {
-    return crypto.randomBytes(4).readUInt32BE();
-  }

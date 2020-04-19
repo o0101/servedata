@@ -7,7 +7,7 @@ import {MAIL_SENDER, MAIL_HOST, MAIL_PORT} from '../common.js';
 import {
   LOGINLINK_TABLE, SESSION_TABLE, COOKIE_NAME,
   addUser, newLoginLink
-} from '../server.js';
+} from '../db_helpers.js';
 
 export default async function action({username, password, email}, {getTable, newItem}, req, res) {
   const user = addUser({username, email, password, verified: false}, 'users');

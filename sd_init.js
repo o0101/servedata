@@ -2,7 +2,7 @@ import {
   NOUSER_ID, DB_ROOT, 
   GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE,
   addUser
-} from './server.js';
+} from './db_helpers.js';
 import Perms from './permissions.js';
 
 export default function init({getTable, newItem, config}) {

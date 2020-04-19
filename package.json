@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run dev-db",
-    "dev-db": "node-dev -r esm start.js"
+    "dev-db": "nodemon -r esm start.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "helmet": "^3.22.0",
     "jtype-system": "^1.1.4",
     "nodemailer": "^6.4.6",
+    "nodemon": "^2.0.3",
     "stubdb": "^1.0.10"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import {COOKIE_NAME, NOUSER_ID} from '../server.js';
+import {COOKIE_NAME, NOUSER_ID} from '../db_helpers.js';
 
 export default function action({userid}, {getTable, newItem}, req, res) {
   const utable = getTable('users');
