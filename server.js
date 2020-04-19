@@ -80,75 +80,26 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
 
   app.use(cookieParser());
-
   app.use(express.urlencoded({extended:true}));
-
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
-
   app.use(getSession);
-
-  const X = async (req, res, next) => {
-    if ( DEBUG.AUTH ) {
-      getPermission(req, res);
-
-      if ( ! req.authorization ) {
-        return res.status(401).send('401 Not authorized. No valid user identified.');
-      }
-
-      // sometimes we do an action through get because 'links'
-      if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
-        return res.status(401).send('401 Not authorized. User has no view permission on this scope.');
-      }
-
-      if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-        return res.status(401).send('401 Not authorized. User has no create permission on this scope.');
-      }
-    }
-
-    const way = `${req.method} ${req.route.path}`;
-    const data = {...req.params, item: req.body, _search: req.query};
-    if ( data.table ) {
-      data.table = _getTable(data.table);
-    }
-    let result
-    try {
-      if ( req.path.startsWith('/form')) {
-        res.type('html');
-      } else if ( req.path.startsWith('/json')) {
-        res.type('json');
-      }
-      if ( req.path.includes('/action/') ) {
-        result = await DISPATCH[way](data, req, res);
-      } else {
-        result = await DISPATCH[way](data);
-      }
-      res.end(result);
-    } catch(e) {
-      next(e);
-    }
-  }
-
-  // views are in './views/:view.js'
-  // queries are in './queries/:query.js'
-  // actions are in './actions/:action.js'
 
   // JSON
     // getters
-    app.get('/json/table/:table/:id', X);
-    app.get('/json/list/table/:table/:id/sort/:prop', X);
-    app.get('/json/search/table/:table/:id/sort/:prop', X);
+      app.get('/json/table/:table/:id', X);
+      app.get('/json/list/table/:table/:id/sort/:prop', X);
+      app.get('/json/search/table/:table/:id/sort/:prop', X);
     // auto id
-    app.post('/json/table/:table', X);    
+      app.post('/json/table/:table', X);    
     // given id
-    app.put('/json/table/:table/:id', X); 
+      app.put('/json/table/:table/:id', X); 
     // update 
-    app.patch('/json/table/:table/:id', X); 
+      app.patch('/json/table/:table/:id', X); 
     // stored procedures
-    app.post('/json/action/:action', X);
-    app.get('/json/query/:query', X);
+      app.post('/json/action/:action', X);
+      app.get('/json/query/:query', X);
 
   // FORM
-    // with is render (from ./views/:view.js)
     // getters 
       app.get('/form/table/:table/:id/with/:view', X);
       app.get('/form/list/table/:table/with/:view/', X);
@@ -164,11 +115,9 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.get('/form/query/:query/with/:view', X);
       app.post('/form/action/:action/with/:view', X);
 
-
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
   });
-
   app.use(catchError);
 
   app.listen(PORT, err => {
@@ -177,5 +126,47 @@ export function servedata({callConfig: callConfig = false} = {}) {
     }
     Log({serverUp:{port:PORT, up:Date.now()}});
   });
+}
+
+async function X(req, res, next) {
+  getPermission(req, res);
+
+  if ( ! req.authorization ) {
+    return res.status(401).send('401 Not authorized. No valid user identified.');
+  }
+
+  // sometimes we do an action through get because 'links'
+  if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
+    return res.status(401).send('401 Not authorized. User has no view permission on this scope.');
+  }
+
+  if ( req.method == 'POST' && !req.authorization.permissions.create ) {
+    return res.status(401).send('401 Not authorized. User has no create permission on this scope.');
+  }
+
+  const way = `${req.method} ${req.route.path}`;
+  const data = {...req.params, item: req.body, _search: req.query};
+
+  if ( data.table ) {
+    data.table = _getTable(data.table);
+  }
+
+  let result;
+
+  try {
+    if ( req.path.startsWith('/form')) {
+      res.type('html');
+    } else if ( req.path.startsWith('/json')) {
+      res.type('json');
+    }
+    if ( req.path.includes('/action/') ) {
+      result = await DISPATCH[way](data, req, res);
+    } else {
+      result = await DISPATCH[way](data);
+    }
+    res.end(result);
+  } catch(e) {
+    next(e);
+  }
 }
 

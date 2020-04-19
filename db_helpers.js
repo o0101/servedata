@@ -1,36 +1,37 @@
-import path from 'path';
-import fs from 'fs';
+// imports
+  import path from 'path';
+  import fs from 'fs';
 
-import {config, getTable} from 'stubdb';
+  import {config, getTable} from 'stubdb';
 
-import {
-  DEBUG,
-  APP_ROOT
-} from './common.js';
+  import {
+    DEBUG,
+    APP_ROOT
+  } from './common.js';
+  import {
+    newRandom32BitSeed,
+    nextKey,
+    formatError,
+  } from './helpers.js';
 
-import {
-  newRandom32BitSeed,
-  nextKey,
-  formatError,
-} from './helpers.js';
+// constants
+  // cache 
+    export const SchemaValidators = {};
+    export const Tables = new Map();
 
-// cache 
-  export const SchemaValidators = {};
-  export const Tables = new Map();
+  // file location constants
+    export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
+    export const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
+    export const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
+    export const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
 
-//file location constants
-  export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
-  export const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
-  export const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
-  export const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
+  // database table name constants
+    export const SearchControl = new Set([
+      "_keywords",
+      "_and"
+    ]);
 
-//database table name constants
-  export const SearchControl = new Set([
-    "_keywords",
-    "_and"
-  ]);
-
-// database adapters
+// database helpers and adapters 
   export async function loadSchemas() {
     const entries = fs.readdirSync(SCHEMAS);
 
@@ -150,5 +151,4 @@ import {
     }
     return Tables.get(table);
   }
-
 

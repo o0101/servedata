@@ -5,7 +5,6 @@
 // debug
   export const DEBUG = {
     CONSOLE_ERROR: true,
-    AUTH: true,
     WARN: true,
     ERROR: true,
     INFO: true
