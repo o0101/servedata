@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
-import {VIEWS} from './helpers.js';
+import {VIEWS} from './common.js';
 
 // views
   export function withView(f) {

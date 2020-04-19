@@ -13,7 +13,7 @@
 
   import {newItem} from './db_helpers.js';
 
-// constants
+  import {PermNames} from './permissions.js';
 
 // error helpers
   export const JSON_ERROR = msg => JSON.stringify({error:msg});

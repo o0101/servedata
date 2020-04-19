@@ -15,12 +15,12 @@ export default function action({id}, {getTable, newItem, setItem}, req, res) {
     loginLink = linkTable.get(id);
   } catch(e) {
     res.status(401).send(`That login link does not exist`);
-    throw e;
+    throw {error: `That login link does not exist`};
   }
 
   if ( loginLink.expired ) {
     res.status(401).send(`That login link is expired`);
-    throw e;
+    throw {error:`That login link is expired`};
   }
 
   setItem({table:linkTable, id:loginLink._id, item: {expired:true}}); 
@@ -28,8 +28,8 @@ export default function action({id}, {getTable, newItem, setItem}, req, res) {
   try {
     user = userTable.get(loginLink.userid);
   } catch(e) {
-    res.status(401).send(`That login link is trying to log in a user that does not exist`);
-    throw e;
+    res.status(401).send(`That login link is trying to log in a user that does not exist.`);
+    throw {error:`That login link is trying to log in a user that does not exist.`};
   }
 
   setItem({table:userTable, id:user._id, item:{verified:true}});

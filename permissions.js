@@ -91,4 +91,11 @@ const Perms = [
       ],
 ];
 
+export const PermNames = [
+  'excise',
+  'view',
+  'alter',
+  'create'
+];
+
 export default Perms;
