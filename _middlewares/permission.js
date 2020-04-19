@@ -1,3 +1,5 @@
+import {DEBUG,formatError} from '../helpers.js';
+import {grant, blankPerms, _getTable, getItem, PERMISSION_TABLE, USER_TABLE} from '../db_helpers.js';
 
   export function getPermission(req, res) {
     let userid;
@@ -17,7 +19,7 @@
         const table = _getTable(USER_TABLE);
         user = getItem({table, id:userid});
       } catch(e) {
-        DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid});
+        DEBUG.ERROR && console.error({msg:"Session and token OK, but no user", userid, error:  formatError(e)});
         req.errors = {noUser:true};
         return;
       }

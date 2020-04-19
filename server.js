@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import url from 'url';
 
 import helmet from 'helmet';
 import express from 'express';

@@ -2,15 +2,13 @@ import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 
-import {beamsplitter} from 'beamsplitter';
-
 // debug
   export const DEBUG = {
     CONSOLE_ERROR: true,
     AUTH: true,
     WARN: true,
     ERROR: true,
-    INFO: false
+    INFO: true
   };
 
 // constants
