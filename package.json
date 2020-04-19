@@ -7,6 +7,11 @@
     "test": "npm run dev-db",
     "dev-db": "nodemon -r esm start.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "db-servedata/**"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cris691/servedata.git"
