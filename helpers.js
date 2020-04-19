@@ -1,24 +1,23 @@
-import path from 'path';
-import fs from 'fs';
-import crypto from 'crypto';
+// imports
+  import path from 'path';
+  import fs from 'fs';
+  import crypto from 'crypto';
 
-// debug
-  export const DEBUG = {
-    CONSOLE_ERROR: true,
-    AUTH: true,
-    WARN: true,
-    ERROR: true,
-    INFO: true
-  };
+  import {beamsplitter} from 'beamsplitter';
+  import {getTable} from 'stubdb';
+
+  import {
+    USER_TABLE,
+    GROUP_TABLE
+  } from './common.js';
+
+  import {newItem} from './db_helpers.js';
 
 // constants
-  export const DEFAULT_PORT = 8080;
-  export const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
 
 // error helpers
   export const JSON_ERROR = msg => JSON.stringify({error:msg});
   export const HTML_ERROR = msg => `<h1>Error</h1><p>${msg}</p>`;
-
 
 // helpers
   export function Log(obj, stdErr = false) {
@@ -56,4 +55,38 @@ import crypto from 'crypto';
   export function newRandom32BitSeed() {
     return crypto.randomBytes(4).readUInt32BE();
   }
+
+  export function addUser({username, email, password}, ...groups) {
+    const randomSalt = newRandom32BitSeed();
+    const user = {
+      username, 
+      email,
+      salt: randomSalt,
+      passwordHash: beamsplitter(password, randomSalt).toString(16),
+      groups
+    }
+    const userObject = newItem({table:getTable(USER_TABLE), item:user});
+    const gtable = getTable(GROUP_TABLE);
+    for( const group of groups ) {
+      const groupObject = gtable.get(group);
+      groupObject.users[userObject._id] = true;
+      gtable.put(group, groupObject);
+    }
+    return userObject;
+  }
+
+  export function blankPerms() {
+    const perm = {};
+    for( const name of PermNames ) {
+      perm[name] = false;
+    }
+    return perm;
+  }
+
+  export function grant(perms, new_perms) {
+    for( const name of PermNames ) {
+      perms[name] |= new_perms[name];
+    }
+  }
+
 

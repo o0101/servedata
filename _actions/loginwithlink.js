@@ -1,8 +1,8 @@
 import {
+  COOKIE_NAME,
   USER_TABLE, SESSION_TABLE, 
   LOGINLINK_TABLE,
-  COOKIE_NAME, 
-} from '../db_helpers.js';
+} from '../common.js';
 
 export default function action({id}, {getTable, newItem, setItem}, req, res) {
   const linkTable = getTable(LOGINLINK_TABLE);

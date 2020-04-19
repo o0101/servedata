@@ -1,5 +1,6 @@
-import {DEBUG,formatError} from '../helpers.js';
-import {grant, blankPerms, _getTable, getItem, PERMISSION_TABLE, USER_TABLE} from '../db_helpers.js';
+import {DEBUG, PERMISSION_TABLE, USER_TABLE} from '../common.js';
+import {formatError, grant, blankPerms} from '../helpers.js';
+import {_getTable, getItem} from '../db_helpers.js';
 
   export function getPermission(req, res) {
     let userid;

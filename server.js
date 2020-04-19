@@ -1,41 +1,48 @@
-import path from 'path';
-import fs from 'fs';
+// imports 
+  // nodejs builtins
+    import path from 'path';
+    import fs from 'fs';
 
-import helmet from 'helmet';
-import express from 'express';
-import cookieParser from 'cookie-parser';
+  // 3rd party dependencies
+    import helmet from 'helmet';
+    import express from 'express';
+    import cookieParser from 'cookie-parser';
 
-import {config, getTable} from 'stubdb';
+  // my own external dependencies
+    import {config, getTable} from 'stubdb';
 
-import './types.js';
-import {getSession} from './_middlewares/session.js';
-import {getPermission} from './_middlewares/permission.js';
-import {catchError} from './_middlewares/error.js';
-import {
-  HTML_ERROR, JSON_ERROR, DEBUG,Log, guardNumber, nextKey, clone, formatError, newRandom32BitSeed,
-  PORT, 
-} from './helpers.js';
-
-import {
-  APP_ROOT, DB_ROOT, SCHEMAS, ACTIONS, QUERIES, VIEWS, STATIC, 
-  INIT_SCRIPT, 
-  USER_TABLE, SESSION_TABLE, PERMISSION_TABLE, 
-  GROUP_TABLE, LOGINLINK_TABLE, DEPOSIT_TABLE,
-  SchemaValidators,
-  addUser,
-  getList,
-  getListSorted,
-  getSearchResult,
-  getStoredQueryResult,
-  runStoredAction,
-  grant, blankPerms, loadSchemas,
-  newItem,
-  setItem,
-  getItem,
-  _getTable,
-} from './db_helpers.js';
-
-// constants and config
+  // internal modules
+    import './types.js';
+    import {
+      APP_ROOT,
+      VIEWS, STATIC, 
+      INIT_SCRIPT, 
+      DEBUG,
+      PORT
+    } from './common.js';
+    import {
+      Log,
+      guardNumber, nextKey, clone, formatError, newRandom32BitSeed,
+      HTML_ERROR, JSON_ERROR,
+    } from './helpers.js';
+    import {
+      DB_ROOT, SCHEMAS, ACTIONS, QUERIES, 
+      SchemaValidators,
+      getList,
+      getListSorted,
+      getSearchResult,
+      getStoredQueryResult,
+      runStoredAction,
+      loadSchemas,
+      newItem,
+      setItem,
+      getItem,
+      _getTable,
+    } from './db_helpers.js';
+    import {getSession} from './_middlewares/session.js';
+    import {getPermission} from './_middlewares/permission.js';
+    import {catchError} from './_middlewares/error.js';
+    import {withView} from './views.js';
 
 // paths dispatch
   const DISPATCH = {
@@ -171,26 +178,4 @@ export function servedata({callConfig: callConfig = false} = {}) {
     Log({serverUp:{port:PORT, up:Date.now()}});
   });
 }
-
-// views
-  function withView(f) {
-    return async (...args) => {
-      const raw = await f(...args);
-      const view = args[0].view;
-      let viewFileName, View;
-      //try {
-        viewFileName = path.resolve(VIEWS, `${args[0].view}.js`);
-        ({default:View} = await import(viewFileName));
-      //} catch(e) {
-      //  console.warn(`View ${view} is not in file ${viewFileName}`);
-      //}
-      /**
-      const tempJsonView = JSON.stringify(raw);
-      return tempJsonView;
-      **/
-      const renderedView = View(raw);
-      return renderedView;
-    };
-  }
-
 

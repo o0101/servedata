@@ -4,7 +4,7 @@ import {
   GROUP_TABLE,
   DEPOSIT_TABLE,
   NOUSER_ID
-} from './db_helpers.js';
+} from './common.js';
 
 const Perms = [
   // permissions for standard auth actions signup, login, logout

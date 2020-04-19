@@ -1,8 +1,13 @@
 import {
-  NOUSER_ID, DB_ROOT, 
+  NOUSER_ID, 
   GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE,
+} from './common.js';
+import {
+  addUser
+} from './helpers.js';
+import {
+  DB_ROOT, 
   setItem,
-  addUser,
 } from './db_helpers.js';
 import Perms from './permissions.js';
 

@@ -1,52 +1,47 @@
 import path from 'path';
 import fs from 'fs';
-import url from 'url';
 
 import {config, getTable} from 'stubdb';
-import {beamsplitter} from 'beamsplitter';
 
 import {
   DEBUG,
+  APP_ROOT
+} from './common.js';
+
+import {
   newRandom32BitSeed,
   nextKey,
-  formatError
+  formatError,
 } from './helpers.js';
-
 
 // cache 
   export const SchemaValidators = {};
   export const Tables = new Map();
 
-
-//constants
-  export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
-  export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
+//file location constants
   export const DB_ROOT = path.resolve(APP_ROOT, "db-servedata");
   export const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
   export const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
   export const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
-  export const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
-  export const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.SD_STATIC_FILES) : path.resolve(APP_ROOT, "public");
-  export const INIT_SCRIPT = process.env.SD_INIT_SCRIPT ? path.resolve(process.env.SD_INIT_SCRIPT) : path.resolve(APP_ROOT, "sd_init.js");
-  export const USER_TABLE = process.env.SD_USER_TABLE ? process.env.SD_USER_TABLE : "users";
-  export const SESSION_TABLE = process.env.SD_SESSION_TABLE ? process.env.SD_SESSION_TABLE : "sessions";
-  export const PERMISSION_TABLE = process.env.SD_PERMISSION_TABLE ? process.env.SD_SESSION_TABLE : "permissions";
-  export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
-  export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
-  export const DEPOSIT_TABLE = process.env.SD_DEPOSIT_TABLE ? process.env.SD_DEPOSIT_TABLE : "deposits";
-  export const NOUSER_ID = 'nouser';
-  export const PermNames = [
-    'excise',
-    'view',
-    'alter',
-    'create'
-  ];
+
+//database table name constants
   export const SearchControl = new Set([
     "_keywords",
     "_and"
   ]);
 
 // database adapters
+  export async function loadSchemas() {
+    const entries = fs.readdirSync(SCHEMAS);
+
+    for( const file of entries ) {
+      if ( file.startsWith('.') || ! file.endsWith('.js') ) continue;
+      const {default:validator} = await import(path.resolve(SCHEMAS, file));  
+      const tableName = file.replace(/\.js$/, '');
+      SchemaValidators[tableName] = validator;
+    }
+  }
+
   export function getItem({table, id}) {
     return table.get(id);
   }
@@ -154,63 +149,6 @@ import {
       Tables.set(table, getTable(table));
     }
     return Tables.get(table);
-  }
-  export function addUser({username, email, password}, ...groups) {
-    const randomSalt = newRandom32BitSeed();
-    const user = {
-      username, 
-      email,
-      salt: randomSalt,
-      passwordHash: beamsplitter(password, randomSalt).toString(16),
-      groups
-    }
-    const userObject = newItem({table:getTable(USER_TABLE), item:user});
-    const gtable = getTable(GROUP_TABLE);
-    for( const group of groups ) {
-      const groupObject = gtable.get(group);
-      groupObject.users[userObject._id] = true;
-      gtable.put(group, groupObject);
-    }
-    return userObject;
-  }
-  export async function loadSchemas() {
-    const entries = fs.readdirSync(SCHEMAS);
-
-    for( const file of entries ) {
-      if ( file.startsWith('.') || ! file.endsWith('.js') ) continue;
-      const {default:validator} = await import(path.resolve(SCHEMAS, file));  
-      const tableName = file.replace(/\.js$/, '');
-      SchemaValidators[tableName] = validator;
-    }
-  }
-
-  export function newLoginLink(req, loginId) {
-    return {
-      formAction: url.format({
-        protocol: req.protocol,
-        host: req.get('host'),
-        pathname: '/form/action/loginwithlink/with/app'
-      }),
-      linkHref: url.format({
-        protocol: req.protocol,
-        host: req.get('host'),
-        pathname: `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`,
-      })
-    };
-  }
-
-  export function blankPerms() {
-    const perm = {};
-    for( const name of PermNames ) {
-      perm[name] = false;
-    }
-    return perm;
-  }
-
-  export function grant(perms, new_perms) {
-    for( const name of PermNames ) {
-      perms[name] |= new_perms[name];
-    }
   }
 
 

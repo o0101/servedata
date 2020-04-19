@@ -1,4 +1,5 @@
-import {DEBUG,Log,HTML_ERROR,JSON_ERROR} from '../helpers.js';
+import {DEBUG} from '../common.js';
+import {Log,HTML_ERROR, JSON_ERROR} from '../helpers.js';
 
   export function catchError(err, req, res, next) {
     const errExists = !! err;
@@ -29,3 +30,4 @@ import {DEBUG,Log,HTML_ERROR,JSON_ERROR} from '../helpers.js';
       res.end("Error " + msg);
     }
   }
+

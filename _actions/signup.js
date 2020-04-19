@@ -1,13 +1,15 @@
-import nodemailer from 'nodemailer';
+// imports
+  import url from 'url';
 
-import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
+  import nodemailer from 'nodemailer';
 
-import {MAIL_SENDER, MAIL_HOST, MAIL_PORT} from '../common.js';
-
-import {
-  LOGINLINK_TABLE, SESSION_TABLE, COOKIE_NAME,
-  addUser, newLoginLink
-} from '../db_helpers.js';
+  import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
+  import {
+    COOKIE_NAME, MAIL_SENDER, 
+    MAIL_HOST, MAIL_PORT,
+    addUser
+  } from '../helpers.js';
+  import { LOGINLINK_TABLE, SESSION_TABLE } from '../db_helpers.js';
 
 export default async function action({username, password, email}, {getTable, newItem}, req, res) {
   const user = addUser({username, email, password, verified: false}, 'users');
@@ -85,4 +87,19 @@ export async function sendLoginMail({email, loginLink, req}) {
   console.log("Yay!");
   console.log(`Email sent: ${email}, ${JSON.stringify({mail})}`);
   return {success: true, email, mail, id};
+}
+
+export function newLoginLink(req, loginId) {
+  return {
+    formAction: url.format({
+      protocol: req.protocol,
+      host: req.get('host'),
+      pathname: '/form/action/loginwithlink/with/app'
+    }),
+    linkHref: url.format({
+      protocol: req.protocol,
+      host: req.get('host'),
+      pathname: `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`,
+    })
+  };
 }

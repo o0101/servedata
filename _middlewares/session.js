@@ -1,5 +1,6 @@
-import {DEBUG} from '../helpers.js';
-import {COOKIE_NAME, NOUSER_ID, blankPerms, _getTable, SESSION_TABLE} from '../db_helpers.js';
+import {DEBUG, COOKIE_NAME, SESSION_TABLE, NOUSER_ID} from '../common.js';
+import {blankPerms} from '../helpers.js';
+import {_getTable} from '../db_helpers.js';
 
   export function getSession(req, res, next) {
     const {[COOKIE_NAME]:cookie} = req.cookies;
