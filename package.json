@@ -32,6 +32,6 @@
     "stubdb": "^1.0.10"
   },
   "devDependencies": {
-    "node-dev": "^4.0.0"
+    "nodemon": "^2.0.3"
   }
 }
