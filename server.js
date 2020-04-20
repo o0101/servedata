@@ -166,6 +166,7 @@ async function X(req, res, next) {
     }
     res.end(result);
   } catch(e) {
+    console.log("EEE",e);
     next(e);
   }
 }

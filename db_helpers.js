@@ -146,14 +146,9 @@
 
   export async function runStoredAction({action, item}, req, res) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
-    try {
-      const {default:Action} = await import(actionFileName);
-      const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
-      return result;
-    } catch(e) {
-      DEBUG.WARN && console.warn('wtf', e);
-      throw new Error(`Action ${action} is not defined in ${actionFileName}`);
-    }
+    const {default:Action} = await import(actionFileName);
+    const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
+    return result;
   }
 
   export function _getTable(table) {
