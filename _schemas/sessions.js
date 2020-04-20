@@ -10,3 +10,7 @@ T.def('Session', {
 export default function validate(session) {
   return T.errors(T`Session`, session);
 }
+
+export function validatePartial(partialSession) {
+  return T.partialMatch(T`Session`, partialSession).valid;
+}

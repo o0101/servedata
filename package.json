@@ -27,12 +27,12 @@
   },
   "homepage": "https://github.com/cris691/servedata#readme",
   "dependencies": {
-    "beamsplitter": "^2.0.3",
+    "beamsplitter": "^2.0.4",
     "cookie-parser": "^1.4.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
-    "jtype-system": "^1.1.4",
+    "jtype-system": "^1.1.6",
     "nodemailer": "^6.4.6",
     "stubdb": "^1.0.10"
   },

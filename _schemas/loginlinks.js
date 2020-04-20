@@ -12,3 +12,7 @@ T.def('LoginLink', {
 export default function validate(loginLink) {
   return T.errors(T`LoginLink`, loginLink);
 }
+
+export function validatePartial(partialLoginLink) {
+  return T.partialMatch(T`LoginLink`, partialLoginLink).valid;
+}

@@ -12,3 +12,7 @@ T.def('Permission', validationObject);
 export default function validate(permission) {
   return T.errors(T`Permission`, permission);
 }
+
+export function validatePartial(partialPermission) {
+  return T.partialMatch(T`Permission`, partialPermission).valid;
+}

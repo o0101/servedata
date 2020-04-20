@@ -13,3 +13,7 @@ T.def('User', {
 export default function validate(user) {
   return T.errors(T`User`, user);
 }
+
+export function validatePartial(partialUser) {
+  return T.partialMatch(T`User`, partialUser).valid;
+}

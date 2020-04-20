@@ -37,9 +37,10 @@
 
     for( const file of entries ) {
       if ( file.startsWith('.') || ! file.endsWith('.js') ) continue;
-      const {default:validator} = await import(path.resolve(SCHEMAS, file));  
+      const {default:validator, validatePartial:partialMatch} = await import(path.resolve(SCHEMAS, file));  
       const tableName = file.replace(/\.js$/, '');
       SchemaValidators[tableName] = validator;
+      Object.assign(SchemaValidators[tableName], {partialMatch});
     }
   }
 
@@ -81,6 +82,16 @@
         _search[attr] !== undefined && 
         _search[attr] !== null
       );
+
+      const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
+      const attributesValid = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
+
+      console.log({partialEntry,attributesValid});
+      if ( !attributesValid ) {
+        throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: ${
+          JSON.stringify(partialEntry, null, 2)
+        }`);
+      }
 
       if ( _search._and ) {
         result = list.filter(item => attrs.every(attr => {
