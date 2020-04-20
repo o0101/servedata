@@ -87,7 +87,6 @@
       const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
       const attributesValid = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
 
-      console.log({partialEntry,attributesValid});
       if ( !attributesValid ) {
         throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: ${
           JSON.stringify(partialEntry, null, 2)

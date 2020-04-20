@@ -2,7 +2,8 @@ import {T} from 'jtype-system';
 
 T.def('Session', {
   _id: T`ID`,
-  userid: T`ID`
+  userid: T`ID`,
+  loggedOut: T`MaybeBoolean`
 }, {
   verify: s => (s.userid+'').length < 200
 });
