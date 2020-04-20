@@ -80,7 +80,8 @@
       const attrs = Object.keys(_search).filter(attr => 
         !SearchControl.has(attr) && 
         _search[attr] !== undefined && 
-        _search[attr] !== null
+        _search[attr] !== null &&
+        _search[attr] !== ''
       );
 
       const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});

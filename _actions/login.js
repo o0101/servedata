@@ -31,14 +31,12 @@ export default function action({email, username, password}, {getTable, newItem},
 
     if ( !! firstMatchingUser ) {
       if ( !firstMatchingUser.verified ) {
-        res.status(401).send(`You cannot login until you verify your email address ${firstMatchingUser.email}`);
-        throw {error:`You cannot login until you verify your email address ${firstMatchingUser.email}`};
+        throw { status: 401, error: `You cannot login until you verify your email address ${firstMatchingUser.email}`};
       }
       userid = firstMatchingUser._id;
     }
   } else {
-    res.status(404).send(`No such user`);
-    throw {error: `No such user ${email|username}`};
+    throw {status: 404, error: `No such user ${email||''} ${username||''}`};
   }
 
   if ( userid ) {
@@ -47,7 +45,6 @@ export default function action({email, username, password}, {getTable, newItem},
 
     return {session};
   } else {
-    res.status(404).send(`No such user`);
-    throw {error: `No such user ${email|username}`};
+    throw {status: 404, error: `No such user ${email||''} ${username||''}`};
   }
 }

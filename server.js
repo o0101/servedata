@@ -56,6 +56,7 @@
     'POST /form/action/:action/with/:view': withView(runStoredAction),
   };
 
+process.on('unhandledRejection', (...args) => console.log(args));
 export async function initializeDB() {
   const {default:initialize} = await import(INIT_SCRIPT);
   await loadSchemas();
@@ -132,16 +133,16 @@ async function X(req, res, next) {
   getPermission(req, res);
 
   if ( ! req.authorization ) {
-    return res.status(401).send('401 Not authorized. No valid user identified.');
+    next({status: 401, error: '401 Not authorized. No valid user identified.'});
   }
 
   // sometimes we do an action through get because 'links'
   if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
-    return res.status(401).send('401 Not authorized. User has no view permission on this scope.');
+    next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
   }
 
   if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-    return res.status(401).send('401 Not authorized. User has no create permission on this scope.');
+    next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
   }
 
   const way = `${req.method} ${req.route.path}`;
@@ -166,7 +167,6 @@ async function X(req, res, next) {
     }
     res.end(result);
   } catch(e) {
-    console.log("EEE",e);
     next(e);
   }
 }
