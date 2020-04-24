@@ -46,14 +46,29 @@
 
 // paths dispatch
   const DISPATCH = {
-    'GET /form/table/:table/:id/with/:view': withView(getItem),
-    'GET /form/list/table/:table/with/:view/': withView(getList),
-    'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
-    'GET /form/search/table/:table/with/:view': withView(getSearchResult),
-    'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
-    'POST /form/table/:table/new/with/:view': withView(newItem),
-    'POST /form/table/:table/:id/with/:view': withView(setItem),
-    'POST /form/action/:action/with/:view': withView(runStoredAction),
+    // forms
+      'GET /form/table/:table/:id/with/:view': withView(getItem),
+      'GET /form/list/table/:table/with/:view/': withView(getList),
+      'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
+      'GET /form/search/table/:table/with/:view': withView(getSearchResult),
+      'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
+      'POST /form/table/:table/new/with/:view': withView(newItem),
+      'POST /form/table/:table/:id/with/:view': withView(setItem),
+      'POST /form/action/:action/with/:view': withView(runStoredAction),
+
+    // JSON API
+      'GET /json/table/:table/:id': getItem,
+      'GET /json/list/table/:table/': getList,
+      'GET /json/list/table/:table/sort/:prop': getListSorted,
+      'GET /json/search/table/:table': getSearchResult,
+      'GET /json/query/:query': getStoredQueryResult,
+      'POST /json/table/:table': newItem,
+      // not implemented
+        /*
+        'PUT /json/table/:table/:id': overwriteItem,
+        */
+      'PATCH /json/table/:table/:id': setItem,
+      'POST /json/action/:action': runStoredAction,
   };
 
 process.on('unhandledRejection', (...args) => console.log(args));
@@ -89,23 +104,24 @@ export function servedata({callConfig: callConfig = false} = {}) {
   // JSON
     // getters
       app.get('/json/table/:table/:id', X);
-      app.get('/json/list/table/:table/:id/sort/:prop', X);
-      app.get('/json/search/table/:table/:id/sort/:prop', X);
+      app.get('/json/list/table/:table', X);
+      app.get('/json/list/table/:table/sort/:prop', X);
+      app.get('/json/search/table/:table', X);
     // auto id
       app.post('/json/table/:table', X);    
-    // given id
-      app.put('/json/table/:table/:id', X); 
-    // update 
+    // given id ( set/ overwrite (not implemented) )
+    // app.put('/json/table/:table/:id', X); 
+    // update  (setItem, standard implementation, subset of properties)
       app.patch('/json/table/:table/:id', X); 
     // stored procedures
-      app.post('/json/action/:action', X);
       app.get('/json/query/:query', X);
+      app.post('/json/action/:action', X);
 
   // FORM
     // getters 
       app.get('/form/table/:table/:id/with/:view', X);
-      app.get('/form/list/table/:table/with/:view/', X);
-      app.get('/form/list/table/:table/with/:view/sort/:prop', X);
+      app.get('/form/list/table/:table/with/:view', X);
+      app.get('/form/list/table/:table/sort/:prop/with/:view', X);
       app.get('/form/search/table/:table/with/:view', X);
       // special action 'getter' for say email links
       app.get('/form/action/:action/with/:view', X);

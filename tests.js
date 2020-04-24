@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import './types.js';
 import {loadSchemas, SchemaValidators} from './db_helpers.js';
-import {servedata} from './server.js';
+import {initializeDB,servedata} from './server.js';
 
 const Tests = [
 
@@ -11,6 +11,7 @@ const Tests = [
 testAll();
 
 async function testAll(silent = false) {
+  await initializeDB();
   await servedata();
   console.log("Running tests...");
   await loadSchemas();
