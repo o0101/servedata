@@ -5,21 +5,21 @@
 
   import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
   import {
+    USER_TABLE, 
     COOKIE_NAME, MAIL_SENDER, 
     MAIL_HOST, MAIL_PORT,
-    LOGINLINK_TABLE, SESSION_TABLE 
+    LOGINLINK_TABLE, 
   } from '../common.js';
   import {
     addUser
   } from '../helpers.js';
 
-export default async function action({username, password, email}, {getTable, newItem}, req, res) {
-  const user = addUser({username, email, password, verified: false}, 'users');
+export default async function action({username, password, email}, {getTable, newItem, getSearchResult}, req, res) {
+  if ( getSearchResult({table: getTable(USER_TABLE), _search: { username }}) ) {
+    throw {status: 401, error: `Username ${username} already exists.`};
+  }
 
-  /**
-  const session = newItem({table:getTable(SESSION_TABLE), item: {userid:user._id}});
-  res.cookie(COOKIE_NAME, session._id);
-  **/
+  const user = addUser({username, email, password, verified: false}, 'users');
 
   const loginLink = newItem({table:getTable(LOGINLINK_TABLE), item: {userid:user._id}});
 
