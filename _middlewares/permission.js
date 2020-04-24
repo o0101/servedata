@@ -50,56 +50,52 @@ import {_getTable, getItem} from '../db_helpers.js';
           break;
       }
 
+      let id;
+
+      if ( active.startsWith('action') ) {
+        id = req.body.id;
+      } else {
+        id = req.params.id;
+      }
+
       for( const group of user.groups ) {
+        const endpoint_key = `group/${group}:${active}`;
+        const instance_key = `group/${group}:${active}:${id}`;
+
         try {
           const table = _getTable(PERMISSION_TABLE);
-          const endpoint_key = `group/${group}:${active}`;
           const endpoint_permissions = getItem({table, id:endpoint_key});
           grant(Endpoint_permissions, endpoint_permissions);
         } catch(e) {
-          DEBUG.INFO && console.warn(e);
+          DEBUG.INFO && console.warn({endpoint_key, e});
         }
 
         try {
           const table = _getTable(PERMISSION_TABLE);
-
-          let id;
-          if ( active.startsWith('action') ) {
-            id = req.body.id;
-          } else {
-            id = req.params.id;
-          }
-
-          const instance_key = `group/${group}:${active}:${id}`;
           const instance_permissions = getItem({table, id:instance_key});
           grant(Instance_permissions, instance_permissions);
         } catch(e) {
-          DEBUG.INFO && console.warn(e);
+          DEBUG.INFO && console.warn({instance_key, e});
         }
       }
 
+      const endpoint_key = `${userid}:${active}`;
+      const instance_key = `${userid}:${active}:${id}`;
+
       try {
         const table = _getTable(PERMISSION_TABLE);
-        const endpoint_key = `${userid}:${active}`;
         const endpoint_permissions = getItem({table, id:endpoint_key});
         grant(Endpoint_permissions, endpoint_permissions);
       } catch(e) {
-        DEBUG.INFO && console.warn(e);
+        DEBUG.INFO && console.info({endpoint_key, e});
       }
 
       try {
         const table = _getTable(PERMISSION_TABLE);
-        let id;
-        if ( active.startsWith('action') ) {
-          id = req.body.id;
-        } else {
-          id = req.params.id;
-        }
-        const instance_key = `${userid}:${active}:${id}`;
         const instance_permissions = getItem({table, id:instance_key});
         grant(Instance_permissions, instance_permissions);
       } catch(e) {
-        DEBUG.INFO && console.warn(e);
+        DEBUG.INFO && console.warn({instance_key,e});
       }
 
       grant(req.authorization.permissions, Endpoint_permissions);

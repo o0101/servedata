@@ -15,7 +15,7 @@
   } from '../helpers.js';
 
 export default async function action({username, password, email}, {getTable, newItem, getSearchResult}, req, res) {
-  if ( getSearchResult({table: getTable(USER_TABLE), _search: { username }}) ) {
+  if ( getSearchResult({table: getTable(USER_TABLE), _search: { username }}).length ) {
     throw {status: 401, error: `Username ${username} already exists.`};
   }
 

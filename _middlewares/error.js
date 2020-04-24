@@ -17,20 +17,22 @@ import {Log,HTML_ERROR, JSON_ERROR} from '../helpers.js';
       status = err.status;
       stack = (new Error('Request Error')).stack.split(/\s*\n\s*/g);
     }
-    const Err = {
-      status,
-      stack,
-      msg,
-      path: req.path,
-      ip: {
-        rip: req.ip,
-        rips: req.ips,
-        rcra: req.connection.remoteAddress,
-        rxff: req.headers['x-forwarded-for'],
-        rxrip: req.headers['x-real-ip']
-      }
-    };
-    Log(Err, DEBUG.CONSOLE_ERROR);
+    if ( DEBUG.INFO ) {
+      const Err = {
+        status,
+        stack,
+        msg,
+        path: req.path,
+        ip: {
+          rip: req.ip,
+          rips: req.ips,
+          rcra: req.connection.remoteAddress,
+          rxff: req.headers['x-forwarded-for'],
+          rxrip: req.headers['x-real-ip']
+        }
+      };
+      Log(Err, DEBUG.CONSOLE_ERROR);
+    }
     if ( req.path.startsWith('/form') ) {
       res.type('html');
       res.status(status);

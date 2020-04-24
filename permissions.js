@@ -52,7 +52,7 @@ const Perms = [
 
     // user admin role
       [
-        `group/user_admins:table/${USER_TABLE}`,
+        `group/useradmins:table/${USER_TABLE}`,
         {
           excise:true,
           view:true,
@@ -63,7 +63,7 @@ const Perms = [
 
     // global admin role
       [
-        `group/global_admins:table/${DEPOSIT_TABLE}`,
+        `group/globaladmins:table/${DEPOSIT_TABLE}`,
         {
           excise:true,
           view:true,
@@ -72,7 +72,7 @@ const Perms = [
         }
       ],
       [
-        `group/global_admins:table/${USER_TABLE}`,
+        `group/globaladmins:table/${USER_TABLE}`,
         {
           excise:true,
           view:true,
@@ -81,7 +81,7 @@ const Perms = [
         }
       ],
       [
-        `group/global_admins:table/${PERMISSION_TABLE}`,
+        `group/globaladmins:table/${PERMISSION_TABLE}`,
         {
           excise:true,
           view:true,

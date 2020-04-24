@@ -67,9 +67,7 @@ import {_getTable} from '../db_helpers.js';
     Object.freeze(authorization);
     Object.defineProperty(req, 'authorization', { get: () => authorization, enumerable: true });
 
-    DEBUG.INFO && console.log({authorization});
-
-    console.log({
+    DEBUG.INFO && console.log({
       path: req.path,
       authorization
     });
