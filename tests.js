@@ -19,6 +19,17 @@ const Tests = [
       }
     },
     type: 'MaybeSession'
+  },
+  {
+    endpoint: '/json/action/login',
+    options: {
+      method: 'POST',
+      body: {
+        username: 'test10',
+        password: 'abc123'
+      }
+    },
+    type: 'Err'
   }
 ];
 

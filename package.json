@@ -33,7 +33,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
-    "jtype-system": "^1.1.6",
+    "jtype-system": "^1.1.8",
     "nodemailer": "^6.4.6",
     "stubdb": "^1.0.10"
   },
