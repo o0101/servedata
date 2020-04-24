@@ -92,12 +92,22 @@ export function servedata({callConfig: callConfig = false} = {}) {
   app.set('trust proxy', true);
 
   app.use((req,res,next) => {
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    // set cache
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+
+    //set type
+      if ( req.path.startsWith('/form')) {
+        res.type('html');
+      } else if ( req.path.startsWith('/json')) {
+        res.type('json');
+      }
+
     next();
   });
 
   app.use(cookieParser());
   app.use(express.urlencoded({extended:true}));
+  app.use(express.json({extended:true}));
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
   app.use(getSession);
 
@@ -172,15 +182,13 @@ async function X(req, res, next) {
   let result;
 
   try {
-    if ( req.path.startsWith('/form')) {
-      res.type('html');
-    } else if ( req.path.startsWith('/json')) {
-      res.type('json');
-    }
     if ( req.path.includes('/action/') ) {
       result = await DISPATCH[way](data, req, res);
     } else {
       result = await DISPATCH[way](data);
+    }
+    if ( req.path.startsWith('/json') ) {
+      result = JSON.stringify(result);
     }
     res.end(result);
   } catch(e) {

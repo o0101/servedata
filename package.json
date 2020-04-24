@@ -4,7 +4,7 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "start": "npm run dev-db",
+    "start": "node -r esm start.js",
     "test": "nodemon -r esm tests.js",
     "dev-db": "nodemon -r esm start.js"
   },

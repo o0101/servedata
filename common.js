@@ -7,7 +7,7 @@
     CONSOLE_ERROR: true,
     WARN: true,
     ERROR: true,
-    INFO: false
+    INFO: true
   };
 
 // constants

@@ -36,8 +36,8 @@ const Tests = [
 testAll();
 
 async function testAll(silent = false) {
-  await initializeDB();
-  await servedata();
+  //await initializeDB();
+  //await servedata();
   console.log("Running tests...");
   await loadSchemas();
   createTestTypes();
@@ -55,6 +55,8 @@ async function testAll(silent = false) {
     if ( !testRun.result.valid ) {
       console.log(JSON.stringify({testFail: testRun},null,2));
       fails ++;
+    } else {
+      console.log(JSON.stringify({testPass: testRun},null,2));
     }
   }
 
@@ -72,15 +74,17 @@ async function test({endpoint, options}, typeName) {
     throw new TypeError(`Tests can only be run on JSON endpoints`);
   }
   const endpointUrl = new URL(endpoint, 'http://localhost:8080');
+  options.body = JSON.stringify(options.body);
   const response = await fetch(endpointUrl, options).then(r => r.text());
   try {
     const jsonResponse = JSON.parse(response);
     const {valid, errors} = T.validate(T`${typeName}`, jsonResponse);
+    console.log(JSON.stringify(T.validate(T`WrappedSession`, jsonResponse),null,2));
     if ( ! valid ) {
       const testError = {context:`Error validating JSON response at ${typeName}`, jsonResponse, error: 'Validation error'};
       errors.push(testError);
     }
-    return {valid, errors};
+    return {valid, errors, jsonResponse, response};
   } catch(e) {
     const testError = {context:`Error validating JSON response at ${typeName}`, response, error: e};
     console.log(testError);
@@ -95,5 +99,8 @@ function createTestTypes() {
     status: T`MaybeInteger`
   });
   console.log(T.validate(T`Err`, {error:'String'}));
-  T.defOr('MaybeSession', T`Session`, T`Err`);
+  T.def('WrappedSession', {
+    session: T`Session`
+  });
+  T.defOr('MaybeSession', T`WrappedSession`, T`Err`);
 }
