@@ -56,14 +56,15 @@
     return crypto.randomBytes(4).readUInt32BE();
   }
 
-  export function addUser({username, email, password}, ...groups) {
+  export function addUser({username, email, password, verified}, ...groups) {
     const randomSalt = newRandom32BitSeed();
     const user = {
       username, 
       email,
       salt: randomSalt,
       passwordHash: beamsplitter(password, randomSalt).toString(16),
-      groups
+      groups,
+      verified
     }
     const userObject = newItem({table:getTable(USER_TABLE), item:user});
     const gtable = getTable(GROUP_TABLE);
