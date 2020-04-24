@@ -1,11 +1,11 @@
 import {beamsplitter} from 'beamsplitter';
 
-import {DEBUG, COOKIE_NAME, NOUSER_ID} from '../common.js';
+import {DEBUG, COOKIE_NAME, NOUSER_ID, USER_TABLE, SESSION_TABLE} from '../common.js';
 import {getSearchResult} from '../db_helpers.js';
 
 export default function action({email, username, password}, {getTable, newItem}, req, res) {
-  const utable = getTable('users');
-  const stable = getTable('sessions');
+  const utable = getTable(USER_TABLE);
+  const stable = getTable(SESSION_TABLE);
 
   const users = getSearchResult({
     table:utable, 
