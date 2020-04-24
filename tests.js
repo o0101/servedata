@@ -79,7 +79,6 @@ async function test({endpoint, options}, typeName) {
   try {
     const jsonResponse = JSON.parse(response);
     const {valid, errors} = T.validate(T`${typeName}`, jsonResponse);
-    console.log(JSON.stringify(T.validate(T`WrappedSession`, jsonResponse),null,2));
     if ( ! valid ) {
       const testError = {context:`Error validating JSON response at ${typeName}`, jsonResponse, error: 'Validation error'};
       errors.push(testError);
@@ -98,7 +97,6 @@ function createTestTypes() {
     error: T`String`,
     status: T`MaybeInteger`
   });
-  console.log(T.validate(T`Err`, {error:'String'}));
   T.def('WrappedSession', {
     session: T`Session`
   });
