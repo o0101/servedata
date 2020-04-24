@@ -57,6 +57,7 @@
   };
 
 process.on('unhandledRejection', (...args) => console.log(args));
+
 export async function initializeDB() {
   const {default:initialize} = await import(INIT_SCRIPT);
   await loadSchemas();

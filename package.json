@@ -4,7 +4,8 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run dev-db",
+    "start": "npm run dev-db",
+    "test": "nodemon -r esm tests.js",
     "dev-db": "nodemon -r esm start.js"
   },
   "nodemonConfig": {
@@ -37,6 +38,7 @@
     "stubdb": "^1.0.10"
   },
   "devDependencies": {
+    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.3"
   }
 }
