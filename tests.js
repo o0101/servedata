@@ -41,13 +41,29 @@ const Tests = [
     },
     type: 'Err'
   },
+  {
+    endpoint: '/json/action/signup',
+    options: {
+      method: 'POST',
+      body: {
+        email: 'cris7fe@gmail.com',
+        username: 'test10' + (Math.random()*1000).toFixed(0).toString(36),
+        password: 'abc123'
+      }
+    },
+    type: 'SignupResponse'
+  },
 ];
+
+let publicIP;
 
 testAll();
 
 async function testAll(silent = false) {
   await initializeDB();
   await servedata();
+
+  publicIP = await fetch('http://ifconfig.me/ip').then(r => r.text());
   console.log("Running tests...");
   await loadSchemas();
   createTestTypes();
@@ -92,7 +108,7 @@ async function test({endpoint, options}, typeName) {
   if ( !endpoint.startsWith('/json') ) {
     throw new TypeError(`Tests can only be run on JSON endpoints`);
   }
-  const endpointUrl = new URL(endpoint, 'http://localhost:8080');
+  const endpointUrl = new URL(endpoint, `http://${publicIP}:8080`);
   options.body = JSON.stringify(options.body);
   const response = await fetch(endpointUrl, options).then(r => r.text());
   try {
@@ -111,7 +127,7 @@ async function test({endpoint, options}, typeName) {
 }
 
 function createTestTypes() {
-  T.defOr('MaybeInteger', T`Number`, T`None`)
+  T.defOr('MaybeInteger', T`Integer`, T`None`)
   T.def('Err', {
     error: T`String`,
     status: T`MaybeInteger`
@@ -120,4 +136,8 @@ function createTestTypes() {
     session: T`Session`
   });
   T.defOr('MaybeSession', T`WrappedSession`, T`Err`);
+  T.def('SignupResponse', {
+    email: T`Email`,
+    username: T`Username`
+  });
 }

@@ -4,7 +4,7 @@ import {_getTable} from '../db_helpers.js';
 
   export function getSession(req, res, next) {
     const {[COOKIE_NAME]:cookie} = req.cookies;
-    const {Authorization:authHeader} = req.headers;
+    const {authorization:authHeader} = req.headers;
     const noSessionClaim = ! cookie && ! authHeader;
     const redundantClaim = cookie && authHeader;
 
