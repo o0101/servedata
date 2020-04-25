@@ -18,8 +18,18 @@ const Tests = [
         password: 'abc123'
       }
     },
-    type: 'MaybeSession'
+    type: 'WrappedSession'
   },
+  input => ({
+    endpoint: '/json/action/logout',
+    options: {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${input.session._id}`
+      }
+    },
+    type: 'WrappedSession'
+  }),
   {
     endpoint: '/json/action/login',
     options: {
@@ -30,28 +40,37 @@ const Tests = [
       }
     },
     type: 'Err'
-  }
+  },
 ];
 
 testAll();
 
 async function testAll(silent = false) {
-  //await initializeDB();
-  //await servedata();
+  await initializeDB();
+  await servedata();
   console.log("Running tests...");
   await loadSchemas();
   createTestTypes();
   const Results = [];
   let fails = 0;
+  let lastResult;
 
-  for( const {endpoint, options, type} of Tests ) {
-    options.headers = {
+  for( const Test of Tests ) {
+    let endpoint, options, type;
+    if ( Test instanceof Function ) {
+      ({endpoint,options,type} = Test(lastResult));
+    } else {
+      ({endpoint,options,type} = Test);
+    }
+    options.headers = options.headers || {};
+    Object.assign(options.headers, {
       'Content-type': 'application/json'
-    };
+    });
     const testRun = {
       endpoint, options, type, 
       result: await test({endpoint, options}, type)
     };
+    lastResult = testRun.result.jsonResponse;
     if ( !testRun.result.valid ) {
       console.log(JSON.stringify({testFail: testRun},null,2));
       fails ++;
