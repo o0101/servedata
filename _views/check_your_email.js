@@ -6,7 +6,7 @@ export default function CheckYourEmail({email, _id, error}) {
       <html lang=en stylist="aux_page">
         <meta charset=utf-8>
         <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>PayMe</title>
+        <title>Dosyago</title>
         <script>
           self.loadData = ${JSON.stringify({email, _id})};
         </script>
