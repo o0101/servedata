@@ -162,6 +162,7 @@
       }
 
       * .button-like {
+        padding: 0;
         padding: var(--pad1);
         border: 0.25em solid;
         border-radius: 0.25em;

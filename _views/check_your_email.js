@@ -7,27 +7,11 @@ export default function CheckYourEmail({email, _id, error}) {
         <meta charset=utf-8>
         <meta name=viewport content="width=device-width, initial-scale=1">
         <title>Dosyago</title>
+        <link rel=stylesheet href=/static/style.css>
         <script>
           self.loadData = ${JSON.stringify({email, _id})};
         </script>
         <script type=module src=/src/check_your_email.js></script>
-        <style>
-          :root {
-            font-family: Arial, sans-serif;
-            --white: white;
-            --smoke: whitesmoke;
-            --grey: silver;
-            --left: dodgerblue;
-            --right: mediumspringgreen;
-            --blue: darkturquoise;
-
-
-            --pad1: 1rem;
-          }
-          body {
-            margin: 0;
-          }
-        </style>
       </html>
     `
   }
