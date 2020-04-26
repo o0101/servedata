@@ -14,7 +14,7 @@ function App(state) {
     main ${_} ${"holyGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"PayMe"}  .
+          li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
           li a ${{href:'#how'}}  :text ${"How it works"}  .
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .

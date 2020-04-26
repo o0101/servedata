@@ -14,7 +14,7 @@ function Profile({username, email, _id}) {
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"PayMe"}  .
+          li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
           li button ${{form:'logout', class:'button-like'}} :text ${"Logout"}.
         .
       .
@@ -60,7 +60,7 @@ function OldProfile({username, email, _id}) {
     main ${_} ${"holyGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"PayMe"}  .
+          li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
           li a ${{href:'#how'}}  :text ${"How it works"}  .
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
