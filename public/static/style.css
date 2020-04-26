@@ -1,0 +1,15 @@
+    :root {
+      font-family: Arial, sans-serif;
+      --white: white;
+      --smoke: whitesmoke;
+      --grey: silver;
+      --left: dodgerblue;
+      --right: mediumspringgreen;
+      --blue: darkturquoise;
+
+      --pad1: 1rem;
+
+    }
+    body {
+      margin: 0;
+    }

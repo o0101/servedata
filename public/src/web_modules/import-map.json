@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "bepis": "./bepis.js",
+    "style.dss": "./style.dss.js"
+  }
+}

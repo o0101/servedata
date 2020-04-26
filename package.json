@@ -4,9 +4,15 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "start": "node -r esm start.js",
+    "dev-db": "nodemon -r esm start.js",
+    "db": "node -r esm start.js",
+    "dev-site": "npm run pack && npm run dev-db",
+    "site": "npm run pack && npm run db",
+    "static": "npm run pack && serve -p 8080 public",
+    "start": "npm run dev-site",
     "test": "nodemon -r esm tests.js",
-    "dev-db": "nodemon -r esm start.js"
+    "pack": "npx snowpack --include \"public/src/**/*.js\" --dest public/src/web_modules",
+    "up": "rm package-lock.json && rm -rf node_modules && npm upgrade && npm i && npm run pack"
   },
   "nodemonConfig": {
     "ignore": [
@@ -39,6 +45,7 @@
   },
   "devDependencies": {
     "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "snowpack": "^1.7.1"
   }
 }
