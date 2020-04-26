@@ -42,7 +42,7 @@ function Profile({username, email, _id}) {
         hidden:true,
         id: 'logout',
         method: 'POST',
-        action: `/form/table/sessions/${_id}/with/app`,
+        action: `/form/action/logout/with/app`,
       }},
         input ${{
           type:'hidden', 

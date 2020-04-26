@@ -13,7 +13,7 @@ function Signup(state) {
   return w`
     form ${{
       method:'POST',
-      action:'/form/table/users/new/with/profile',
+      action:'/form/action/signup/with/check_your_email',
       stylist: 'form'
     }},
       fieldset,
