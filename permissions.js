@@ -15,6 +15,12 @@ const Perms = [
       }
     ],
     [
+      `${NOUSER_ID}:action/sendloginemail`,
+      {
+        create:true, 
+      }
+    ],
+    [
       `${NOUSER_ID}:action/loginwithlink`,
       {
         create:true, 

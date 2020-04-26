@@ -165,11 +165,11 @@ async function X(req, res, next) {
 
   // sometimes we do an action through get because 'links'
   if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
-    next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
+    return next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
   }
 
   if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-    next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
+    return next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
   }
 
   const way = `${req.method} ${req.route.path}`;

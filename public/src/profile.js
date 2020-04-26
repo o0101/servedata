@@ -21,8 +21,12 @@ function Profile({username, email, _id}) {
       section ${{class:'vertical-tabs'}} ${"verticalTabs"},
         ul,
           li a ${{href:'#profile'}} :text ${`My Profile`}.
-          li a ${{href:'#settings'}}:text  ${`Account settings`}.
-          li a ${{href:'#billing'}} :text ${`Product billing`}.
+          li a ${{href:'#account'}}:text  ${`Dosyago account`}.
+          li a ${{href:'#billing'}} :text ${`Billing account`}.
+          li a ${{href:'#subscriptions'}} :text ${`Subscriptions`}.
+          li a ${{href:'#onetimepayments'}} :text ${`One-time payments`}.
+          li a ${{href:'#usage'}} :text ${`Usage`}.
+          li a ${{href:'#freecredits'}} :text ${`Free credits`}.
         .
       .
       section ${{class:'content'}} ${"profileContent"},

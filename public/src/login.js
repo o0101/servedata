@@ -14,12 +14,12 @@ function Login(state) {
     return w`
       form ${{
         method:'POST',
-        action:'/form/action/login_with_email/with/check_your_email',
+        action:'/form/action/sendloginemail/with/check_your_email',
         stylist: 'form'
       }},
         fieldset,
           legend :text ${"Login with Email"}.
-          p label ${"Email"} input ${fields.email}.
+          p label ${"Username"} input ${fields.username}.
           p button :text ${"Get Login Email"}.
           hr.
           small ${"Can't access email? "}, 

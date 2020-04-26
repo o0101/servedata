@@ -6,7 +6,7 @@
   import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
   import {
     USER_TABLE, 
-    COOKIE_NAME, MAIL_SENDER, 
+    MAIL_SENDER, 
     MAIL_HOST, MAIL_PORT,
     LOGINLINK_TABLE, 
   } from '../common.js';

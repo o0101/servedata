@@ -88,7 +88,7 @@
       }
 
       * .button-like {
-        padding: 0.75em 1.5em;
+        padding: var(--pad1);
         border: 0.25em solid;
         border-radius: 0.25em;
         display: inline-block;
@@ -99,7 +99,7 @@
 
       @media screen and (max-width: 640px) {
         * a.button-like {
-          margin: 0.75em 0 0;
+          margin: var(--pad1);
         }
       }
 
@@ -162,7 +162,7 @@
       }
 
       * .button-like {
-        padding: 0.75em 1.5em;
+        padding: var(--pad1);
         border: 0.25em solid;
         border-radius: 0.25em;
         display: inline-block;
@@ -173,7 +173,7 @@
 
       @media screen and (max-width: 640px) {
         * a.button-like {
-          margin: 0.75em 0 0;
+          margin: var(--pad1);
         }
       }
 
@@ -260,6 +260,7 @@
         list-style-type: none;
         display: flex;
         margin: 0;
+        padding: 0;
         padding: var(--pad1);
         justify-content: space-between;
         align-items: center;
