@@ -1,6 +1,6 @@
 # ServeData 
 
-## Version 1.2.0
+## Version 1.3.1
 
 A simple server for the [stubdb](https://github.com/cris691/stubdb)
 
