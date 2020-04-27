@@ -4,6 +4,7 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
+    "build-views": "npx webpack",
     "dev-db": "nodemon -r esm start.js",
     "db": "node -r esm start.js",
     "dev-site": "npm run pack && npm run dev-db",
@@ -49,6 +50,8 @@
   "devDependencies": {
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.3",
-    "snowpack": "^1.7.1"
+    "snowpack": "^1.7.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }

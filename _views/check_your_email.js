@@ -1,3 +1,5 @@
+import {DEBUG} from '../common.js';
+
 export default function CheckYourEmail({email, _id, error}) {
   if ( error ) {
     return `<h1>Error: ${error}</h1>`
@@ -11,7 +13,7 @@ export default function CheckYourEmail({email, _id, error}) {
         <script>
           self.loadData = ${JSON.stringify({email, _id})};
         </script>
-        <script type=module src=/src/check_your_email.js></script>
+        <script type=module src=/${DEBUG.BUILD}/check_your_email.js></script>
       </html>
     `
   }

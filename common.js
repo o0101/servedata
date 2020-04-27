@@ -4,6 +4,7 @@
 
 // debug
   export const DEBUG = {
+    BUILD: 'dist',
     CONSOLE_ERROR: true,
     WARN: true,
     ERROR: true,

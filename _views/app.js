@@ -1,3 +1,5 @@
+import {DEBUG} from '../common.js';
+
 export default function App(state) {
   return `
     <html lang=en>
@@ -8,7 +10,7 @@ export default function App(state) {
       <script>
         self.loadData = ${JSON.stringify({state})};
       </script>
-      <script type=module src=/src/app.js></script>
+      <script type=module src=/${DEBUG.BUILD}/app.js></script>
     </html>
   `
 }

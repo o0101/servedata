@@ -1,3 +1,5 @@
+import {DEBUG} from '../common.js';
+
 export default function Profile({username, email, _id, error}) {
   if ( error ) {
     return `<h1>Error: ${error}</h1>`
@@ -11,7 +13,7 @@ export default function Profile({username, email, _id, error}) {
         <script>
           self.loadData = ${JSON.stringify({username, email,_id})};
         </script>
-        <script type=module src=/src/profile.js></script>
+        <script type=module src=/${DEBUG.BUILD}/profile.js></script>
       </html>
     `
   }
