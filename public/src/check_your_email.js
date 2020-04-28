@@ -2,6 +2,7 @@ import {w} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
 import {auth_fields as fields} from './fields.js';
+import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';

@@ -6,10 +6,20 @@ import {auth_fields as fields} from './fields.js';
 const _ = null;
 const $ = '';
 
-initializeDSS({}, stylists);
-Profile(self.loadData);
+export function Header() {
+  initializeDSS({}, stylists);
+  return w`
+    header ${_} ${"header"}, 
+      nav ul ${_} ${"responsiveList"},
+        li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
+      .
+    .
 
-function Profile({username, email, _id}) {
+  `
+}
+
+export function Profile({username, email, _id}) {
+  initializeDSS({}, stylists);
   return w`
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
