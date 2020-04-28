@@ -146,12 +146,18 @@
     return item;
   }
 
-  export function getSelectionData({selection, id}) {
-    throw new Error(`getSelectionData not implemented: ${selection}:${id}`);
+  export async function getSelectionData({selection, id}) {
+    const selectionFileName = path.resolve(SELECTIONS, `${selection}.js`); 
+    const {select} = await import(selectionFileName);
+    const result = select({id});
+    return result;
   }
 
-  export function displaySelectionData({selection, id}) {
-    throw new Error(`displaySelectionData not implemented: ${selection}:${id}`);
+  export async function displaySelectionData({selection, id}) {
+    const selectionFileName = path.resolve(SELECTIONS, `${selection}.js`); 
+    const {select,display} = await import(selectionFileName);
+    const result = display(select({id}));
+    return result;
   }
 
   export async function runStoredAction({action, item}, req, res) {
