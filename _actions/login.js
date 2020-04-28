@@ -43,7 +43,7 @@ export default function action({email, username, password}, {getTable, newItem},
     const session = newItem({table:stable, item: {userid}});
     res.cookie(COOKIE_NAME, session._id);
 
-    return {id:userid};
+    return {id:userid, session};
   } else {
     throw {status: 404, error: `No such user ${email||''} ${username||''}`};
   }

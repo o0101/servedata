@@ -133,6 +133,7 @@ function createTestTypes() {
     status: T`MaybeInteger`
   });
   T.def('WrappedSession', {
+    id: T.defOption(T`String`),
     session: T`Session`
   });
   T.defOr('MaybeSession', T`WrappedSession`, T`Err`);
