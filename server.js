@@ -15,7 +15,7 @@
     import './types.js';
     import {
       APP_ROOT,
-      VIEWS, STATIC, 
+      STATIC, 
       INIT_SCRIPT, 
       DEBUG,
       PORT
@@ -27,11 +27,14 @@
     } from './helpers.js';
     import {
       DB_ROOT, SCHEMAS, ACTIONS, QUERIES, 
+      SELECTIONS,
       SchemaValidators,
       getList,
       getListSorted,
       getSearchResult,
       getStoredQueryResult,
+      getSelectionData,
+      displaySelectionData,
       runStoredAction,
       loadSchemas,
       newItem,
@@ -52,6 +55,7 @@
       'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
       'GET /form/search/table/:table/with/:view': withView(getSearchResult),
       'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
+      'GET /form/selection/:selection/:id': displaySelectionData,
       'POST /form/table/:table/new/with/:view': withView(newItem),
       'POST /form/table/:table/:id/with/:view': withView(setItem),
       'POST /form/action/:action/with/:view': withView(runStoredAction),
@@ -62,13 +66,14 @@
       'GET /json/list/table/:table/sort/:prop': getListSorted,
       'GET /json/search/table/:table': getSearchResult,
       'GET /json/query/:query': getStoredQueryResult,
+      'GET /json/selection/:selection/:id': getSelectionData,
       'POST /json/table/:table': newItem,
+      'PATCH /json/table/:table/:id': setItem,
+      'POST /json/action/:action': runStoredAction,
       // not implemented
         /*
         'PUT /json/table/:table/:id': overwriteItem,
         */
-      'PATCH /json/table/:table/:id': setItem,
-      'POST /json/action/:action': runStoredAction,
   };
 
 process.on('unhandledRejection', (...args) => console.log(args));
@@ -133,8 +138,6 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.get('/form/list/table/:table/with/:view', X);
       app.get('/form/list/table/:table/sort/:prop/with/:view', X);
       app.get('/form/search/table/:table/with/:view', X);
-      // special action 'getter' for say email links
-      app.get('/form/action/:action/with/:view', X);
     // create
       app.post('/form/table/:table/new/with/:view', X);
     // update

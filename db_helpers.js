@@ -24,6 +24,8 @@
     export const SCHEMAS = process.env.SD_SCHEMAS ? path.resolve(process.env.SD_SCHEMAS) : path.resolve(APP_ROOT, "_schemas");
     export const ACTIONS = process.env.SD_ACTIONS ? path.resolve(process.env.SD_ACTIONS) : path.resolve(APP_ROOT, "_actions");
     export const QUERIES = process.env.SD_QUERIES ? path.resolve(process.env.SD_QUERIES) : path.resolve(APP_ROOT, "_queries");
+    export const SELECTIONS = process.env.SD_SELECTIONS ? 
+      path.resolve(process.env.SD_SELECTIONS) : path.resolve(APP_ROOT, "_selections");
 
   // database table name constants
     export const SearchControl = new Set([
@@ -142,6 +144,14 @@
     }
     table.put(id, item);
     return item;
+  }
+
+  export function getSelectionData({selection, id}) {
+    throw new Error(`getSelectionData not implemented: ${selection}:${id}`);
+  }
+
+  export function displaySelectionData({selection, id}) {
+    throw new Error(`displaySelectionData not implemented: ${selection}:${id}`);
   }
 
   export async function runStoredAction({action, item}, req, res) {

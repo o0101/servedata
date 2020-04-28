@@ -13,7 +13,8 @@
     "dev": "npm run dev-site",
     "start": "npm run site",
     "test-api": "nodemon -r esm tests.js",
-    "test": "npm run test-api",
+    "test": "npm run dev",
+    "tests": "npm run test-api",
     "pack": "npx snowpack --include \"public/src/**/*.js\" --dest public/src/web_modules",
     "up": "rm package-lock.json && rm -rf node_modules && npm upgrade && npm i && npm run pack"
   },
