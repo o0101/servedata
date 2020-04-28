@@ -24,6 +24,7 @@
       Log,
       guardNumber, nextKey, clone, formatError, newRandom32BitSeed,
       HTML_ERROR, JSON_ERROR,
+      route,
     } from './helpers.js';
     import {
       DB_ROOT, SCHEMAS, ACTIONS, QUERIES, 
@@ -139,6 +140,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.get('/form/list/table/:table/with/:view', X);
       app.get('/form/list/table/:table/sort/:prop/with/:view', X);
       app.get('/form/search/table/:table/with/:view', X);
+      app.get('/form/selection/:selection/:id', X);
     // create
       app.post('/form/table/:table/new/with/:view', X);
     // update
@@ -146,6 +148,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
     // stored procedure
       app.get('/form/query/:query/with/:view', X);
       app.post('/form/action/:action/with/:view', X);
+      app.post('/form/action/:action/redir/:selection', X);
 
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
@@ -193,11 +196,12 @@ async function X(req, res, next) {
     }
 
     if ( req.path.includes('/redir/') ) {
-      if ( !result.pathname ) {
+      const {pathname} = result;
+      if ( !pathname ) {
         throw new TypeError(`Redirect can only be used when task returns a 'pathname' field`);
       }
 
-      const toUrl = new URL(result.pathname, req.get('host'));
+      const toUrl = route(req, pathname);
 
       res.redirect(toUrl);
     } else {
@@ -212,7 +216,7 @@ async function X(req, res, next) {
   }
 }
 
-function toSelection(f) {
+export function toSelection(f) {
   return async (...args) => {
     const raw = await f(...args);
     const [{selection}] = args;
@@ -227,4 +231,3 @@ function toSelection(f) {
     return {pathname}
   };
 }
-

@@ -44,6 +44,12 @@ const Perms = [
         create:true, 
       }
     ],
+    [
+      `group/users:selection/profile`,
+      {
+        view:true, 
+      }
+    ],
   
   // permissions for data entry actions based on regular users,
   // user admins, and global admins

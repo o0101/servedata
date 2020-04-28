@@ -1,6 +1,7 @@
 // imports
   import path from 'path';
   import fs from 'fs';
+  import url from 'url';
   import crypto from 'crypto';
 
   import {beamsplitter} from 'beamsplitter';
@@ -90,4 +91,11 @@
     }
   }
 
+  export function route(req, pathname) {
+    return url.format({
+      pathname,
+      host: req.get('host'),
+      protocol: req.protocol
+    });
+  }
 

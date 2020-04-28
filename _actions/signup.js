@@ -1,6 +1,4 @@
 // imports
-  import url from 'url';
-
   import nodemailer from 'nodemailer';
 
   import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
@@ -11,7 +9,7 @@
     LOGINLINK_TABLE, 
   } from '../common.js';
   import {
-    addUser
+    addUser, route
   } from '../helpers.js';
 
 export default async function action({username, password, email}, {getTable, newItem, getSearchResult}, req, res) {
@@ -91,17 +89,10 @@ export async function sendLoginMail({email, loginLink, req}) {
   return {success: true, email, mail, id};
 }
 
-export function newLoginLink(req, loginId) {
+function newLoginLink(req, loginId) {
   return {
-    formAction: url.format({
-      protocol: req.protocol,
-      host: req.get('host'),
-      pathname: '/form/action/loginwithlink/redir/profile'
-    }),
-    linkHref: url.format({
-      protocol: req.protocol,
-      host: req.get('host'),
-      pathname: `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`,
-    })
+    formAction: route(req, '/form/action/loginwithlink/redir/profile'),
+    linkHref: route(req, `/form/table/${LOGINLINK_TABLE}/${loginId}/with/loginlink`)
   };
 }
+
