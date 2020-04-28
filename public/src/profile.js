@@ -46,7 +46,7 @@ function Profile({username, email, _id}) {
         hidden:true,
         id: 'logout',
         method: 'POST',
-        action: `/form/action/logout/with/app`,
+        action: `/form/action/logout/redir/app`,
       }},
         input ${{
           type:'hidden', 

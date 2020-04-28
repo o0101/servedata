@@ -57,6 +57,7 @@
       'GET /form/search/table/:table/with/:view': withView(getSearchResult),
       'GET /form/query/:query/with/:view': withView(getStoredQueryResult),
       'GET /form/selection/:selection/:id': displaySelectionData,
+      'GET /form/selection/:selection': displaySelectionData,
       'POST /form/table/:table/new/with/:view': withView(newItem),
       'POST /form/table/:table/:id/with/:view': withView(setItem),
       'POST /form/action/:action/with/:view': withView(runStoredAction),
@@ -69,6 +70,7 @@
       'GET /json/search/table/:table': getSearchResult,
       'GET /json/query/:query': getStoredQueryResult,
       'GET /json/selection/:selection/:id': getSelectionData,
+      'GET /json/selection/:selection': getSelectionData,
       'POST /json/table/:table': newItem,
       'PATCH /json/table/:table/:id': setItem,
       'POST /json/action/:action': runStoredAction,
@@ -141,6 +143,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.get('/form/list/table/:table/sort/:prop/with/:view', X);
       app.get('/form/search/table/:table/with/:view', X);
       app.get('/form/selection/:selection/:id', X);
+      app.get('/form/selection/:selection', X);
     // create
       app.post('/form/table/:table/new/with/:view', X);
     // update
@@ -222,11 +225,13 @@ export function toSelection(f) {
     const [{selection}] = args;
     const {id} = raw;
 
-    if ( ! id ) {
-      throw new TypeError(`Redirect to selection requires that task returns an object with an 'id' field`);
-    }
+    let pathname;
 
-    const pathname = `/form/selection/${selection}/${id}`;
+    if ( id ) {
+      pathname = `/form/selection/${selection}/${id}`;
+    } else {
+      pathname = `/form/selection/${selection}`;
+    }
 
     return {pathname}
   };

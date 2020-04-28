@@ -9,6 +9,12 @@ import {
 const Perms = [
   // permissions for standard auth actions signup, login, logout
     [
+      `${NOUSER_ID}:selection/app`,
+      {
+        view:true, 
+      }
+    ],
+    [
       `${NOUSER_ID}:action/signup`,
       {
         create:true, 
@@ -46,6 +52,12 @@ const Perms = [
     ],
     [
       `group/users:selection/profile`,
+      {
+        view:true, 
+      }
+    ],
+    [
+      `group/users:selection/app`,
       {
         view:true, 
       }
