@@ -35,7 +35,7 @@ function Login(state) {
     return w`
       form ${{
         method:'POST',
-        action:'/form/action/login_from_link/with/profile',
+        action:'/form/action/login_from_link/redir/profile',
         stylist: 'form'
       }},
         fieldset,
@@ -57,7 +57,7 @@ function Login(state) {
     return w`
       form ${{
         method:'POST',
-        action:'/form/action/login/with/profile',
+        action:'/form/action/login/redir/profile',
         stylist: 'form'
       }},
         fieldset,

@@ -7,7 +7,7 @@ import {VIEWS} from './common.js';
   export function withView(f) {
     return async (...args) => {
       const raw = await f(...args);
-      const view = args[0].view;
+      const {view} = args[0];
       let viewFileName, View;
 
       try {

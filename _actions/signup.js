@@ -96,7 +96,7 @@ export function newLoginLink(req, loginId) {
     formAction: url.format({
       protocol: req.protocol,
       host: req.get('host'),
-      pathname: '/form/action/loginwithlink/with/profile'
+      pathname: '/form/action/loginwithlink/redir/profile'
     }),
     linkHref: url.format({
       protocol: req.protocol,

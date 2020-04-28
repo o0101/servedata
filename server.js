@@ -59,6 +59,7 @@
       'POST /form/table/:table/new/with/:view': withView(newItem),
       'POST /form/table/:table/:id/with/:view': withView(setItem),
       'POST /form/action/:action/with/:view': withView(runStoredAction),
+      'POST /form/action/:action/redir/:selection': toSelection(runStoredAction),
 
     // JSON API
       'GET /json/table/:table/:id': getItem,
@@ -190,12 +191,40 @@ async function X(req, res, next) {
     } else {
       result = await DISPATCH[way](data);
     }
-    if ( req.path.startsWith('/json') ) {
-      result = JSON.stringify(result);
+
+    if ( req.path.includes('/redir/') ) {
+      if ( !result.pathname ) {
+        throw new TypeError(`Redirect can only be used when task returns a 'pathname' field`);
+      }
+
+      const toUrl = new URL(result.pathname, req.get('host'));
+
+      res.redirect(toUrl);
+    } else {
+      if ( req.path.startsWith('/json') ) {
+        result = JSON.stringify(result);
+      }
+
+      res.end(result);
     }
-    res.end(result);
   } catch(e) {
     next(e);
   }
+}
+
+function toSelection(f) {
+  return async (...args) => {
+    const raw = await f(...args);
+    const [{selection}] = args;
+    const {id} = raw;
+
+    if ( ! id ) {
+      throw new TypeError(`Redirect to selection requires that task returns an object with an 'id' field`);
+    }
+
+    const pathname = `/form/selection/${selection}/${id}`;
+
+    return {pathname}
+  };
 }
 
