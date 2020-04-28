@@ -140,4 +140,7 @@ function createTestTypes() {
     email: T`Email`,
     username: T`Username`
   });
+  T.def('WrappedSelection', {
+    selection: T`Object`
+  });
 }

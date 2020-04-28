@@ -32,4 +32,3 @@ T.def('URL', null, {
   T.def('Email', null, {verify: i => EmailRegExp.test(i) && i.length < 200});
   T.def('Hash', null, {verify: i => HexRegExp.test(i) && i.length < 200});
 
-
