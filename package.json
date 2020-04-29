@@ -4,11 +4,10 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "build-views": "npx webpack",
     "dev-db": "export SD_MODE=dev&& nodemon -r esm start.js",
     "db": "export SD_MODE=prod&& node -r esm start.js",
     "dev-site": "./dev_views.sh && npm run pack && npm run dev-db",
-    "site": "./prod_views.sh && npm run build-views && npm run pack && npm run db",
+    "site": "./prod_views.sh && npm run pack && npm run db",
     "static": "npm run pack && serve -p 8080 public",
     "dev": "npm run dev-site",
     "start": "npm run site",
@@ -52,8 +51,6 @@
   "devDependencies": {
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.3",
-    "snowpack": "^1.7.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "snowpack": "^1.7.1"
   }
 }
