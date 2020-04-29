@@ -12,7 +12,7 @@ export function init() {
   initializeDSS({}, stylists);
 }
 
-function CheckYourEmail(state) {
+function CheckYourEmail({state}) {
   let link;
   try {
     link = new URL(`https://${state.email}`);

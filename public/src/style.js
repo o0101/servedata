@@ -8,6 +8,8 @@
     content,
     profileContent,
     section,
+    error,
+    funnyImage,
     responsiveList,
     verticalTabs,
     form,
@@ -29,6 +31,29 @@
         return Object.assign({}, ...styles);
       };
     }
+  }
+
+  function error() {
+    return `
+      * {
+        background: snow;
+      }
+
+      * section.message {
+        padding: var(--pad2);
+      }
+    `;
+  }
+
+  function funnyImage() {
+    return `
+      * {
+        display: block;
+        margin: 3rem auto;
+        padding: var(--pad2);
+        min-width: 30%;
+      }
+    `;
   }
 
   function verticalTabs() {

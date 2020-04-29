@@ -1,7 +1,8 @@
 import {DEBUG} from '../common.js';
 import {Log,HTML_ERROR, JSON_ERROR} from '../helpers.js';
+import {ErrorView} from '../_views/error.js';
 
-  export function catchError(err, req, res, next) {
+  export async function catchError(err, req, res, next) {
     const nativeError = err instanceof Error;
     let stack, msg, status
     if ( ! err ) {
@@ -36,7 +37,7 @@ import {Log,HTML_ERROR, JSON_ERROR} from '../helpers.js';
     if ( req.path.startsWith('/form') ) {
       res.type('html');
       res.status(status);
-      res.end(HTML_ERROR(msg));
+      res.end(await ErrorView({error:msg}));
     } else if ( req.path.startsWith('/json') ) {
       res.type('json');
       res.status(status);
