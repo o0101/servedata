@@ -18,5 +18,5 @@ export default async function action({username}, {getTable, newItem, setItem, ge
 
   await sendLoginMail({email, loginLink, req});
 
-  return {username, email};
+  return {username};
 }

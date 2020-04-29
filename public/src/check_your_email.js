@@ -6,6 +6,7 @@ import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';
+const message = `subject=Not%20this%20email?&body=Check%20the%20email%20you%20used%20to%20sign%20up%20and%20check%20spam.`;
 
 export function init() {
   CheckYourEmail(self.loadData);
@@ -13,14 +14,6 @@ export function init() {
 }
 
 function CheckYourEmail({state}) {
-  let link;
-  try {
-    link = new URL(`https://${state.email}`);
-    link = link.origin;
-  } catch(e) {
-    link = '';
-    console.warn(e);
-  }
   return w`
     article,
       :comp ${Header}.
@@ -28,8 +21,8 @@ function CheckYourEmail({state}) {
         h1 ${"Email is on its way!"}.
         p,
           :text ${'If you like, you can '}.
-          a ${{href: link, target: '_blank'}} :text ${`check your mail`}.
-          :text ${` (${state.email}) for the link to login.`}.
+          a ${{href: `mailto:answer@yourquestion.com?${message}`, target: '_blank'}} :text ${`check your mail`}.
+          :text ${` for the link to login.`}.
         .
         hr.
         small ${"Didn't get the email? "}, 
