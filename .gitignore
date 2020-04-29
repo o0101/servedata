@@ -1,4 +1,4 @@
-public/web_modules
+public/src/web_modules
 secrets
 db-servedata
 *.swp
