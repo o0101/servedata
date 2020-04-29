@@ -7,8 +7,13 @@ import {
 import Profile from '../_views/profile.js';
 
 export function select({id}) {
+  if ( ! id ) {
+    throw new TypeError(`Selection 'Profile' requires a parameter 'id'`);
+  }
+
   const users = _getTable(USER_TABLE); 
   const user = users.get(id);
+
   return user;
 }
 
