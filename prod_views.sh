@@ -1,1 +1,1 @@
-find public/*.html -type f -exec sed -i 's/src=\/\w\+\//src=\/dist\//g' {} +
+find public/*.html -type f -exec sed -i "s/from '\/\w\+\//from '\/dist\//g" {} +

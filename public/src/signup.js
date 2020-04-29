@@ -8,27 +8,28 @@ const _ = null;
 const $ = '';
 
 export function init() {
-  initializeDSS({}, stylists);
   Signup();
+  initializeDSS({}, stylists);
 }
 
 function Signup(state) {
   return w`
-    :comp {_} {Header}
-    form ${{
-      method:'POST',
-      action:'/form/action/signup/with/check_your_email',
-      stylist: 'form'
-    }},
-      fieldset,
-        legend ${"Signup"}.
-        p label ${"Username"} input ${fields.username}.
-        p label ${"Email"} input ${fields.email}.
-        p label ${"Password"} input ${fields.password}.
-        p label ${"Confirm password"} input ${fields.password2}.
-        p button ${"Signup"}.
+    article,
+      :comp ${Header}.
+      form ${{
+        method:'POST',
+        action:'/form/action/signup/with/check_your_email',
+        stylist: 'form'
+      }},
+        fieldset,
+          legend ${"Signup"}.
+          p label ${"Username"} input ${fields.username}.
+          p label ${"Email"} input ${fields.email}.
+          p label ${"Password"} input ${fields.password}.
+          p label ${"Confirm password"} input ${fields.password2}.
+          p button ${"Signup"}.
+        .
       .
-    .
   `(
     document.body
   );

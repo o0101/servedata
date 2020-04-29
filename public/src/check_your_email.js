@@ -8,8 +8,8 @@ const _ = null;
 const $ = '';
 
 export function init() {
-  initializeDSS({}, stylists);
   CheckYourEmail(self.loadData);
+  initializeDSS({}, stylists);
 }
 
 function CheckYourEmail(state) {
@@ -22,17 +22,20 @@ function CheckYourEmail(state) {
     console.warn(e);
   }
   return w`
-    aside ${{class:'notification', stylist:'toast'}},
-      h1 ${"Email is on its way!"}.
-      p,
-        :text ${'If you like, you can '}.
-        a ${{href: link, target: '_blank'}} :text ${`check your mail`}.
-        :text ${` (${state.email}) for the link to login.`}.
-      hr.
-      small ${"Didn't get the email? "}, 
-        a ${{href:'/email-login.html'}} :text ${"Try sending again."}.
+    article,
+      :comp ${Header}.
+      aside ${{class:'notification', stylist:'toast'}},
+        h1 ${"Email is on its way!"}.
+        p,
+          :text ${'If you like, you can '}.
+          a ${{href: link, target: '_blank'}} :text ${`check your mail`}.
+          :text ${` (${state.email}) for the link to login.`}.
+        .
+        hr.
+        small ${"Didn't get the email? "}, 
+          a ${{href:'/email-login.html'}} :text ${"Try sending again."}.
+        .
       .
-    .
   `(
     document.body
   );

@@ -7,8 +7,8 @@ const _ = null;
 const $ = '';
 
 export function init() {
-  initializeDSS({}, stylists);
   App();
+  initializeDSS({}, stylists);
 }
 
 function App(state) {
@@ -26,7 +26,7 @@ function App(state) {
       .
       section ${{class:'content'}} ${"content"},
         section ${{class:'banner'}} ${"section"},
-          :comp ${state} ${Banner}. 
+          h1 ${"Dosyago"}.
         .
         section ${{class:'pricing'}} ${"section"},
           h1 ${"Pricing"}.

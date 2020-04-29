@@ -15,7 +15,7 @@ export function Header() {
   return w`
     header ${_} ${"header"}, 
       nav ul ${_} ${"responsiveList"},
-        li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
+        li a ${{href:'/', class:'brand-link'}}  :text ${"Dosyago"}  .
       .
     .
 
