@@ -2,15 +2,19 @@ import {w} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
 import {auth_fields as fields} from './fields.js';
+import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';
 
-initializeDSS({}, stylists);
-Signup();
+export function init() {
+  initializeDSS({}, stylists);
+  Signup();
+}
 
 function Signup(state) {
   return w`
+    :comp {_} {Header}
     form ${{
       method:'POST',
       action:'/form/action/signup/with/check_your_email',

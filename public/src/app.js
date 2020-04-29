@@ -1,13 +1,15 @@
 import {w} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
-import {Banner} from './banner.js';
+import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';
 
-initializeDSS({}, stylists);
-App();
+export function init() {
+  initializeDSS({}, stylists);
+  App();
+}
 
 function App(state) {
   return w`

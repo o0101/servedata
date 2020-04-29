@@ -7,8 +7,10 @@ import {Header} from './profile.js';
 const _ = null;
 const $ = '';
 
-initializeDSS({}, stylists);
-CheckYourEmail(self.loadData);
+export function init() {
+  initializeDSS({}, stylists);
+  CheckYourEmail(self.loadData);
+}
 
 function CheckYourEmail(state) {
   let link;

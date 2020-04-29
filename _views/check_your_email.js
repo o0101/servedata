@@ -1,6 +1,8 @@
 import {DEBUG} from '../common.js';
 
 export default function CheckYourEmail({email, _id, error}) {
+  const state = {email,_id, error};
+
   if ( error ) {
     return `<h1>Error: ${error}</h1>`
   } else {
@@ -10,10 +12,13 @@ export default function CheckYourEmail({email, _id, error}) {
         <meta name=viewport content="width=device-width, initial-scale=1">
         <title>Dosyago</title>
         <link rel=stylesheet href=/static/style.css>
-        <script>
-          self.loadData = ${JSON.stringify({email, _id})};
-        </script>
-        <script type=module src=/${DEBUG.BUILD}/check_your_email.js></script>
+      <script type=module>
+        import {init} from '/${DEBUG.BUILD}/check_your_email.js';
+
+        self.loadData = ${JSON.stringify({state})};
+
+        init();
+      </script>
       </html>
     `
   }

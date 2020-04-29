@@ -2,16 +2,20 @@ import {w} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
 import {auth_fields as fields} from './fields.js';
+import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';
 
-initializeDSS({}, stylists);
-Login();
+export function init() {
+  initializeDSS({}, stylists);
+  Login();
+}
 
 function Login(state) {
   if ( location.pathname.startsWith('/email-login') ) {
     return w`
+      :comp {_} {Header}
       form ${{
         method:'POST',
         action:'/form/action/sendloginemail/with/check_your_email',
@@ -33,6 +37,7 @@ function Login(state) {
   } else if ( location.pathname.startsWith('/link-login') ) {
     const loginId = location.search.split('&')[0].replace('?loginId=', '');
     return w`
+      :comp {_} {Header}
       form ${{
         method:'POST',
         action:'/form/action/login_from_link/redir/profile',
@@ -55,6 +60,7 @@ function Login(state) {
     );
   } else {
     return w`
+      :comp {_} {Header}
       form ${{
         method:'POST',
         action:'/form/action/login/redir/profile',

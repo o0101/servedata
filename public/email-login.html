@@ -2,6 +2,9 @@
   <meta charset=utf-8>
   <meta name=viewport content="width=device-width, initial-scale=1">
   <title>Dosyago</title>
-  <script type=module src=/src/login.js></script>
   <link rel=stylesheet href=/static/style.css>
+  <script type=module>
+    import {init} from '/src/login.js'
+    init();
+  </script>
 </html>
