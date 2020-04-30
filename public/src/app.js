@@ -46,7 +46,7 @@ function App(state) {
           li a ${{href:'https://dosyago.com', class:'author-cite', target:'_blank'}} :text ${"2020 DOSYAGO, Inc."}.
           li a ${{href:'/about.html'}} :text ${"About"}.
           li a ${{href:'/privacy.html'}} :text ${"Privacy Policy"}.
-          li a ${{href:'/term"html"'}} :text ${"Terms of Service"}.
+          li a ${{href:'/terms.html'}} :text ${"Terms of Service"}.
           li a ${{href:'/contact.html'}} :text ${"Contact"}.
           li a ${{href:'/security.html'}} :text ${"Security"}.
           li, a ${{href:'https://github.com/dosyago', class:'social-icon', target:'_blank'}} :text ${"GH"}.
