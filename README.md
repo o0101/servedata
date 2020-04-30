@@ -1,11 +1,12 @@
 # ServeData 
 
-## Version 1.3.7
+## Version 1.3.8
 
-A simple server for the [stubdb](https://github.com/cris691/stubdb)
+A simple server based on [stubdb](https://github.com/cris691/stubdb) for serving all types of data.
 
-Now including basic sketches of users, sessions and authorization with configurable permissions per endpoint or entity.
+Already includes schemas and users, and groups, and authentication, and authorization and permissions. 
 
-Adding support for groups/teams/roles currently.
+Will soon include #18, #19, #20 and #21
+
 
 
