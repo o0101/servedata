@@ -1,7 +1,7 @@
 # ServeData 
 
 
-## Version 1.3.8
+## Version 1.4.0
 
 A simple server based on [stubdb](https://github.com/cris691/stubdb) for serving all types of data.
 
