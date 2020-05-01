@@ -3,6 +3,7 @@
     holyGrid,
     profileGrid,
     header,
+    nav,
     footer,
     section, 
     content,
@@ -158,10 +159,10 @@
       * {
         display: grid;
         grid-template-areas: 
-          "header"
-          "content"
-          "footer";
-        grid-template-columns: 1fr;
+          "header header header"
+          "nav content aside"
+          "footer footer footer";
+        grid-template-columns: auto 1fr auto;
         grid-template-rows: auto 1fr auto;
         height: 100%;
       }
@@ -208,6 +209,14 @@
         color: var(--white);
         font-variant: small-caps;
         text-decoration: none;
+      }
+    `;
+  }
+
+  function nav() {
+    return `
+      *.vertical {
+        
       }
     `;
   }
