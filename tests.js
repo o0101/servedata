@@ -5,6 +5,7 @@
   import {T} from 'jtype-system';
 
   import './types.js';
+  import {DEFAULT_PORT} from './common.js';
   import {loadSchemas, SchemaValidators} from './db_helpers.js';
   import {initializeDB,servedata} from './server.js';
 
@@ -108,7 +109,7 @@ async function test({endpoint, options}, typeName) {
   if ( !endpoint.startsWith('/json') ) {
     throw new TypeError(`Tests can only be run on JSON endpoints`);
   }
-  const endpointUrl = new URL(endpoint, `http://${publicIP}:8080`);
+  const endpointUrl = new URL(endpoint, `http://${publicIP}:${DEFAULT_PORT}`);
   options.body = JSON.stringify(options.body);
   const response = await fetch(endpointUrl, options).then(r => r.text());
   try {

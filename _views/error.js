@@ -37,6 +37,12 @@ export async function ErrorView(state) {
         :root {
           background-color: #e4ff6d;
           background-image: linear-gradient(319deg, #e4ff6d 0%, #ffad42 37%, #e4ff6d 100%);
+          min-height: 100%;
+          height: 100%;
+        }
+        body {
+          min-height: 100%;
+          height: 100%;
         }
       </style>
       <script type=module>

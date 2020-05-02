@@ -12,7 +12,11 @@
     addUser, route
   } from '../helpers.js';
 
-export default async function action({username, password, email}, {getTable, newItem, getSearchResult}, req, res) {
+export default async function action({username, password, email2, email}, {getTable, newItem, getSearchResult}, req, res) {
+  if ( email != email2 ) {
+      throw {status: 400, error: `Email ${email} does not match ${email2}`};
+  }
+
   if ( getSearchResult({table: getTable(USER_TABLE), _search: { username }}).length ) {
     throw {status: 401, error: `Username ${username} already exists.`};
   }

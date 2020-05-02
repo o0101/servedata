@@ -22,4 +22,10 @@ export const auth_fields = {
     type: 'email',
     placeholder: 'email'
   },
+  email2: {
+    required: true,
+    name: 'email2',
+    type: 'email',
+    placeholder: 'email again'
+  },
 };

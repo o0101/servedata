@@ -13,7 +13,7 @@
   };
 
 // constants
-  export const DEFAULT_PORT = 8080;
+  export const DEFAULT_PORT = 80;
   export const PORT = process.env.SERVEDATA_PORT || Number(process.argv[2] || DEFAULT_PORT);
   export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
   export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();

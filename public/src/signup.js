@@ -25,8 +25,8 @@ function Signup(state) {
           legend ${"Signup"}.
           p label ${"Username"} input ${fields.username}.
           p label ${"Email"} input ${fields.email}.
+          p label ${"Email again"} input ${fields.email2}.
           p label ${"Password"} input ${fields.password}.
-          p label ${"Confirm password"} input ${fields.password2}.
           p button ${"Signup"}.
         .
       .

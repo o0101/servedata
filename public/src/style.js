@@ -53,6 +53,7 @@
         margin: 3rem auto;
         padding: var(--pad2);
         min-width: 30%;
+        max-width: 88vw;
       }
     `;
   }
