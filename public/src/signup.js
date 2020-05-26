@@ -22,12 +22,12 @@ function Signup(state) {
         stylist: 'form'
       }},
         fieldset,
-          legend ${"Signup"}.
+          legend ${"Sign Up"}.
           p label ${"Username"} input ${fields.username}.
           p label ${"Email"} input ${fields.email}.
           p label ${"Email again"} input ${fields.email2}.
           p label ${"Password"} input ${fields.password}.
-          p button ${"Signup"}.
+          p button ${"Sign Up"}.
         .
       .
   `(

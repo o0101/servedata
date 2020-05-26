@@ -79,7 +79,7 @@ function Login(state) {
               a ${{href:'/email-login.html'}} :text ${"Login with email instead."}.
             .
             p small ${"Don't have an account? "}, 
-              a ${{href:'/signup.html'}} :text ${"Signup here."}.
+              a ${{href:'/signup.html'}} :text ${"Sign Up here."}.
             .
           .
       .

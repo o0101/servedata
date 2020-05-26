@@ -5,7 +5,7 @@
   import {T} from 'jtype-system';
 
   import './types.js';
-  import {DEFAULT_PORT} from './common.js';
+  import {PORT} from './common.js';
   import {loadSchemas, SchemaValidators} from './db_helpers.js';
   import {initializeDB,servedata} from './server.js';
 
@@ -48,6 +48,7 @@ const Tests = [
       method: 'POST',
       body: {
         email: 'cris7fe@gmail.com',
+        email2: 'cris7fe@gmail.com',
         username: 'test10' + (Math.random()*1000).toFixed(0).toString(36),
         password: 'abc123'
       }
@@ -109,7 +110,7 @@ async function test({endpoint, options}, typeName) {
   if ( !endpoint.startsWith('/json') ) {
     throw new TypeError(`Tests can only be run on JSON endpoints`);
   }
-  const endpointUrl = new URL(endpoint, `http://${publicIP}:${DEFAULT_PORT}`);
+  const endpointUrl = new URL(endpoint, `http://${publicIP}:${PORT}`);
   options.body = JSON.stringify(options.body);
   const response = await fetch(endpointUrl, options).then(r => r.text());
   try {
