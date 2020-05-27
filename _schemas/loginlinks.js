@@ -14,5 +14,5 @@ export default function validate(loginLink) {
 }
 
 export function validatePartial(partialLoginLink) {
-  return T.partialMatch(T`LoginLink`, partialLoginLink).valid;
+  return T.partialMatch(T`LoginLink`, partialLoginLink);
 }

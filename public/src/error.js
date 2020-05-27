@@ -18,7 +18,7 @@ function ErrorPage({state:{error, gifUrl}}) {
         :comp ${Header}. 
         section ${{class:'message'}},
           h1 ${"An Error occurred"}.
-          p ${error}.
+          pre code ${error}.
         .
         hr.
       .

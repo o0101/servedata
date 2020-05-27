@@ -87,11 +87,11 @@
       );
 
       const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
-      const attributesValid = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
+      const {errors, valid:attributesValid} = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
 
       if ( !attributesValid ) {
-        throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: ${
-          JSON.stringify(partialEntry, null, 2)
+        throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: \n${
+          JSON.stringify({query:partialEntry, errors}, null, 2)
         }`);
       }
 

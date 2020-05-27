@@ -13,5 +13,5 @@ export default function validate(session) {
 }
 
 export function validatePartial(partialSession) {
-  return T.partialMatch(T`Session`, partialSession).valid;
+  return T.partialMatch(T`Session`, partialSession);
 }

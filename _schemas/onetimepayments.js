@@ -5,5 +5,5 @@ export default function validate(account) {
 }
 
 export function validatePartial(partialAccount) {
-  return true;
+  return {valid:true, errors:[]};
 }

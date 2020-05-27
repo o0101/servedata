@@ -21,7 +21,7 @@ function App(state) {
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
           li a ${{href:'/signup.html'}} :text ${"Sign Up"}.
-          li a ${{href:'/login.html', class:'button-like'}} :text ${"Login"}.
+          li a ${{href:'/login.html'}} :text ${"Login"}.
         .
       .
       section ${{class:'content'}} ${"content"},

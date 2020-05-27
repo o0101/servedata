@@ -5,5 +5,5 @@ export default function validate(subscription) {
 }
 
 export function validatePartial(partialSubscription) {
-  return true;
+  return {valid:true,errors:[]};
 }

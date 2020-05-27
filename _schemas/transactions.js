@@ -5,5 +5,5 @@ export default function validate(transaction) {
 }
 
 export function validatePartial(partialTransaction) {
-  return true;
+  return {valid:true, errors:[]};
 }

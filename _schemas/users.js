@@ -15,5 +15,5 @@ export default function validate(user) {
 }
 
 export function validatePartial(partialUser) {
-  return T.partialMatch(T`User`, partialUser).valid;
+  return T.partialMatch(T`User`, partialUser);
 }

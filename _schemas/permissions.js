@@ -14,5 +14,5 @@ export default function validate(permission) {
 }
 
 export function validatePartial(partialPermission) {
-  return T.partialMatch(T`Permission`, partialPermission).valid;
+  return T.partialMatch(T`Permission`, partialPermission);
 }
