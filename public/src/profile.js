@@ -66,9 +66,15 @@ export function Profile({username, email, _id}) {
 
 function Purchases() {
   return w`
-    form,
-      p select,
-        option ${{value:"Option1"}} :text ${"Option 1"}.
+    article,
+      h1 ${"Credits & Subscriptions"}.
+      hr.
+      form,
+        p label :text ${"Purchase option"}. select,
+          option ${{value:"Group Subscription"}} :text ${"Group Subscription"}.
+          option ${{value:"Group Subscription"}} :text ${"1000 Credit Pack"}.
+        .
+        p button ${"Buy Now"}.
       .
     .
   `;
@@ -76,17 +82,17 @@ function Purchases() {
 
 function Default() {
   return w`
-        article ${{class:'profile'}},
-          h1 ${`My profile`}.
-          hr.
-          form ${{
-              class: 'full-width' 
-            }} ${'form'},
-            p label ${"Email"} input ${fields.email}.
-            p label ${"Username"} input ${fields.username}.
-            p label ${"Save changes"} button ${"Save"}.
-          .
-        .
+    article ${{class:'profile'}},
+      h1 ${`My profile`}.
+      hr.
+      form ${{
+          class: 'full-width' 
+        }} ${'form'},
+        p label ${"Email"} input ${fields.email}.
+        p label ${"Username"} input ${fields.username}.
+        p label ${"Save changes"} button ${"Save"}.
+      .
+    .
   `
 }
 
