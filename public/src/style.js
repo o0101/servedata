@@ -304,7 +304,6 @@
     return `
       * {
         display: table;
-        margin: 0 auto;
         padding-top: 1rem;
       }
 

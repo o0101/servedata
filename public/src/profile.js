@@ -64,6 +64,49 @@ export function Profile({username, email, _id}) {
   `;
 }
 
+function Account() {
+  return w`
+    article,
+      h1 ${`My Dosyago Account`}.
+      hr.
+      form ${_} ${'form'},
+        p label ${"Email"} input ${fields.email}.
+        p label button ${"Save"}.
+      .
+      form ${_} ${'form'},
+        p label ${"Username"} input ${fields.username}.
+        p label button ${"Save"}.
+      .
+      form ${_} ${'form'},
+        p label ${"Password"} input ${fields.password}.
+        p label button ${"Save"}.
+      .
+    .
+  `
+}
+
+function BillingAccount() {
+  return w`
+    article,
+      h1 ${"Billing Account"}.
+      hr.
+      b ${"Credit balance "}.
+      span ${"100 credits"}.
+    .
+  `;
+}
+
+function Usage() {
+  return w`
+    article,
+      h1 ${"Usage"}.
+      hr.
+      b ${"Credits used "}.
+      span ${"50 credits"}.
+    .
+  `;
+}
+
 function Purchases() {
   return w`
     article,
@@ -80,17 +123,37 @@ function Purchases() {
   `;
 }
 
+function FreeCredits() {
+  return w`
+    article,
+      h1 ${"Free Credits"}.
+      hr.
+      form,
+        p label :text ${"Coupon or Token"}. input.
+        p button ${"Redeem"}.
+      .
+    .
+  `;
+}
+
 function Default() {
   return w`
     article ${{class:'profile'}},
       h1 ${`My profile`}.
       hr.
-      form ${{
-          class: 'full-width' 
-        }} ${'form'},
-        p label ${"Email"} input ${fields.email}.
-        p label ${"Username"} input ${fields.username}.
-        p label ${"Save changes"} button ${"Save"}.
+      dl,
+        dt ${"Active Purchases"}.
+        dd ${"Some Credit Pack"}.
+        dd ${"Some Subscription"}.
+      .
+      dl,
+        dt ${"Current Balance"}.
+        dd ${"50 Credits."}.
+      .
+      dl,
+        dt ${"Services Uses"}.
+        dd ${"RemoteView"}.
+        dd ${"22120"}.
       .
     .
   `
@@ -101,11 +164,20 @@ function ActiveContent() {
   let view = Default;
   switch(hash) {
     case "billing":
+      view = BillingAccount;
+      break;
+    case "usage":
+      view = Usage;
+      break;
+    case "freecredits":
+      view = FreeCredits;
+      break;
     case "onetimepayments":
     case "subscriptions":
-    case "usage":
-    case "freecredits":
       view = Purchases;
+      break;
+    case "account":
+      view = Account;
       break;
     default: 
       view = Default;
