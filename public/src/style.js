@@ -141,8 +141,9 @@
         padding: 0;
       }
 
-      * .vertical-tabs li {
+      * .vertical-tabs li a {
         padding: 0.5rem 1rem;
+        display: block;
         margin: 0;
       }
 

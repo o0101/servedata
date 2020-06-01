@@ -1,14 +1,18 @@
-import {w} from './web_modules/bepis.js';
+import {w, clone} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
 import {auth_fields as fields} from './fields.js';
 
 const _ = null;
 const $ = '';
+const State = {};
+
 
 export function init() {
+  Object.assign(State, clone(self.loadData));
   initializeDSS({}, stylists);
-  Profile(self.loadData);
+  Profile(State)(document.body);
+  self.addEventListener('hashchange', () => Profile(State));
 }
 
 export function Header() {
@@ -23,8 +27,7 @@ export function Header() {
 }
 
 export function Profile({username, email, _id}) {
-  initializeDSS({}, stylists);
-  return w`
+  return w`${true}
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
@@ -44,17 +47,7 @@ export function Profile({username, email, _id}) {
         .
       .
       section ${{class:'content'}} ${"profileContent"},
-        article ${{class:'profile'}},
-          h1 ${`My profile`}.
-          hr.
-          form ${{
-              class: 'full-width' 
-            }} ${'form'},
-            p label ${"Email"} input ${fields.email}.
-            p label ${"Username"} input ${fields.username}.
-            p label ${"Save changes"} button ${"Save"}.
-          .
-        .
+        :comp ${ActiveContent}.
       .
       form ${{
         hidden:true,
@@ -68,8 +61,50 @@ export function Profile({username, email, _id}) {
           value:'logged-out'
         }}.
       .
-  `(
-    document.body
-  );
+  `;
+}
+
+function Purchases() {
+  return w`
+    form,
+      p select,
+        option ${{value:"Option1"}} :text ${"Option 1"}.
+      .
+    .
+  `;
+}
+
+function Default() {
+  return w`
+        article ${{class:'profile'}},
+          h1 ${`My profile`}.
+          hr.
+          form ${{
+              class: 'full-width' 
+            }} ${'form'},
+            p label ${"Email"} input ${fields.email}.
+            p label ${"Username"} input ${fields.username}.
+            p label ${"Save changes"} button ${"Save"}.
+          .
+        .
+  `
+}
+
+function ActiveContent() {
+  const hash = window.location.hash.slice(1);
+  let view = Default;
+  switch(hash) {
+    case "billing":
+    case "onetimepayments":
+    case "subscriptions":
+    case "usage":
+    case "freecredits":
+      view = Purchases;
+      break;
+    default: 
+      view = Default;
+      break;
+  }
+  return view();
 }
 
