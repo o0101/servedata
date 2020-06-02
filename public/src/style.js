@@ -153,6 +153,14 @@
         background: var(--white);
         border: thin solid var(--grey);
       }
+
+      * .shrink-fit {
+        display: table;
+      }
+
+      * .v-gapped {
+        margin: 1em 0;
+      }
     `;
   }
 
@@ -304,12 +312,17 @@
     return `
       * {
         display: table;
+        margin: 0 auto;
         padding-top: 1rem;
       }
 
       *.full-width {
         display: block;
         width: 100%;
+      }
+
+      *.full-width fieldset {
+
       }
 
       * fieldset {
@@ -323,7 +336,7 @@
         justify-content: space-between;
       }
 
-      * input {
+      * input, * select  {
         margin-left: 2rem;
       }
 

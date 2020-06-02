@@ -69,17 +69,28 @@ function Account() {
     article,
       h1 ${`My Dosyago Account`}.
       hr.
-      form ${_} ${'form'},
-        p label ${"Email"} input ${fields.email}.
-        p label button ${"Save"}.
-      .
-      form ${_} ${'form'},
-        p label ${"Username"} input ${fields.username}.
-        p label button ${"Save"}.
-      .
-      form ${_} ${'form'},
-        p label ${"Password"} input ${fields.password}.
-        p label button ${"Save"}.
+      section ${{class:'shrink-fit'}},
+        form ${{class:'v-gapped full-width'}} ${'form'},
+          fieldset,
+            legend ${"Change email"}.
+            p label ${"Email"} input ${fields.email}.
+            p label button ${"Update"}.
+          .
+        .
+        form ${{class:'v-gapped full-width'}} ${'form'},
+          fieldset,
+            legend ${"Change username"}.
+            p label ${"Username"} input ${fields.username}.
+            p label button ${"Update"}.
+          .
+        .
+        form ${{class:'v-gapped full-width'}} ${'form'},
+          fieldset,
+            legend ${"Change password"}.
+            p label ${"Password"} input ${fields.password}.
+            p label button ${"Update"}.
+          .
+        .
       .
     .
   `
@@ -112,12 +123,17 @@ function Purchases() {
     article,
       h1 ${"Credits & Subscriptions"}.
       hr.
-      form,
-        p label :text ${"Purchase option"}. select,
-          option ${{value:"Group Subscription"}} :text ${"Group Subscription"}.
-          option ${{value:"Group Subscription"}} :text ${"1000 Credit Pack"}.
+      section ${{class:'shrink-fit'}},
+        form ${{class:'full-width'}} ${'form'},
+          fieldset,
+            legend ${"Select purchase"}.
+            p label ${{innerText:"Purchase option "}} select,
+              option ${{value:"Group Subscription"}} :text ${"Group Subscription"}.
+              option ${{value:"Group Subscription"}} :text ${"1000 Credit Pack"}.
+            .
+            p button ${"Buy Now"}.
+          .
         .
-        p button ${"Buy Now"}.
       .
     .
   `;
@@ -128,9 +144,14 @@ function FreeCredits() {
     article,
       h1 ${"Free Credits"}.
       hr.
-      form,
-        p label :text ${"Coupon or Token"}. input.
-        p button ${"Redeem"}.
+      section ${{class:'shrink-fit'}},
+        form ${{class:'full-width'}} ${'form'},
+          fieldset,
+            legend ${"Add free credits"}.
+            p label ${{innerText:"Coupon or Token"}} input.
+            p button ${"Redeem"}.
+          .
+        .
       .
     .
   `;
