@@ -15,7 +15,8 @@ T.def('User', {
 export default function validate(user) {
   const errors = T.errors(T`User`, user);
   
-  validateUsernameUniqueness(user, errors);
+  // this cannot go here, the complex quieries create call loops
+  //validateUsernameUniqueness(user, errors);
 
   return errors;
 }
@@ -23,9 +24,11 @@ export default function validate(user) {
 export function validatePartial(partialUser) {
   const errors = T.partialMatch(T`User`, partialUser);
 
+  // this cannot go here, the complex quieries create call loops
   if ( partialUser.username ) {
-    validateUsernameUniqueness(partialUser, errors);
+    //validateUsernameUniqueness(partialUser, errors);
   }
+
 
   return errors;
 }

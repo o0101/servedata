@@ -9,7 +9,8 @@ const State = {};
 
 
 export function init() {
-  Object.assign(State, clone(self.loadData));
+  const {state} = self.loadData;
+  Object.assign(State, clone(state));
   initializeDSS({}, stylists);
   Profile(State)(document.body);
   self.addEventListener('hashchange', () => Profile(State));
@@ -48,7 +49,7 @@ export function Profile({username, email, _id}) {
         .
       .
       section ${{class:'content'}} ${"profileContent"},
-        :comp ${ActiveContent} ${state}.
+        :comp ${state} ${ActiveContent}.
       .
       form ${{
         hidden:true,
@@ -87,11 +88,11 @@ function Account(state) {
         form ${{
             class:'v-gapped full-width',
             method: 'POST',
-            action: `/form/table/users/${state._id}/redir/profile`
+            action: `/form/table/users/${state._id}/with/profile`
           }} ${'form'},
           fieldset,
             legend ${"Change username"}.
-            :comp ${hiddenInput} ${{name:'_id', value:state._id}}
+            :comp ${{name:'_id', value:state._id}} ${hiddenInput}.
             p label ${"Username"} input ${fields.username}.
             p label button ${"Update"}.
           .

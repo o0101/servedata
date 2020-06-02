@@ -32,8 +32,8 @@ export const auth_fields = {
   },
 };
 
-export hiddenInput({name, value}) {
+export function hiddenInput({name, value}) {
   return w`
-    <input type=hidden name=${name} value=${value}>
+    input ${{type:'hidden', name, value}}
   `;
 }
