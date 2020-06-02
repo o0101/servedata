@@ -1,7 +1,7 @@
 import {w, clone} from './web_modules/bepis.js';
 import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
-import {auth_fields as fields} from './fields.js';
+import {hiddenInput, auth_fields as fields} from './fields.js';
 
 const _ = null;
 const $ = '';
@@ -27,6 +27,7 @@ export function Header() {
 }
 
 export function Profile({username, email, _id}) {
+  const state = {username, email, _id};
   return w`${true}
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
@@ -47,7 +48,7 @@ export function Profile({username, email, _id}) {
         .
       .
       section ${{class:'content'}} ${"profileContent"},
-        :comp ${ActiveContent}.
+        :comp ${ActiveContent} ${state}.
       .
       form ${{
         hidden:true,
@@ -64,11 +65,17 @@ export function Profile({username, email, _id}) {
   `;
 }
 
-function Account() {
+function Account(state) {
   return w`
     article,
       h1 ${`My Dosyago Account`}.
       hr.
+      dl,
+        dt ${"Username"}.
+        dd ${state.username}.
+        dt ${"Email"}.
+        dd ${state.email}.
+      .
       section ${{class:'shrink-fit'}},
         form ${{class:'v-gapped full-width'}} ${'form'},
           fieldset,
@@ -77,9 +84,14 @@ function Account() {
             p label button ${"Update"}.
           .
         .
-        form ${{class:'v-gapped full-width'}} ${'form'},
+        form ${{
+            class:'v-gapped full-width',
+            method: 'POST',
+            action: `/form/table/users/${state._id}/redir/profile`
+          }} ${'form'},
           fieldset,
             legend ${"Change username"}.
+            :comp ${hiddenInput} ${{name:'_id', value:state._id}}
             p label ${"Username"} input ${fields.username}.
             p label button ${"Update"}.
           .
@@ -180,7 +192,7 @@ function Default() {
   `
 }
 
-function ActiveContent() {
+function ActiveContent(state) {
   const hash = window.location.hash.slice(1);
   let view = Default;
   switch(hash) {
@@ -204,6 +216,6 @@ function ActiveContent() {
       view = Default;
       break;
   }
-  return view();
+  return view(state);
 }
 

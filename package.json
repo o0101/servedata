@@ -38,7 +38,7 @@
   "homepage": "https://github.com/cris691/servedata#readme",
   "dependencies": {
     "@stripe/stripe-js": "^1.5.0",
-    "beamsplitter": "^2.1.1",
+    "beamsplitter": "^2.1.2",
     "bepis": "^2.1.20",
     "cookie-parser": "^1.4.5",
     "esm": "^3.2.25",
@@ -53,6 +53,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
-    "snowpack": "^1.7.1"
+    "snowpack": "1.7.1"
   }
 }

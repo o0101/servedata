@@ -1,3 +1,5 @@
+import {w, clone} from './web_modules/bepis.js';
+
 export const auth_fields = {
   username: {
     required: true,
@@ -29,3 +31,9 @@ export const auth_fields = {
     placeholder: 'email again'
   },
 };
+
+export hiddenInput({name, value}) {
+  return w`
+    <input type=hidden name=${name} value=${value}>
+  `;
+}
