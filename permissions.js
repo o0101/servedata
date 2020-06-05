@@ -53,13 +53,17 @@ const Perms = [
     [
       `group/users:selection/profile`,
       {
-        view:true, 
+        owner: {
+          view:true, 
+        }
       }
     ],
     [
       `group/users:selection/app`,
       {
-        view:true, 
+        any: {
+          view:true, 
+        }
       }
     ],
   
@@ -67,10 +71,25 @@ const Perms = [
   // user admins, and global admins
     // regular user role
       [
+        `group/users:table/${USER_TABLE}`,
+        {
+          owner : {
+            alter: true,
+            create:true, 
+            view:true,
+          }
+        }
+      ],
+      [
         `group/users:table/${DEPOSIT_TABLE}`,
         {
-          create:true, 
-          view:true
+          public : {
+            view: true
+          },
+          owner : {
+            create:true, 
+            view:true
+          }
         }
       ],
 
@@ -78,10 +97,12 @@ const Perms = [
       [
         `group/useradmins:table/${USER_TABLE}`,
         {
-          excise:true,
-          view:true,
-          alter:true,
-          create:true, 
+          any: {
+            excise:true,
+            view:true,
+            alter:true,
+            create:true, 
+          }
         }
       ],
 
@@ -89,28 +110,34 @@ const Perms = [
       [
         `group/globaladmins:table/${DEPOSIT_TABLE}`,
         {
-          excise:true,
-          view:true,
-          alter:true,
-          create:true, 
+          any : {
+            excise:true,
+            view:true,
+            alter:true,
+            create:true, 
+          }
         }
       ],
       [
         `group/globaladmins:table/${USER_TABLE}`,
         {
-          excise:true,
-          view:true,
-          alter:true,
-          create:true, 
+          any: {
+            excise:true,
+            view:true,
+            alter:true,
+            create:true, 
+          }
         }
       ],
       [
         `group/globaladmins:table/${PERMISSION_TABLE}`,
         {
-          excise:true,
-          view:true,
-          alter:true,
-          create:true, 
+          any: {
+            excise:true,
+            view:true,
+            alter:true,
+            create:true, 
+          }
         }
       ],
 ];
