@@ -53,16 +53,16 @@
     }
   }
 
-  export function getItem({table, id}) {
-    return table.get(id);
+  export function getItem({table, id}, greenlights) {
+    return table.get(id, greenlights);
   }
 
-  export function getList({table}) {
-    return table.getAll();
+  export function getList({table}, greenlights) {
+    return table.getAll(greenlights);
   }
 
-  export function getListSorted({table, prop}) {
-    const list = table.getAll();
+  export function getListSorted({table, prop}, greenlights) {
+    const list = table.getAll(greenlights);
     list.sort((a,b) => {
       let X,Y;
       try {
@@ -79,8 +79,8 @@
     return list;
   }
 
-  export function getSearchResult({table, _search}) {
-    const list = getList({table});
+  export function getSearchResult({table, _search}, greenlights) {
+    const list = getList({table}, greenlights);
     let result;
     if ( _search._keywords ) {
       const {_keywords} = _search;
@@ -124,20 +124,21 @@
     throw new Error("Not implemented");
   }
 
-  export function newItem({table, item}) {
+  export function newItem({table, item}, greenlights) {
     const id = nextKey();
     item._id = id;
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
-    table.put(id, item);
+    table.put(id, item, greenlights);
     return item;
   }
 
-  export function setItem({table, id, item}) {
+  export function setItem({table, id, item}, greenlights) {
     item._id = id;
     let existingItem;
+    // for setItem greenlights are only on the 'put' not the 'get'
     try {
       existingItem = table.get(id);
     } catch(e) {
@@ -149,28 +150,28 @@
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
-    table.put(id, item);
+    table.put(id, item, greenlights);
     return item;
   }
 
-  export async function getSelectionData({selection, id}) {
+  export async function getSelectionData({selection, id}, greenlights) {
     const selectionFileName = path.resolve(SELECTIONS, `${selection}.js`); 
     const {select} = await import(selectionFileName);
-    const result = select({id});
+    const result = select({id}, greenlights);
     return result;
   }
 
-  export async function displaySelectionData({selection, id}) {
+  export async function displaySelectionData({selection, id}, greenlights) {
     const selectionFileName = path.resolve(SELECTIONS, `${selection}.js`); 
     const {select,display} = await import(selectionFileName);
-    const result = display(select({id}));
+    const result = display(select({id}, greenlights));
     return result;
   }
 
-  export async function runStoredAction({action, item}, req, res) {
+  export async function runStoredAction({action, item}, req, res, greenlights) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
     const {default:Action} = await import(actionFileName);
-    const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res);
+    const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res, greenlights);
     return result;
   }
 
