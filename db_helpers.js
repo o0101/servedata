@@ -5,6 +5,7 @@
   import {config, getTable} from 'stubdb';
 
   import {
+    INIT_SCRIPT, 
     DEBUG,
     APP_ROOT
   } from './common.js';
@@ -34,6 +35,12 @@
     ]);
 
 // database helpers and adapters 
+  export async function initialize() {
+    const {default:initialize} = await import(INIT_SCRIPT);
+    await loadSchemas();
+    initialize({getTable, config});
+  }
+
   export async function loadSchemas() {
     const entries = fs.readdirSync(SCHEMAS);
 

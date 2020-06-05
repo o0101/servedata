@@ -16,7 +16,6 @@
     import {
       APP_ROOT,
       STATIC, 
-      INIT_SCRIPT, 
       DEBUG,
       PORT
     } from './common.js';
@@ -37,7 +36,7 @@
       getSelectionData,
       displaySelectionData,
       runStoredAction,
-      loadSchemas,
+      initialize,
       newItem,
       setItem,
       getItem,
@@ -83,9 +82,7 @@
 process.on('unhandledRejection', (...args) => console.log(args));
 
 export async function initializeDB() {
-  const {default:initialize} = await import(INIT_SCRIPT);
-  await loadSchemas();
-  initialize({getTable, config});
+  await initialize();
 }
 
 export function servedata({callConfig: callConfig = false} = {}) {
