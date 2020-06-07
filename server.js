@@ -170,13 +170,8 @@ async function X(req, res, next) {
     next({status: 401, error: '401 Not authorized. No valid user identified.'});
   }
 
-  // sometimes we do an action through get because 'links'
-  if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
-    return next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
-  }
-
-  if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-    return next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
+  if ( ! accessGranted(req, res, next) ) {
+    return;
   }
 
   const way = `${req.method} ${req.route.path}`;
@@ -215,6 +210,22 @@ async function X(req, res, next) {
     next(e);
   }
 }
+
+async function accessGranted(req, res, next) {
+  // sometimes we do an action through get because 'links'
+  if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
+    next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
+    return false;
+  }
+
+  if ( req.method == 'POST' && !req.authorization.permissions.create ) {
+    next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
+    return false;
+  }
+
+  return true;
+}
+
 
 export function toSelection(f) {
   return async (...args) => {
