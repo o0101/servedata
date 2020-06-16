@@ -10,6 +10,7 @@
     APP_ROOT
   } from './common.js';
   import {
+    guardNumber,
     newRandom32BitSeed,
     nextKey,
     formatError,

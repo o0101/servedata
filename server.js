@@ -1,34 +1,25 @@
 // imports 
-  // nodejs builtins
-    import path from 'path';
-    import fs from 'fs';
-
   // 3rd party dependencies
     import helmet from 'helmet';
     import express from 'express';
     import cookieParser from 'cookie-parser';
 
   // my own external dependencies
-    import {config, getTable} from 'stubdb';
+    import {config} from 'stubdb';
 
   // internal modules
     import './types.js';
     import {
-      APP_ROOT,
       STATIC, 
       DEBUG,
       PORT
     } from './common.js';
     import {
       Log,
-      guardNumber, nextKey, clone, formatError, newRandom32BitSeed,
-      HTML_ERROR, JSON_ERROR,
       route,
     } from './helpers.js';
     import {
-      DB_ROOT, SCHEMAS, ACTIONS, QUERIES, 
-      SELECTIONS,
-      SchemaValidators,
+      DB_ROOT, 
       getList,
       getListSorted,
       getSearchResult,
