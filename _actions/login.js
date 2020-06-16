@@ -41,7 +41,7 @@ export default function action({email, username, password}, {getTable, newItem},
 
   if ( userid ) {
     const session = newItem({table:stable, userid, item: {userid}});
-    res.cookie(COOKIE_NAME, session._id);
+    res.cookie(COOKIE_NAME, session._id, {sameSite:true, httpOnly:true});
 
     return {id:userid, session};
   } else {

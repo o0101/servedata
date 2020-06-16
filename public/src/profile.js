@@ -96,14 +96,18 @@ function Account(state) {
           }} ${'form'},
           fieldset,
             legend ${"Change username"}.
-            :comp ${{name:'_id', value:state._id}} ${hiddenInput}.
             p label ${"Username"} input ${fields.username}.
             p label button ${"Update"}.
           .
         .
-        form ${{class:'v-gapped full-width'}} ${'form'},
+        form ${{
+            class:'v-gapped full-width',
+            method: 'POST',
+            action: `/form/action/update_password/redir/profile`
+          }} ${'form'},
           fieldset,
             legend ${"Change password"}.
+            :comp ${{name:'_id', value:state._id}} ${hiddenInput}.
             p label ${"Password"} input ${fields.password}.
             p label button ${"Update"}.
           .

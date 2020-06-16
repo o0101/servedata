@@ -6,7 +6,6 @@ import {Header} from './profile.js';
 
 const _ = null;
 const $ = '';
-const message = `subject=Send%20yourself%20this%20mail&body=Then...go%to%that%email%20%to%20get%20your%20login%20%link.`;
 
 export function init() {
   CheckYourEmail(self.loadData);
@@ -21,7 +20,7 @@ function CheckYourEmail({state}) {
         h1 ${"Email is on its way!"}.
         p,
           :text ${'If you like, you can '}.
-          a ${{href: `mailto:${state.email}?${message}`, target: '_blank'}} :text ${`check your mail`}.
+          a ${{href: `mailto:?subject=Check%20Your%20Inbox`, target: '_blank'}} :text ${`check your mail`}.
           :text ${` for the link to login.`}.
         .
         hr.

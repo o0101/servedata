@@ -1,12 +1,11 @@
 import {DEBUG} from '../common.js';
 import {ErrorView} from './error.js';
 
-export default function CheckYourEmail({email, _id, error}) {
-  const state = {email,_id, error};
-
+export default function CheckYourEmail({username, error}) {
   if ( error ) {
     return ErrorView({error});
   } else {
+    const state = {username};
     return `
       <html lang=en stylist="aux_page">
         <meta charset=utf-8>
