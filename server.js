@@ -170,7 +170,9 @@ async function X(req, res, next) {
     next({status: 401, error: '401 Not authorized. No valid user identified.'});
   }
 
-  if ( ! accessGranted(req, res, next) ) {
+  const grant = await accessGranted(req, res, next);
+
+  if ( ! grant ) {
     return;
   }
 
