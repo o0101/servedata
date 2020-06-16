@@ -7,6 +7,7 @@ import {
 } from './helpers.js';
 import {
   DB_ROOT, 
+  newItem,
   setItem,
 } from './db_helpers.js';
 import Perms from './permissions.js';
@@ -25,6 +26,7 @@ export default function init({getTable, newItem, config, dropTable}) {
   // and 'globaladmin' (global admin)
 
   const noUser = {
+    _owner: NOUSER_ID,
     username: 'nouser',
     email: 'no-one@nowhere.nothing',
     salt: 0,

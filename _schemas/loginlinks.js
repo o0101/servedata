@@ -2,6 +2,7 @@ import {T} from 'jtype-system';
 
 
 T.def('LoginLink', {
+  _owner: T`ID`,
   _id: T`ID`,
   userid: T`ID`,
   expired: T`MaybeBoolean`

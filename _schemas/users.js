@@ -4,6 +4,7 @@ import {_getTable, getSearchResult} from '../db_helpers.js';
 
 T.def('User', {
   _id: T`ID`,
+  _owner: T`ID`,
   username: T`Username`,
   email: T`Email`,
   salt: T`Integer`,

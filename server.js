@@ -181,6 +181,7 @@ async function X(req, res, next) {
 
   if ( data.table ) {
     data.table = _getTable(data.table);
+    data.userid = req.authorization.userid;
   }
 
   let result;
@@ -220,9 +221,23 @@ async function accessGranted(req, res, next) {
     return false;
   }
 
-  if ( req.method == 'POST' && !req.authorization.permissions.create ) {
-    next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
-    return false;
+  if ( req.method == 'POST' ) {
+    if ( req.params.table ) {
+      if ( ! req.params.id && !req.authorization.permissions.create ) {
+        next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
+        return false;
+      } else if ( req.params.id && !req.authorization.permissions.alter ) {
+        next({status:401, error: '401 Not authorized. User has no alter permission on this scope.'});
+        return false;
+      }
+    } else {
+      if ( !req.authorization.permissions.create ) {
+        next({status:401, error: '401 Not authorized. User has no create permission on this scope.'});
+        return false;
+      }
+    }
+
+    return true;
   }
 
   return true;

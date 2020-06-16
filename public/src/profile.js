@@ -78,7 +78,11 @@ function Account(state) {
         dd ${state.email}.
       .
       section ${{class:'shrink-fit'}},
-        form ${{class:'v-gapped full-width'}} ${'form'},
+        form ${{
+          class:'v-gapped full-width',
+          method: 'POST',
+          action: `/form/table/users/${state._id}/with/profile`
+        }} ${'form'},
           fieldset,
             legend ${"Change email"}.
             p label ${"Email"} input ${fields.email}.

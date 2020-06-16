@@ -14,7 +14,7 @@ export default async function action({username}, {getTable, newItem, setItem, ge
 
   const {email} = user;
 
-  const loginLink = newItem({table:getTable(LOGINLINK_TABLE), item: {userid:user._id}});
+  const loginLink = newItem({table:getTable(LOGINLINK_TABLE), userid:user._id, item: {userid:user._id}});
 
   await sendLoginMail({email, loginLink, req});
 

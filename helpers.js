@@ -9,7 +9,8 @@
 
   import {
     USER_TABLE,
-    GROUP_TABLE
+    GROUP_TABLE,
+    NOUSER_ID,
   } from './common.js';
 
   import {newItem} from './db_helpers.js';
@@ -67,7 +68,7 @@
       groups,
       verified
     }
-    const userObject = newItem({table:getTable(USER_TABLE), item:user});
+    const userObject = newItem({table:getTable(USER_TABLE), item:user, ownerId: true});
     const gtable = getTable(GROUP_TABLE);
     for( const group of groups ) {
       const groupObject = gtable.get(group);
@@ -77,17 +78,36 @@
     return userObject;
   }
 
-  export function blankPerms() {
+  export function noPerms() {
     const perm = {};
+
+    return perm;
+  }
+
+  export function grantAllPerms() {
+    const perm = {};
+
+    for( const name of PermNames ) {
+      perm[name] = true;
+    }
+
+    return perm;
+  }
+
+  export function denyAllPerms() {
+    const perm = {};
+
     for( const name of PermNames ) {
       perm[name] = false;
     }
+
     return perm;
   }
 
   export function grant(perms, new_perms) {
     for( const name of PermNames ) {
-      perms[name] |= new_perms[name];
+      if ( new_perms[name] == undefined ) continue;
+      perms[name] = new_perms[name];
     }
   }
 

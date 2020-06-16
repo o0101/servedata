@@ -23,7 +23,7 @@ export default async function action({username, password, email2, email}, {getTa
 
   const user = addUser({username, email, password, verified: false}, 'users');
 
-  const loginLink = newItem({table:getTable(LOGINLINK_TABLE), item: {userid:user._id}});
+  const loginLink = newItem({table:getTable(LOGINLINK_TABLE), userid: user._id, item: {userid:user._id}});
 
   await sendLoginMail({email, loginLink, req});
 

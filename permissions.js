@@ -51,19 +51,15 @@ const Perms = [
       }
     ],
     [
-      `group/users:selection/profile`,
+      `owner:selection/profile`,
       {
-        owner: {
-          view:true, 
-        }
+        view: true
       }
     ],
     [
       `group/users:selection/app`,
       {
-        any: {
-          view:true, 
-        }
+        view:true, 
       }
     ],
   
@@ -71,25 +67,28 @@ const Perms = [
   // user admins, and global admins
     // regular user role
       [
+        `owner:table/${USER_TABLE}`,
+        {
+          alter: true,
+          view:true,
+        }
+      ],
+      [
         `group/users:table/${USER_TABLE}`,
         {
-          owner : {
-            alter: true,
-            create:true, 
-            view:true,
-          }
+          create: true
         }
+      ],
+      [
+        `owner:table/${DEPOSIT_TABLE}`,
+        {
+          view: true
+        },
       ],
       [
         `group/users:table/${DEPOSIT_TABLE}`,
         {
-          public : {
-            view: true
-          },
-          owner : {
-            create:true, 
-            view:true
-          }
+          create: true
         }
       ],
 
@@ -97,12 +96,10 @@ const Perms = [
       [
         `group/useradmins:table/${USER_TABLE}`,
         {
-          any: {
             excise:true,
             view:true,
             alter:true,
             create:true, 
-          }
         }
       ],
 
@@ -110,34 +107,28 @@ const Perms = [
       [
         `group/globaladmins:table/${DEPOSIT_TABLE}`,
         {
-          any : {
             excise:true,
             view:true,
             alter:true,
             create:true, 
-          }
         }
       ],
       [
         `group/globaladmins:table/${USER_TABLE}`,
         {
-          any: {
             excise:true,
             view:true,
             alter:true,
             create:true, 
-          }
         }
       ],
       [
         `group/globaladmins:table/${PERMISSION_TABLE}`,
         {
-          any: {
             excise:true,
             view:true,
             alter:true,
             create:true, 
-          }
         }
       ],
 ];

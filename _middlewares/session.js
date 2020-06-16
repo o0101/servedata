@@ -1,5 +1,5 @@
 import {DEBUG, COOKIE_NAME, SESSION_TABLE, NOUSER_ID} from '../common.js';
-import {blankPerms} from '../helpers.js';
+import {noPerms} from '../helpers.js';
 import {_getTable} from '../db_helpers.js';
 
   export function getSession(req, res, next) {
@@ -61,7 +61,7 @@ import {_getTable} from '../db_helpers.js';
       tokenIsInvalid,
       sessionIsExpired,
       // as an object, 'permissions' properties are *not* frozen
-      permissions: blankPerms()
+      permissions: noPerms()
     };
 
     Object.freeze(authorization);

@@ -6,10 +6,10 @@
   console.log({sd_mode:process.env.SD_MODE});
   export const DEBUG = {
     BUILD: process.env.SD_MODE == 'dev' ? 'src' : 'dist',
-    CONSOLE_ERROR: true,
-    WARN: true,
-    ERROR: true,
-    INFO: true
+    CONSOLE_ERROR: false,
+    WARN: false,
+    ERROR: false,
+    INFO: false
   };
 
 // constants

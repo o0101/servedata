@@ -1,5 +1,5 @@
 import {DEBUG, PERMISSION_TABLE, USER_TABLE} from '../common.js';
-import {formatError, grant, blankPerms} from '../helpers.js';
+import {formatError, grant, noPerms, grantAllPerms} from '../helpers.js';
 import {_getTable, getItem} from '../db_helpers.js';
 
   export function getPermission(req, res) {
@@ -33,9 +33,6 @@ import {_getTable, getItem} from '../db_helpers.js';
         return;
       }
 
-      const Endpoint_permissions = blankPerms();
-      const Instance_permissions = blankPerms();
-
       let active;
 
       switch(true) {
@@ -60,7 +57,103 @@ import {_getTable, getItem} from '../db_helpers.js';
         id = req.params.id;
       }
 
+      let owner = false;
+
+      if ( id && req.params.table ) {
+        const table = _getTable(req.params.table);
+        const record = table.get(id);
+        if ( record._owner == userid ) {
+          owner = true;
+        }
+        console.log({table,id,owner,record});
+      }
+
+      if ( id && req.params.selection ) {
+        if ( id == userid ) {
+          owner = true;
+        }
+      }
+
+      const Endpoint_permissions = noPerms();
+      const Instance_permissions = noPerms();
+
+      if ( owner ) {
+        const endpoint_key = `owner:${active}`;
+        const instance_key = `owner:${active}:${id}`;
+
+        console.log({endpoint_key, instance_key});
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const endpoint_permissions = getItem({table, id:endpoint_key});
+          grant(Endpoint_permissions, endpoint_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({endpoint_key, e});
+        }
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const instance_permissions = getItem({table, id:instance_key});
+          grant(Instance_permissions, instance_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({instance_key, e});
+        }
+      }
+
+      let isGlobalAdmin, isEndpointAdmin;
+
       for( const group of user.groups ) {
+        if ( group == `globalAdmins` ) {
+          isGlobalAdmin = true;
+          continue;
+        } else if ( group == `${active}:Admins` ) {
+          isEndpointAdmin = true;
+          continue;
+        }
+        const endpoint_key = `group/${group}:${active}`;
+        const instance_key = `group/${group}:${active}:${id}`;
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const endpoint_permissions = getItem({table, id:endpoint_key});
+          grant(Endpoint_permissions, endpoint_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({endpoint_key, e});
+        }
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const instance_permissions = getItem({table, id:instance_key});
+          grant(Instance_permissions, instance_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({instance_key, e});
+        }
+      }
+
+      if ( isEndpointAdmin ) {
+        const group = '${active}:Admins';
+        const endpoint_key = `group/${group}:${active}`;
+        const instance_key = `group/${group}:${active}:${id}`;
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const endpoint_permissions = getItem({table, id:endpoint_key});
+          grant(Endpoint_permissions, endpoint_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({endpoint_key, e});
+        }
+
+        try {
+          const table = _getTable(PERMISSION_TABLE);
+          const instance_permissions = getItem({table, id:instance_key});
+          grant(Instance_permissions, instance_permissions);
+        } catch(e) {
+          DEBUG.INFO && console.warn({instance_key, e});
+        }
+      }
+
+      if ( isGlobalAdmin ) {
+        const group = 'globalAdmins';
         const endpoint_key = `group/${group}:${active}`;
         const instance_key = `group/${group}:${active}:${id}`;
 
@@ -101,9 +194,19 @@ import {_getTable, getItem} from '../db_helpers.js';
       }
 
       grant(req.authorization.permissions, Endpoint_permissions);
-      grant(req.authorization.permissions, Instance_permissions);
+
+      if ( id ) {
+        grant(req.authorization.permissions, Instance_permissions);
+      }
 
       Object.freeze(req.authorization.permissions);
+
+      // so basically the order is
+      // UserID perms > GlobalAdmin perms > EndpoinAdmin perms > Group perms > Owner perms 
+      // and
+      // Instance perms > Endpoint perms
+
+      console.log({perms:req.authorization.permissions, active, id, userid, Endpoint_permissions, Instance_permissions});
     }
   }
 

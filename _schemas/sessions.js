@@ -1,6 +1,7 @@
 import {T} from 'jtype-system';
 
 T.def('Session', {
+  _owner: T`ID`,
   _id: T`ID`,
   userid: T`ID`,
   loggedOut: T`MaybeBoolean`

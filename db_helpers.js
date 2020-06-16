@@ -124,9 +124,16 @@
     throw new Error("Not implemented");
   }
 
-  export function newItem({table, item}, greenlights) {
+  export function newItem({table, userid, ownerId, item}, greenlights) {
     const id = nextKey();
     item._id = id;
+    item._owner = userid;
+    if ( ownerId ) {
+      item._owner = id;
+    }
+    if ( ! item._owner ) {
+      throw new TypeError(`Item must have owner ${JSON.stringify({table,item})}`);
+    }
     const errors = SchemaValidators[table.tableInfo.name](item);
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
