@@ -108,6 +108,7 @@ function Account(state) {
           fieldset,
             legend ${"Change password"}.
             :comp ${{name:'_id', value:state._id}} ${hiddenInput}.
+            :comp ${{name:'username', value:state.username}} ${hiddenInput}.
             p label ${"Password"} input ${fields.password}.
             p label button ${"Update"}.
           .

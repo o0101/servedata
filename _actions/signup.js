@@ -88,8 +88,8 @@ export async function sendLoginMail({email, loginLink, req}) {
     throw e;
   }
   //console.log("Email sent!", {mail, email, id, transporter});
-  console.log("Yay!");
-  console.log(`Email sent: ${email}, ${JSON.stringify({mail})}`);
+  //console.log("Yay!");
+  //console.log(`Email sent: ${email}, ${JSON.stringify({mail})}`);
   return {success: true, email, mail, id};
 }
 

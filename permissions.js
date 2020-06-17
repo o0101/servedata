@@ -51,6 +51,12 @@ const Perms = [
       }
     ],
     [
+      `owner:action/update_password`,
+      {
+        create:true, 
+      }
+    ],
+    [
       `owner:selection/profile`,
       {
         view: true

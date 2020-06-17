@@ -58,13 +58,19 @@
     return crypto.randomBytes(4).readUInt32BE();
   }
 
-  export function addUser({username, email, password, verified}, ...groups) {
+  export function hashPassword(password) {
     const randomSalt = newRandom32BitSeed();
+    const passwordHash = beamsplitter(password, randomSalt).toString(16);
+    return {randomSalt, passwordHash};
+  }
+
+  export function addUser({username, email, password, verified}, ...groups) {
+    const {passwordHash, randomSalt} = hashPassword(password);
     const user = {
       username, 
       email,
       salt: randomSalt,
-      passwordHash: beamsplitter(password, randomSalt).toString(16),
+      passwordHash,
       groups,
       verified
     }

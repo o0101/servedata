@@ -49,10 +49,11 @@ import {_getTable, getItem} from '../db_helpers.js';
           active = `selection/${req.params.selection}`;
       }
 
-      let id;
+      let id, _id;
 
       if ( active.startsWith('action') ) {
         id = req.body.id;
+        _id = req.body._id;
       } else {
         id = req.params.id;
       }
@@ -65,11 +66,16 @@ import {_getTable, getItem} from '../db_helpers.js';
         if ( record._owner == userid ) {
           owner = true;
         }
-        console.log({table,id,owner,record});
       }
 
       if ( id && req.params.selection ) {
         if ( id == userid ) {
+          owner = true;
+        }
+      }
+
+      if ( _id && req.params.action ) {
+        if ( _id == userid ) {
           owner = true;
         }
       }
@@ -81,7 +87,6 @@ import {_getTable, getItem} from '../db_helpers.js';
         const endpoint_key = `owner:${active}`;
         const instance_key = `owner:${active}:${id}`;
 
-        console.log({endpoint_key, instance_key});
 
         try {
           const table = _getTable(PERMISSION_TABLE);
@@ -205,8 +210,6 @@ import {_getTable, getItem} from '../db_helpers.js';
       // UserID perms > GlobalAdmin perms > EndpoinAdmin perms > Group perms > Owner perms 
       // and
       // Instance perms > Endpoint perms
-
-      console.log({perms:req.authorization.permissions, active, id, userid, Endpoint_permissions, Instance_permissions});
     }
   }
 

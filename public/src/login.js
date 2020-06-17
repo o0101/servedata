@@ -42,7 +42,7 @@ function Login(state) {
         :comp ${Header}.
         form ${{
           method:'POST',
-          action:'/form/action/login_from_link/redir/profile',
+          action:'/form/action/loginwithlink/redir/profile',
           stylist: 'form'
         }},
           fieldset,
