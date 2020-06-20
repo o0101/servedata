@@ -35,11 +35,7 @@ function saveHash() {
 
 function Route({oldURL,newURL} = {}) {
   localStorage.removeItem('hash-on-submit');
-  Profile(State);
-
-  // calling only below will not work because issue with style.dss
-  // prevents these nodes from being seen by the stylist
-  //ActiveContent(State);
+  ActiveContent(State);
 }
 
 export function Header() {
