@@ -32,7 +32,8 @@
   // database table name constants
     export const SearchControl = new Set([
       "_keywords",
-      "_and"
+      "_and",
+      "_exact"
     ]);
 
 // database helpers and adapters 
@@ -87,6 +88,7 @@
       const {_keywords} = _search;
       result = list.filter(item => JSON.stringify(item).includes(_keywords));
     } else {
+      const MATCHER = _search._exact ? (a,b) => (a+'') == (b+'') : (a,b) => (a+'').includes(b+'');
       const attrs = Object.keys(_search).filter(attr => 
         !SearchControl.has(attr) && 
         _search[attr] !== undefined && 
@@ -106,7 +108,7 @@
       if ( _search._and ) {
         result = list.filter(item => attrs.every(attr => {
           try {
-            return JSON.stringify(item[attr]).includes(_search[attr])
+            return MATCHER(item[attr], _search[attr]);
           } catch(e) {
             console.warn(e);
             console.log({item,attr,_search});
@@ -114,7 +116,7 @@
           }
         }));
       } else {
-        result = list.filter(item => attrs.some(attr => JSON.stringify(item[attr]).includes(_search[attr])));
+        result = list.filter(item => attrs.some(attr => MATCHER(item[attr],_search[attr])));
       }
     }
 

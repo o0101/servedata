@@ -10,8 +10,10 @@ export default function action({email, username, password}, {getTable, newItem},
   const users = getSearchResult({
     table:utable, 
     _search: { 
+      _exact: true,
       _and: true, 
       email, username,
+
     }
   });
 
@@ -36,7 +38,7 @@ export default function action({email, username, password}, {getTable, newItem},
       userid = firstMatchingUser._id;
     }
   } else {
-    throw {status: 404, error: `No such user ${email||''} ${username||''}`};
+    throw {status: 404, error: `No such user with ${JSON.stringify({username,email})}`};
   }
 
   if ( userid ) {
@@ -45,6 +47,6 @@ export default function action({email, username, password}, {getTable, newItem},
 
     return {id:userid, session};
   } else {
-    throw {status: 404, error: `No such user ${email||''} ${username||''}`};
+    throw {status: 404, error: `No such user with ${JSON.stringify({username,email})}`};
   }
 }
