@@ -11,9 +11,35 @@ const State = {};
 export function init() {
   const {state} = self.loadData;
   Object.assign(State, clone(state));
+
   initializeDSS({}, stylists);
   Profile(State)(document.body);
-  self.addEventListener('hashchange', () => Profile(State));
+
+  self.addEventListener('hashchange', Route);
+  self.addEventListener('submit', saveHash);
+
+  restoreSavedHash();
+}
+
+function restoreSavedHash() {
+  const hashOnSubmit = localStorage.getItem('hash-on-submit');
+  if ( !! hashOnSubmit ) {
+    location.hash = hashOnSubmit;
+  }
+}
+
+function saveHash() {
+  const hashOnSubmit = location.hash.slice(1);
+  localStorage.setItem('hash-on-submit', hashOnSubmit);
+}
+
+function Route({oldURL,newURL} = {}) {
+  localStorage.removeItem('hash-on-submit');
+  Profile(State);
+
+  // calling only below will not work because issue with style.dss
+  // prevents these nodes from being seen by the stylist
+  //ActiveContent(State);
 }
 
 export function Header() {
@@ -226,6 +252,10 @@ function ActiveContent(state) {
       view = Default;
       break;
   }
-  return view(state);
+
+  // make a pinner container for active content to render and be replaced in 
+  return w`${true}
+    :comp ${state} ${view}
+  `;
 }
 
