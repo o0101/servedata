@@ -8,7 +8,6 @@
     section, 
     content,
     profileContent,
-    section,
     error,
     funnyImage,
     responsiveList,

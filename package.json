@@ -16,11 +16,11 @@
     "tests": "npm run test-api",
     "pack": "npx snowpack --include \"public/src/**/*.js\" --dest public/src/web_modules",
     "up": "rm package-lock.json && rm -rf node_modules && npm upgrade && npm i && npm run pack",
-    "tscheck-client": "rm -rf public/src/web_modules && tsc --target ES2020 --checkJs --allowJs --outFile typetests/client.js --module System public/src/*.js",
+    "tscheck-client": "tsc --types node,./node_modules/@stripe/stripe-js/types --target ES2020 --checkJs --allowJs --outFile typetests/client.js --module System public/src/*.js public/src/decs.d.ts public/src/web_modules/decs.d.ts",
     "tscheck-server": "tsc --target ES2020 --checkJs --allowJs --outFile typetests/server.js --module System server.js decs.d.ts",
     "tscheck": "npm run tscheck-server && npm run tscheck-client",
     "lint": "npx eslint *.js && npx eslint public/src/*.js",
-    "clean": "rm -rf typetests && rm -rf node_modules && npm i",
+    "clean": "./clean.sh",
     "check": "npm run tscheck && npm run lint"
   },
   "nodemonConfig": {
@@ -63,6 +63,7 @@
     "@types/express": "^4.17.6",
     "@types/form-data": "^2.5.0",
     "@types/helmet": "0.0.47",
+    "@types/node": "^14.0.13",
     "@types/node-fetch": "^2.5.7",
     "eslint": "^7.3.0",
     "nodemon": "^2.0.4",

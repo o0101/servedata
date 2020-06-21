@@ -33,7 +33,7 @@ function saveHash() {
   localStorage.setItem('hash-on-submit', hashOnSubmit);
 }
 
-function Route({oldURL,newURL} = {}) {
+function Route() {
   localStorage.removeItem('hash-on-submit');
   ActiveContent(State);
 }
@@ -49,7 +49,7 @@ export function Header() {
   `
 }
 
-export function Profile({username, email, _id}) {
+export function Profile({username:username = null, email:email = null, _id:_id = null}) {
   const state = {username, email, _id};
   return w`${true}
     main ${_} ${"profileGrid"},
