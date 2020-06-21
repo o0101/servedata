@@ -2,6 +2,7 @@
   import url from 'url';
   import fetch from 'node-fetch';
 
+  import {discohash} from 'bebb4185'
   import {T} from 'jtype-system';
 
   import './types.js';
@@ -55,13 +56,15 @@ const Tests = [
     },
     type: 'SignupResponse'
   },
+  CreateDepositTest(),
 ];
 
 let publicIP;
 
-testAll();
+//testAll(Tests);
+speedTest();
 
-async function testAll(silent = false) {
+async function testAll(tests, silent = false) {
   await initializeDB();
   await servedata();
 
@@ -73,7 +76,7 @@ async function testAll(silent = false) {
   let fails = 0;
   let lastResult;
 
-  for( const Test of Tests ) {
+  for( const Test of tests ) {
     let endpoint, options, type;
     if ( Test instanceof Function ) {
       ({endpoint,options,type} = Test(lastResult));
@@ -128,6 +131,14 @@ async function test({endpoint, options}, typeName) {
   }
 }
 
+async function speedTest() {
+  const tests = [];
+  for( let i = 0; i < 1000; i ++ ) {
+    tests.push(CreateDepositTest()); 
+  }
+  await testAll(tests);
+}
+
 function createTestTypes() {
   T.defOr('MaybeInteger', T`Integer`, T`None`)
   T.def('Err', {
@@ -146,4 +157,25 @@ function createTestTypes() {
   T.def('WrappedSelection', {
     selection: T`Object`
   });
+  T.def(`DepositCreateResponse`, {
+    _id: T`ID`
+  });
+}
+
+function CreateDepositTest() {
+  return {
+    endpoint: '/json/table/deposit',
+    options: {
+      method: 'POST',
+      body: {
+        _id: Math.random().toString(36),
+        _owner: Math.random().toString(36),
+        account: 'abc123',
+        txID: discohash('abc123', Math.round(Math.random()*1000)).toString(16),
+        ammount100ths: Math.round(Math.random()*1000),
+        valence: Math.random() > 0.78 ? 1 : -1
+      }
+    },
+    type: 'DepositCreateResponse'
+  };
 }

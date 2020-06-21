@@ -23,7 +23,7 @@ T.def('URL', null, {
   help: "A valid URL"
 });
 
-// user object field types
+// user field types
   T.defCollection('GroupArray',  {
     container: T`Array`,
     member: T`String`
@@ -33,3 +33,6 @@ T.def('URL', null, {
   T.def('Email', null, {verify: i => EmailRegExp.test(i) && i.length < 200, help: "A valid email address"});
   T.def('Hash', null, {verify: i => HexRegExp.test(i) && i.length < 200, help: "A hexadecimal hash value, between 8 and 100 characters"});
 
+// deposit field types
+
+  T.def('IntegerSign', null, {verify: i => Number.isInteger(i) && i == Math.sign(i)});

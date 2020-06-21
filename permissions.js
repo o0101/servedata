@@ -7,6 +7,16 @@ import {
 } from './common.js';
 
 const Perms = [
+  // test permission
+    [
+      `${NOUSER_ID}:table/${DEPOSIT_TABLE}`,
+      {
+        create:true,
+        alter:true,
+        view:true, 
+      }
+    ],
+
   // permissions for standard auth actions signup, login, logout
     [
       `${NOUSER_ID}:selection/app`,
@@ -88,6 +98,7 @@ const Perms = [
       [
         `owner:table/${DEPOSIT_TABLE}`,
         {
+          alter: true,
           view: true
         },
       ],
@@ -113,10 +124,10 @@ const Perms = [
       [
         `group/globaladmins:table/${DEPOSIT_TABLE}`,
         {
-            excise:true,
-            view:true,
-            alter:true,
-            create:true, 
+          excise:true,
+          view:true,
+          alter:true,
+          create:true, 
         }
       ],
       [
