@@ -1,6 +1,7 @@
 // imports
   import path from 'path';
   import fs from 'fs';
+  import {fileURLToPath} from 'url';
 
 // debug
   console.log({sd_mode:process.env.SD_MODE});
@@ -16,10 +17,11 @@
 // constants
   export const DEFAULT_PORT = 80;
   export const PORT = process.env.SD_PORT || Number(process.argv[2] || DEFAULT_PORT);
-  export const APP_ROOT = path.dirname(path.resolve(process.mainModule.filename));
+  export const APP_ROOT = path.dirname(fileURLToPath(import.meta.url));
   export const COOKIE_NAME = process.env.SD_COOKIE_NAME ? process.env.SD_COOKIE_NAME : fs.readFileSync(path.resolve(APP_ROOT, "cookie_name")).toString('utf8').trim();
   export const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
   export const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.SD_STATIC_FILES) : path.resolve(APP_ROOT, "public");
+  export const MAX_REQUEST_SIZE = "4kb";
 
 // mail sending related constants
   export const MAIL_SENDER = 'cris@dosycorp.com';

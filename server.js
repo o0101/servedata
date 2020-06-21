@@ -10,6 +10,7 @@
   // internal modules
     import './types.js';
     import {
+      MAX_REQUEST_SIZE,
       STATIC, 
       DEBUG,
       PORT
@@ -103,8 +104,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
 
   app.use(cookieParser());
-  app.use(express.urlencoded({extended:true}));
-  app.use(express.json({extended:true}));
+  app.use(express.urlencoded({extended:true, limit:MAX_REQUEST_SIZE}));
+  app.use(express.json({limit:MAX_REQUEST_SIZE}));
   app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
   app.use(getSession);
 

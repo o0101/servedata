@@ -160,7 +160,7 @@
     throw new Error("Not implemented");
   }
 
-  export function newItem({table, userid, ownerId, item}, greenlights) {
+  export function newItem({table, userid:userid = null, ownerId:ownerId = null, item}, greenlights) {
     const id = nextKey();
     item._id = id;
     item._owner = userid;
