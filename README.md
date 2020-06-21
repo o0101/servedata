@@ -7,8 +7,6 @@ A simple server based on [stubdb](https://github.com/cris691/stubdb) for serving
 
 Already includes schemas and users, and groups, and authentication, and authorization and permissions. 
 
-Will soon include #18, #19, #20 and #21
-
 
 ## Using this template
 
