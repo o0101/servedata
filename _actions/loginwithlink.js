@@ -4,9 +4,9 @@ import {
   LOGINLINK_TABLE,
 } from '../common.js';
 
-export default function action({id}, {getTable, newItem, setItem}, req, res) {
-  const linkTable = getTable(LOGINLINK_TABLE);
-  const userTable = getTable(USER_TABLE);
+export default function action({id}, {_getTable, newItem, setItem}, req, res) {
+  const linkTable = _getTable(LOGINLINK_TABLE);
+  const userTable = _getTable(USER_TABLE);
 
   let loginLink;
   let user;
@@ -31,7 +31,7 @@ export default function action({id}, {getTable, newItem, setItem}, req, res) {
 
   setItem({table:userTable, id:user._id, item:{verified:true}});
 
-  const session = newItem({table:getTable(SESSION_TABLE), userid: user._id, item: {userid:user._id}});
+  const session = newItem({table: _getTable(SESSION_TABLE), userid: user._id, item: {userid:user._id}});
   res.cookie(COOKIE_NAME, session._id);
 
   return {session, id:user._id};

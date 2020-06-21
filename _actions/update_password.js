@@ -6,8 +6,8 @@
     hashPassword,
   } from '../helpers.js';
 
-export default async function action({username, password, _id}, {getTable, setItem, getSearchResult}, req, res) {
-  const Users = getTable(USER_TABLE);
+export default async function action({username, password, _id}, {_getTable, setItem, getSearchResult}, req, res) {
+  const Users = _getTable(USER_TABLE);
 
   const results = getSearchResult({table: Users, _search: { username }});
 

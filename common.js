@@ -4,6 +4,7 @@
 
 // debug
   console.log({sd_mode:process.env.SD_MODE});
+
   export const DEBUG = {
     BUILD: process.env.SD_MODE == 'dev' ? 'src' : 'dist',
     CONSOLE_ERROR: false,

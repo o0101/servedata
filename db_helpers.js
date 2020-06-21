@@ -2,7 +2,7 @@
   import path from 'path';
   import fs from 'fs';
 
-  import {config, getTable} from 'stubdb';
+  import {config, getIndexedTable} from 'stubdb';
 
   import {
     INIT_SCRIPT, 
@@ -36,11 +36,15 @@
       "_exact"
     ]);
 
+// scope
+  let IndexProps;
+
 // database helpers and adapters 
   export async function initialize() {
-    const {default:initialize} = await import(INIT_SCRIPT);
+    const {init:initialize, IndexProps:props} = await import(INIT_SCRIPT);
     await loadSchemas();
-    initialize({getTable, config});
+    IndexProps = new Map([...Object.entries(props)]);
+    initialize({_getTable, config});
   }
 
   export async function loadSchemas() {
@@ -82,13 +86,13 @@
   }
 
   export function getSearchResult({table, _search}, greenlights) {
-    const list = getList({table}, greenlights);
-    let result;
+    let result = [];
+
     if ( _search._keywords ) {
       const {_keywords} = _search;
+      const list = getList({table}, greenlights);
       result = list.filter(item => JSON.stringify(item).includes(_keywords));
     } else {
-      const MATCHER = _search._exact ? (a,b) => (a+'') == (b+'') : (a,b) => (a+'').includes(b+'');
       const attrs = Object.keys(_search).filter(attr => 
         !SearchControl.has(attr) && 
         _search[attr] !== undefined && 
@@ -96,27 +100,56 @@
         _search[attr] !== ''
       );
 
-      const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
-      const {errors, valid:attributesValid} = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
-
-      if ( !attributesValid ) {
-        throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: \n${
-          JSON.stringify({query:partialEntry, errors}, null, 2)
-        }`);
-      }
-
-      if ( _search._and ) {
-        result = list.filter(item => attrs.every(attr => {
-          try {
-            return MATCHER(item[attr], _search[attr]);
-          } catch(e) {
-            console.warn(e);
-            console.log({item,attr,_search});
-            return false;
+      if ( _search._exact ) {
+        const results = new Set();
+        for ( const attr of attrs ) {
+          const attrResults = table.getAllMatchingKeysFromIndex(attr, _search[attr]);
+          if ( _search._and ) {
+            if ( results.size ) {
+              const attrResultSet = new Set(attrResults);
+              [...results.keys()].forEach(key => {
+                if ( ! attrResultSet.has(key) )  {
+                  results.delete(key);
+                }
+              });
+            } else {
+              attrResults.forEach(key => results.add(key));
+            }
+          } else {
+            attrResults.forEach(key => results.add(key));
           }
-        }));
+        }
+        if ( ! _search._keysonly ) {
+          [...results.keys()].forEach(key => {
+            result.push(table.get(key));
+          });
+        }
       } else {
-        result = list.filter(item => attrs.some(attr => MATCHER(item[attr],_search[attr])));
+        const list = getList({table}, greenlights);
+        const MATCHER = (a,b) => (a+'').includes(b+'');
+
+        const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
+        const {errors, valid:attributesValid} = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
+
+        if ( !attributesValid ) {
+          throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: \n${
+            JSON.stringify({query:partialEntry, errors}, null, 2)
+          }`);
+        }
+
+        if ( _search._and ) {
+          result = list.filter(item => attrs.every(attr => {
+            try {
+              return MATCHER(item[attr], _search[attr]);
+            } catch(e) {
+              console.warn(e);
+              console.log({item,attr,_search});
+              return false;
+            }
+          }));
+        } else {
+          result = list.filter(item => attrs.some(attr => MATCHER(item[attr],_search[attr])));
+        }
       }
     }
 
@@ -181,13 +214,15 @@
   export async function runStoredAction({action, item}, req, res, greenlights) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
     const {default:Action} = await import(actionFileName);
-    const result = Action(item, {getTable, newItem, setItem, getSearchResult}, req, res, greenlights);
+    const result = Action(item, {_getTable, newItem, setItem, getSearchResult}, req, res, greenlights);
     return result;
   }
 
   export function _getTable(table) {
     if ( !Tables.has(table) ) {
-      Tables.set(table, getTable(table));
+      const props = IndexProps.get(table);
+      DEBUG.INFO && console.log(props, IndexProps, table);
+      Tables.set(table, getIndexedTable(table, IndexProps.get(table)));
     }
     return Tables.get(table);
   }

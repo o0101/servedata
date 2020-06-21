@@ -1,7 +1,7 @@
-import {COOKIE_NAME} from '../common.js';
+import {COOKIE_NAME, SESSION_TABLE} from '../common.js';
 
-export default function action(_, {getTable, setItem}, req, res) {
-  const stable = getTable('sessions');
+export default function action(_, {_getTable, setItem}, req, res) {
+  const stable = _getTable(SESSION_TABLE);
 
   const {session} = req.authorization;
 

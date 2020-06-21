@@ -1,5 +1,5 @@
 import {T} from 'jtype-system';
-import {USER_TABLE} from '../common.js';
+import {DEBUG, USER_TABLE} from '../common.js';
 import {_getTable, getSearchResult} from '../db_helpers.js';
 
 T.def('User', {
@@ -16,8 +16,7 @@ T.def('User', {
 export default function validate(user) {
   const errors = T.errors(T`User`, user);
   
-  // this cannot go here, the complex quieries create call loops
-  //validateUsernameUniqueness(user, errors);
+  validateUsernameUniqueness(user, errors);
 
   return errors;
 }
@@ -25,9 +24,8 @@ export default function validate(user) {
 export function validatePartial(partialUser) {
   const errors = T.partialMatch(T`User`, partialUser);
 
-  // this cannot go here, the complex quieries create call loops
   if ( partialUser.username ) {
-    //validateUsernameUniqueness(partialUser, errors);
+    validateUsernameUniqueness(partialUser, errors);
   }
 
 
@@ -36,21 +34,18 @@ export function validatePartial(partialUser) {
 
 function validateUsernameUniqueness(user, errors) {
   const users = _getTable(USER_TABLE);
-  const usernameResults = getSearchResult({table:users, _search: {
-    username: user.username,
-  }});
-
+  const usernameResults = users.getAllMatchingKeysFromIndex("username", user.username);
 
   if ( usernameResults.length ) {
     const userErrors = [];
-    for( const otherUser of usernameResults ) {
-      if ( otherUser._id == user._id ) continue; 
-      else userErrors.push(otherUser);
+    for( const otherUserId of usernameResults ) {
+      if ( otherUserId == user._id ) continue; 
+      else userErrors.push(otherUserId);
     }
 
     if ( userErrors.length ) {
       errors.push(`Username ${user.username} already exists.`);
-      console.warn({usernameResults, userErrors, user});
+      DEBUG.INFO && console.info({usernameResults, userErrors, user});
       return false;
     }
   }

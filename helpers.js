@@ -5,7 +5,6 @@
   import crypto from 'crypto';
 
   import {beamsplitter} from 'beamsplitter';
-  import {getTable} from 'stubdb';
 
   import {
     USER_TABLE,
@@ -13,7 +12,7 @@
     NOUSER_ID,
   } from './common.js';
 
-  import {newItem} from './db_helpers.js';
+  import {newItem, _getTable} from './db_helpers.js';
 
   import {PermNames} from './permissions.js';
 
@@ -74,8 +73,8 @@
       groups,
       verified
     }
-    const userObject = newItem({table:getTable(USER_TABLE), item:user, ownerId: true});
-    const gtable = getTable(GROUP_TABLE);
+    const userObject = newItem({table:_getTable(USER_TABLE), item:user, ownerId: true});
+    const gtable = _getTable(GROUP_TABLE);
     for( const group of groups ) {
       const groupObject = gtable.get(group);
       groupObject.users[userObject._id] = true;
