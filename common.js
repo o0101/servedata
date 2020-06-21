@@ -8,10 +8,10 @@
 
   export const DEBUG = {
     BUILD: process.env.SD_MODE == 'dev' ? 'src' : 'dist',
-    CONSOLE_ERROR: true,
-    WARN: true,
+    CONSOLE_ERROR: false,
+    WARN: false,
     ERROR: true,
-    INFO: true
+    INFO: false
   };
 
 // constants
@@ -22,6 +22,7 @@
   export const VIEWS = process.env.SD_VIEWS ? path.resolve(process.env.SD_VIEWS) : path.resolve(APP_ROOT, "_views");
   export const STATIC = process.env.SD_STATIC_FILES ? path.resolve(process.env.SD_STATIC_FILES) : path.resolve(APP_ROOT, "public");
   export const MAX_REQUEST_SIZE = "4kb";
+  export const MAX_RECORD_SIZE_BYTES = "3000";
 
 // mail sending related constants
   export const MAIL_SENDER = 'cris@dosycorp.com';

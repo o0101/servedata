@@ -7,7 +7,8 @@
   import {
     INIT_SCRIPT, 
     DEBUG,
-    APP_ROOT
+    APP_ROOT,
+    MAX_RECORD_SIZE_BYTES
   } from './common.js';
   import {
     guardNumber,
@@ -35,6 +36,19 @@
       "_and",
       "_exact"
     ]);
+
+  // validation
+    const ALLOW = {allow:true};
+    const VALIDATE_MAX_RECORD_SIZE = ({recordString,key}) => {
+      if ( recordString.length > MAX_RECORD_SIZE_BYTES ) {
+        return {
+          allow: false,
+          reasons: `Record for key ${key} exceeds max record size bytes ${MAX_RECORD_SIZE_BYTES}`
+        };
+      } else {
+        return ALLOW;
+      }
+    };
 
 // scope
   let IndexProps;
@@ -160,7 +174,7 @@
     throw new Error("Not implemented");
   }
 
-  export function newItem({table, userid:userid = null, ownerId:ownerId = null, item}, greenlights) {
+  export function newItem({table, userid:userid = null, ownerId:ownerId = null, item}, greenlights = []) {
     const id = nextKey();
     item._id = id;
     item._owner = userid;
@@ -174,11 +188,12 @@
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
+    greenlights.push(VALIDATE_MAX_RECORD_SIZE);
     table.put(id, item, greenlights);
     return item;
   }
 
-  export function setItem({table, id, item}, greenlights) {
+  export function setItem({table, id, item}, greenlights = []) {
     item._id = id;
     let existingItem;
     // for setItem greenlights are only on the 'put' not the 'get'
@@ -193,6 +208,7 @@
     if ( errors.length ) {
       throw new TypeError(`Addition to table ${table.tableInfo.name} has errors: ${JSON.stringify(errors.map(formatError),null,2)}`);
     }
+    greenlights.push(VALIDATE_MAX_RECORD_SIZE);
     table.put(id, item, greenlights);
     return item;
   }

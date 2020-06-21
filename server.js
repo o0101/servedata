@@ -71,7 +71,11 @@
         */
   };
 
-process.on('unhandledRejection', (...args) => console.log(args));
+process.on('unhandledRejection', (...args) => {
+  console.error(`Unhandled promise rejection`);
+  console.log(`Details`, args);
+  setTimeout(() => process.exit(1), 3000);
+});
 
 export async function initializeDB() {
   await initialize();
@@ -234,7 +238,6 @@ async function accessGranted(req, res, next) {
 
   return true;
 }
-
 
 export function toSelection(f) {
   return async (...args) => {
