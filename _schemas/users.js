@@ -22,14 +22,13 @@ export default function validate(user) {
 }
 
 export function validatePartial(partialUser) {
-  const errors = T.partialMatch(T`User`, partialUser);
+  let {valid,errors} = T.partialMatch(T`User`, partialUser);
 
-  if ( partialUser.username ) {
-    validateUsernameUniqueness(partialUser, errors);
+  if ( valid && partialUser.username ) {
+    valid = valid && validateUsernameUniqueness(partialUser, errors);
   }
 
-
-  return errors;
+  return {valid,errors};
 }
 
 function validateUsernameUniqueness(user, errors) {

@@ -21,14 +21,14 @@ export default function validate(deposit) {
 }
 
 export function validatePartial(partialDeposit) {
-  const errors = T.partialMatch(T`Deposit`, partialDeposit);
+  let {errors,valid} = T.partialMatch(T`Deposit`, partialDeposit);
 
-  if ( partialDeposit.txID ) {
-    validateTxIDUniqueness(partialDeposit, errors);
+  if ( valid && partialDeposit.txID ) {
+    valid = valid && validateTxIDUniqueness(partialDeposit, errors);
   }
 
 
-  return errors;
+  return {errors,valid};
 }
 
 function validateTxIDUniqueness(deposit, errors) {
