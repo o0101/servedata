@@ -1,10 +1,9 @@
 import {w, clone} from './web_modules/bepis.js';
-import {initializeDSS, restyleAll, setState} from './web_modules/style.dss.js';
+import {initializeDSS} from './web_modules/style.dss.js';
 import {stylists} from './style.js';
 import {hiddenInput, auth_fields as fields} from './fields.js';
 
 const _ = null;
-const $ = '';
 const State = {};
 
 
@@ -23,7 +22,7 @@ export function init() {
 
 function restoreSavedHash() {
   const hashOnSubmit = localStorage.getItem('hash-on-submit');
-  if ( !! hashOnSubmit ) {
+  if ( hashOnSubmit ) {
     location.hash = hashOnSubmit;
   }
 }

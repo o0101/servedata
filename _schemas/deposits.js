@@ -36,15 +36,15 @@ function validateTxIDUniqueness(deposit, errors) {
   const results = deposits.getAllMatchingKeysFromIndex("txID", deposit.txID);
 
   if ( results.length ) {
-    const despositErrors = [];
-    for( const otherDepositID of despositnameResults ) {
-      if ( otherDepositID == desposit._id) continue; 
-      else despositErrors.push(otherDepositID);
+    const depositErrors = [];
+    for( const otherDepositID of results ) {
+      if ( otherDepositID == deposit._id) continue; 
+      else depositErrors.push(otherDepositID);
     }
 
-    if ( despositErrors.length ) {
-      errors.push(`Transaction ID ${desposit.txID} already exists.`);
-      DEBUG.INFO && console.info({despositnameResults, despositErrors, desposit});
+    if ( depositErrors.length ) {
+      errors.push(`Transaction ID ${deposit.txID} already exists.`);
+      DEBUG.INFO && console.info({results, depositErrors, deposit});
       return false;
     }
   }

@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 
 import {VIEWS} from './common.js';
 

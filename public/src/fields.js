@@ -1,4 +1,4 @@
-import {w, clone} from './web_modules/bepis.js';
+import {w} from './web_modules/bepis.js';
 
 export const auth_fields = {
   username: {

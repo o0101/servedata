@@ -151,7 +151,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
   app.use(catchError);
 
-  app.listen(PORT, err => {
+  return app.listen(PORT, err => {
     if ( err ) {
       throw err;
     }

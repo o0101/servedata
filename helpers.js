@@ -1,6 +1,4 @@
 // imports
-  import path from 'path';
-  import fs from 'fs';
   import url from 'url';
   import crypto from 'crypto';
 
@@ -9,7 +7,6 @@
   import {
     USER_TABLE,
     GROUP_TABLE,
-    NOUSER_ID,
   } from './common.js';
 
   import {newItem, _getTable} from './db_helpers.js';

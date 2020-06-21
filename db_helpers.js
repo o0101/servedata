@@ -12,7 +12,6 @@
   } from './common.js';
   import {
     guardNumber,
-    newRandom32BitSeed,
     nextKey,
     formatError,
   } from './helpers.js';
@@ -177,7 +176,9 @@
   export function newItem({table, userid:userid = null, ownerId:ownerId = null, item}, greenlights = []) {
     const id = nextKey();
     item._id = id;
-    item._owner = userid;
+    if ( userid ) {
+      item._owner = userid;
+    }
     if ( ownerId ) {
       item._owner = id;
     }

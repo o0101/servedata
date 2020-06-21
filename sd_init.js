@@ -1,30 +1,30 @@
 import {
   DEBUG,
   NOUSER_ID, 
-  GROUP_TABLE, USER_TABLE, SESSION_TABLE, PERMISSION_TABLE,
+  GROUP_TABLE, USER_TABLE, PERMISSION_TABLE,
+  DEPOSIT_TABLE
 } from './common.js';
 import {
   addUser
 } from './helpers.js';
 import {
   DB_ROOT, 
-  newItem,
   setItem,
 } from './db_helpers.js';
 import Perms from './permissions.js';
 
 export const IndexProps = {
   [USER_TABLE]: ["username", "email"],
+  [DEPOSIT_TABLE]: ["txID"]
 };
 
-export function init({_getTable, newItem, config, dropTable}) {
+export function init({_getTable, config}) {
   try {
     // config  
     config({root:DB_ROOT});
 
     // basic tables
     const utable = _getTable(USER_TABLE);
-    const stable = _getTable(SESSION_TABLE);
     const ptable = _getTable(PERMISSION_TABLE);
     const gtable = _getTable(GROUP_TABLE);
 

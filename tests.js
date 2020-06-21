@@ -1,5 +1,4 @@
 // imports
-  import url from 'url';
   import fetch from 'node-fetch';
 
   import {discohash} from 'bebb4185'
@@ -7,9 +6,10 @@
 
   import './types.js';
   import {PORT} from './common.js';
-  import {loadSchemas, SchemaValidators} from './db_helpers.js';
+  import {loadSchemas} from './db_helpers.js';
   import {initializeDB,servedata} from './server.js';
 
+const DEBUG = false;
 const Tests = [
   {
     endpoint: '/json/action/login',
@@ -61,17 +61,27 @@ const Tests = [
 
 let publicIP;
 
-//testAll(Tests);
-speedTest();
+export async function functionTest() {
+  await testAll(Tests);
+}
+
+export async function speedTest() {
+  const tests = [];
+  for( let i = 0; i < 1000; i ++ ) {
+    tests.push(CreateDepositTest()); 
+  }
+  await testAll(tests);
+}
 
 async function testAll(tests, silent = false) {
   await initializeDB();
-  await servedata();
+  const server = await servedata();
 
   publicIP = await fetch('http://ifconfig.me/ip').then(r => r.text());
-  console.log("Running tests...");
   await loadSchemas();
   createTestTypes();
+  console.log("Running tests...");
+  const timeNow = Date.now();
   const Results = [];
   let fails = 0;
   let lastResult;
@@ -93,18 +103,24 @@ async function testAll(tests, silent = false) {
     };
     lastResult = testRun.result.jsonResponse;
     if ( !testRun.result.valid ) {
-      console.log(JSON.stringify({testFail: testRun},null,2));
+      DEBUG && console.log(JSON.stringify({testFail: testRun},null,2));
       fails ++;
     } else {
-      console.log(JSON.stringify({testPass: testRun},null,2));
+      DEBUG && console.log(JSON.stringify({testPass: testRun},null,2));
     }
   }
 
+  const timeAtEnd = Date.now();
+  const testDuration = timeAtEnd - timeNow;
+  const perTestDurationMilliseconds = (testDuration/tests.length).toFixed(2);
+  const testDurationSeconds = (testDuration/1000).toFixed(2);
   console.log("Done!");
 
   if ( !silent ) {
-    console.log(JSON.stringify({Results, tests: Tests.length, fails}, null, 2));
+    console.log(JSON.stringify({testDurationSeconds, perTestDurationMilliseconds, Results, tests: tests.length, fails}, null, 2));
   }
+
+  server.close();
 
   return {Results, fails};
 }
@@ -126,17 +142,9 @@ async function test({endpoint, options}, typeName) {
     return {valid, errors, jsonResponse, response};
   } catch(e) {
     const testError = {context:`Error validating JSON response at ${typeName}`, response, error: e};
-    console.log(testError);
+    DEBUG && console.log(testError);
     return {valid: false, errors: [testError]};
   }
-}
-
-async function speedTest() {
-  const tests = [];
-  for( let i = 0; i < 1000; i ++ ) {
-    tests.push(CreateDepositTest()); 
-  }
-  await testAll(tests);
 }
 
 function createTestTypes() {
@@ -157,25 +165,23 @@ function createTestTypes() {
   T.def('WrappedSelection', {
     selection: T`Object`
   });
-  T.def(`DepositCreateResponse`, {
-    _id: T`ID`
-  });
+  T.defOr('MaybeDCR', T`Deposit`, T`Err`);
 }
 
 function CreateDepositTest() {
   return {
-    endpoint: '/json/table/deposit',
+    endpoint: '/json/table/deposits',
     options: {
       method: 'POST',
       body: {
         _id: Math.random().toString(36),
         _owner: Math.random().toString(36),
         account: 'abc123',
-        txID: discohash('abc123', Math.round(Math.random()*1000)).toString(16),
-        ammount100ths: Math.round(Math.random()*1000),
-        valence: Math.random() > 0.78 ? 1 : -1
+        txID: discohash('xxxyyy', Math.round(Math.random()*10000)).toString(16),
+        amount100ths: Math.round(Math.random()*1000),
+        valence: Math.random() > 0.78 ? -1 : 1
       }
     },
-    type: 'DepositCreateResponse'
+    type: 'MaybeDCR'
   };
 }
