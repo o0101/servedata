@@ -66,6 +66,12 @@ const Perms = [
       }
     ],
     [
+      `owner:action/update_email`,
+      {
+        create:true, 
+      }
+    ],
+    [
       `owner:selection/profile`,
       {
         view: true
@@ -105,6 +111,18 @@ const Perms = [
         `group/users:table/${DEPOSIT_TABLE}`,
         {
           create: true
+        }
+      ],
+      [
+        `owner:table/${LOGINLINK_TABLE}`,
+        {
+          view:true, 
+        }
+      ],
+      [
+        `group/users:action/loginwithlink`,
+        {
+          create:true, 
         }
       ],
 

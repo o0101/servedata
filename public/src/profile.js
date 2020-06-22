@@ -48,8 +48,8 @@ export function Header() {
   `
 }
 
-export function Profile({username:username = null, email:email = null, _id:_id = null}) {
-  const state = {username, email, _id};
+export function Profile({newEmail: newEmail = null, username:username = null, email:email = null, _id:_id = null}) {
+  const state = {username, newEmail, email, _id};
   return w`${true}
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
@@ -87,6 +87,20 @@ export function Profile({username:username = null, email:email = null, _id:_id =
   `;
 }
 
+function NewEmail(state) {
+  if ( state.newEmail ) {
+    return w`
+      dt ${"New email (unverified)"},
+        br.
+        small i ${"check your email for link"}.
+      .
+      dd ${state.newEmail}.
+    `;
+  } else {
+    return w`dt.`;
+  }
+}
+
 function Account(state) {
   return w`
     article,
@@ -97,16 +111,19 @@ function Account(state) {
         dd ${state.username}.
         dt ${"Email"}.
         dd ${state.email}.
+        :comp ${state} ${NewEmail}.
       .
       section ${{class:'shrink-fit'}},
         form ${{
           class:'v-gapped full-width',
           method: 'POST',
-          action: `/form/table/users/${state._id}/with/profile`
+          action: `/form/action/update_email/redir/profile`
         }} ${'form'},
           fieldset,
             legend ${"Change email"}.
             p label ${"Email"} input ${fields.email}.
+            :comp ${{name:'_id', value:state._id}} ${hiddenInput}.
+            :comp ${{name:'username', value:state.username}} ${hiddenInput}.
             p label button ${"Update"}.
           .
         .

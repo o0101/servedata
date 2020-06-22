@@ -29,7 +29,11 @@ export default function action({id}, {_getTable, newItem, setItem}, req, res) {
     throw {status:401, error:`That login link is trying to log in a user that does not exist.`};
   }
 
-  setItem({table:userTable, id:user._id, item:{verified:true}});
+  if ( user.newEmail ) {
+    setItem({table:userTable, id:user._id, item:{email: user.newEmail, newEmail: null, verified:true}});
+  } else {
+    setItem({table:userTable, id:user._id, item:{verified:true}});
+  }
 
   const session = newItem({table: _getTable(SESSION_TABLE), userid: user._id, item: {userid:user._id}});
   res.cookie(COOKIE_NAME, session._id);

@@ -18,8 +18,6 @@ export default async function action({username, password, _id}, {_getTable, setI
   // username's must be unique
   const user = results[0];
 
-  console.log({user});
-
   if ( user._id != _id ) {
     throw {status: 401, error: `User ${username} has different _id to the _id given (and this should have been caught by permissions not here).`};
   }

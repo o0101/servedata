@@ -7,6 +7,7 @@ T.def('User', {
   _owner: T`ID`,
   username: T`Username`,
   email: T`Email`,
+  newEmail: T.maybe(T`Email`),
   salt: T`Integer`,
   passwordHash: T`Hash`,
   groups: T`GroupArray`,

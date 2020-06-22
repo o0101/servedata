@@ -1,8 +1,8 @@
 import {DEBUG} from '../common.js';
 import {ErrorView} from './error.js';
 
-export default function Profile({username, email, _id, error}) {
-  const state = {username, email, _id, error};
+export default function Profile({username, email, newEmail, _id, error}) {
+  const state = {username, email, newEmail, _id, error};
 
   if ( error ) {
     return ErrorView({error});
