@@ -21,11 +21,13 @@ export default function validate(user) {
   return errors;
 }
 
-export function validatePartial(partialUser) {
+export function validatePartial(partialUser, requestType) {
   let {valid,errors} = T.partialMatch(T`User`, partialUser);
 
-  if ( valid && partialUser.username ) {
-    valid = valid && validateUsernameUniqueness(partialUser, errors);
+  if ( requestType != "get" ) {
+    if ( valid && partialUser.username ) {
+      valid = valid && validateUsernameUniqueness(partialUser, errors);
+    }
   }
 
   return {valid,errors};

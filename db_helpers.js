@@ -113,6 +113,15 @@
         _search[attr] !== ''
       );
 
+      const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
+      const {errors, valid:attributesValid} = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry, "get");
+
+      if ( !attributesValid ) {
+        throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: \n${
+          JSON.stringify({query:partialEntry, errors}, null, 2)
+        }`);
+      }
+
       if ( _search._exact ) {
         const results = new Set();
         for ( const attr of attrs ) {
@@ -141,22 +150,13 @@
         const list = getList({table}, greenlights);
         const MATCHER = (a,b) => (a+'').includes(b+'');
 
-        const partialEntry = attrs.reduce((pe, attr) => (pe[attr] = _search[attr], pe), {});
-        const {errors, valid:attributesValid} = SchemaValidators[table.tableInfo.name].partialMatch(partialEntry);
-
-        if ( !attributesValid ) {
-          throw new TypeError(`Search on table ${table.tableInfo.name} has attribute errors in the provided query: \n${
-            JSON.stringify({query:partialEntry, errors}, null, 2)
-          }`);
-        }
-
         if ( _search._and ) {
           result = list.filter(item => attrs.every(attr => {
             try {
               return MATCHER(item[attr], _search[attr]);
             } catch(e) {
-              console.warn(e);
-              console.log({item,attr,_search});
+              DEBUG.WARN && console.warn(e);
+              DEBUG.INFO && console.log({item,attr,_search});
               return false;
             }
           }));
@@ -201,7 +201,7 @@
     try {
       existingItem = table.get(id);
     } catch(e) {
-      console.log(`could not get ${id}`, e);
+      DEBUG.INFO && console.log(`could not get ${id}`, e);
       existingItem = {};
     }
     item = Object.assign(existingItem, item);
