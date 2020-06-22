@@ -1,5 +1,6 @@
 # ServeData 
 
+**Around 3000 source lines of code** (see stats folder)
 
 ## Version 1.4.0
 
