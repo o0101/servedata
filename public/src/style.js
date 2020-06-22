@@ -298,8 +298,12 @@
         flex-wrap: wrap;
       }
 
-      * a {
+      * li a {
         text-decoration: none; 
+      }
+      
+      * li form {
+        margin: 0;
       }
 
       * li {

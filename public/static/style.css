@@ -9,8 +9,14 @@
 
       --pad1: 0.25rem;
       --pad2: 0.5rem;
-
     }
+
     body {
       margin: 0;
+    }
+
+    /* classes */
+
+    button.transparent {
+      opacity: 0.8;
     }

@@ -12,14 +12,18 @@ export function init() {
 function App() {
   return w`
     main ${_} ${"holyGrid"},
-      header ${_} ${"header"}, 
+      header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
           li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
           li a ${{href:'#how'}}  :text ${"How it works"}  .
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
-          li a ${{href:'/signup.html'}} :text ${"Sign Up"}.
-          li a ${{href:'/login.html'}} :text ${"Login"}.
+          li,
+            form ${{action:'/signup.html'}} button ${{class:''}} :text ${"Sign Up"}.
+          .
+          li,
+            form ${{action:'/login.html'}} button ${{class:''}} :text ${"Login"}.
+          .
         .
       .
       section ${{class:'content'}} ${"content"},
