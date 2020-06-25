@@ -62,11 +62,9 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
         ul,
           li a ${{href:'#profile'}} :text ${`My Profile`}.
           li a ${{href:'#account'}}:text  ${`Capi.Click account`}.
+          li a ${{href:'#subscriptions'}} :text ${`Purchase`}.
           li a ${{href:'#billing'}} :text ${`Billing account`}.
-          li a ${{href:'#subscriptions'}} :text ${`Subscriptions`}.
-          li a ${{href:'#onetimepayments'}} :text ${`One-time payments`}.
           li a ${{href:'#usage'}} :text ${`Usage`}.
-          li a ${{href:'#freecredits'}} :text ${`Free credits`}.
         .
       .
       section ${{class:'content'}} ${"profileContent"},
@@ -186,30 +184,22 @@ function Purchases() {
       section ${{class:'shrink-fit'}},
         form ${{class:'full-width'}} ${'form'},
           fieldset,
-            legend ${"Select purchase"}.
-            p label ${{innerText:"Purchase option "}} select,
-              option ${{value:"Group Subscription"}} :text ${"Group Subscription"}.
-              option ${{value:"Group Subscription"}} :text ${"1000 Credit Pack"}.
+            legend ${"Subscription purchase"}.
+            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
+              option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"Capi.Click Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .
         .
-      .
-    .
-  `;
-}
-
-function FreeCredits() {
-  return w`
-    article,
-      h1 ${"Free Credits"}.
-      hr.
-      section ${{class:'shrink-fit'}},
         form ${{class:'full-width'}} ${'form'},
           fieldset,
-            legend ${"Add free credits"}.
-            p label ${{innerText:"Coupon or Token"}} input.
-            p button ${"Redeem"}.
+            legend ${"Credit pack purchase"}.
+            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
+              option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
+              option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
+              option ${{value:"price_1GxoLcBKxtsqOlor6lT2W0na"}} :text ${"Task Run Credits Recharge 750 Pack"}.
+            .
+            p button ${"Buy Now"}.
           .
         .
       .
