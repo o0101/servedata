@@ -1,4 +1,9 @@
 // imports 
+	// nodejs builtins
+	  import path from 'path';	
+	  import fs from 'fs';	
+    import https from 'https';
+
   // 3rd party dependencies
     import helmet from 'helmet';
     import express from 'express';
@@ -154,12 +159,21 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
   app.use(catchError);
 
-  return app.listen(PORT, err => {
+  const server = https.createServer({
+    key: fs.readFileSync(path.resolve('sslcerts', 'privkey.pem')),
+    cert: fs.readFileSync(path.resolve('sslcerts', 'fullchain.pem')),
+    ca: fs.readFileSync(path.resolve('sslcerts', 'chain.pem')),
+  }, app);
+
+
+  server.listen(PORT, err => {
     if ( err ) {
       throw err;
     }
     Log({serverUp:{port:PORT, up:Date.now()}});
   });
+
+  return server;
 }
 
 async function X(req, res, next) {
