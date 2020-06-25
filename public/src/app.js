@@ -14,7 +14,7 @@ function App() {
     main ${_} ${"holyGrid"},
       header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
+          li a ${{href:'#', class:'brand-link'}}  :text ${"Capi.Click"}  .
           li a ${{href:'#how'}}  :text ${"How it works"}  .
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
@@ -28,7 +28,7 @@ function App() {
       .
       section ${{class:'content'}} ${"content"},
         section ${{class:'banner'}} ${"section"},
-          h1 ${"Dosyago"}.
+          h1 ${"Capi.Click"}.
         .
         section ${{class:'pricing'}} ${"section"},
           h1 ${"Pricing"}.

@@ -41,7 +41,7 @@ export function Header() {
   return w`
     header ${_} ${"header"}, 
       nav ul ${_} ${"responsiveList"},
-        li a ${{href:'/', class:'brand-link'}}  :text ${"Dosyago"}  .
+        li a ${{href:'/', class:'brand-link'}}  :text ${"Capi.Click"}  .
       .
     .
 
@@ -54,14 +54,14 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"Dosyago"}  .
+          li a ${{href:'#', class:'brand-link'}}  :text ${"Capi.Click"}  .
           li button ${{form:'logout', class:'button-like'}} :text ${"Logout"}.
         .
       .
       section ${{class:'vertical-tabs'}} ${"verticalTabs"},
         ul,
           li a ${{href:'#profile'}} :text ${`My Profile`}.
-          li a ${{href:'#account'}}:text  ${`Dosyago account`}.
+          li a ${{href:'#account'}}:text  ${`Capi.Click account`}.
           li a ${{href:'#billing'}} :text ${`Billing account`}.
           li a ${{href:'#subscriptions'}} :text ${`Subscriptions`}.
           li a ${{href:'#onetimepayments'}} :text ${`One-time payments`}.
@@ -104,7 +104,7 @@ function NewEmail(state) {
 function Account(state) {
   return w`
     article,
-      h1 ${`My Dosyago Account`}.
+      h1 ${`My Capi.Click Account`}.
       hr.
       dl,
         dt ${"Username"}.
