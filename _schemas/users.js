@@ -11,7 +11,7 @@ T.def('User', {
   salt: T`Integer`,
   passwordHash: T`Hash`,
   groups: T`GroupArray`,
-  stripeCustomerID: T.maybe(T`String`),
+  stripeCustomerID: T`String`,
   verified: T.maybe(T`Boolean`)
 });
 

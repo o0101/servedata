@@ -2,7 +2,8 @@ import {
   DEBUG,
   NOUSER_ID, 
   GROUP_TABLE, USER_TABLE, PERMISSION_TABLE,
-  DEPOSIT_TABLE
+  DEPOSIT_TABLE,
+  SYSTEM_PAYMENT_ACCOUNT
 } from './common.js';
 import {
   addUser
@@ -38,6 +39,7 @@ export function init({_getTable, config}) {
       salt: 0,
       passwordHash: '0000000000000000',
       groups:['nousers'],
+      stripeCustomerID: SYSTEM_PAYMENT_ACCOUNT,
       verified: false
     };
 
@@ -49,17 +51,17 @@ export function init({_getTable, config}) {
     gtable.put('globaladmins', {name:'globaladmins', users: [], description:'global administrators'});
 
     try {
-      addUser({username:'test9', email:'cris7fe@gmail.com', password:'abc123', verified: true}, 'users');
+      addUser({username:'test9', email:'cris7fe@gmail.com', stripeCustomerID: SYSTEM_PAYMENT_ACCOUNT, password:'abc123', verified: true}, 'users');
     } catch(e) {
       DEBUG.INFO && console.info(e+'');
     }
     try {
-      addUser({username:'useradmin', email:'cris7fe@gmail.com', password:'abc123', verified: true}, 'users', 'useradmins');
+      addUser({username:'useradmin', email:'cris7fe@gmail.com', stripeCustomerID: SYSTEM_PAYMENT_ACCOUNT, password:'abc123', verified: true}, 'users', 'useradmins');
     } catch(e) {
       DEBUG.INFO && console.info(e+'');
     }
     try {
-      addUser({username:'globaladmin', email:'cris7fe@gmail.com', password:'abc123', verified: true}, 'users', 'globaladmins');
+      addUser({username:'globaladmin', email:'cris7fe@gmail.com', stripeCustomerID: SYSTEM_PAYMENT_ACCOUNT, password:'abc123', verified: true}, 'users', 'globaladmins');
     } catch(e) {
       DEBUG.INFO && console.info(e+'');
     }

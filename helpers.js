@@ -60,7 +60,7 @@
     return {randomSalt, passwordHash};
   }
 
-  export function addUser({username, email, password, verified}, ...groups) {
+  export function addUser({username, email, password, stripeCustomerID, verified}, ...groups) {
     const {passwordHash, randomSalt} = hashPassword(password);
     const user = {
       username, 
@@ -68,6 +68,7 @@
       salt: randomSalt,
       passwordHash,
       groups,
+      stripeCustomerID,
       verified
     }
     const userObject = newItem({table:_getTable(USER_TABLE), item:user, ownerId: true});
