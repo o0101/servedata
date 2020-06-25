@@ -69,6 +69,7 @@
     "@types/node-fetch": "^2.5.7",
     "eslint": "^7.3.0",
     "nodemon": "^2.0.4",
+    "rollup": "^2.18.0",
     "snowpack": "1.7.1",
     "typescript": "^3.9.5"
   }

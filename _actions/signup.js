@@ -35,6 +35,8 @@ export default async function action({username, password, email2, email}, {_getT
 
   await sendLoginMail({email, loginLink, req});
 
+  console.log({loginLink});
+
   return {username, email};
 }
 

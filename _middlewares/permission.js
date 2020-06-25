@@ -47,6 +47,8 @@ import {_getTable, getItem} from '../db_helpers.js';
           break;
         case !!req.params.selection:
           active = `selection/${req.params.selection}`;
+        case !!req.params.message:
+          active = `message/${req.params.message}`;
       }
 
       let id, _id;

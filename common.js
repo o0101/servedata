@@ -45,3 +45,8 @@
   export const PAYMENT_TYPES = [
     "card",
   ];
+
+// messages
+  export const MESSAGES = {
+    cancel_payment: `Your payment was cancelled.`
+  };

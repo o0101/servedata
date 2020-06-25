@@ -15,6 +15,7 @@
   // internal modules
     import './types.js';
     import {
+      MESSAGES,
       MAX_REQUEST_SIZE,
       STATIC, 
       DEBUG,
@@ -47,7 +48,7 @@
 // paths dispatch
   const DISPATCH = {
     // forms
-      'GET /redirected/message/:id/with/:view': withView(showMessage),
+      'GET /redirected/message/:message/with/:view': withView(showMessage),
       'GET /form/table/:table/:id/with/:view': withView(getItem),
       'GET /form/list/table/:table/with/:view/': withView(getList),
       'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
@@ -154,6 +155,9 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.post('/form/action/:action/with/:view', X);
       app.post('/form/action/:action/redir/:selection', X);
 
+  // other
+    app.get('/redirected/message/:message/with/:view', X);
+
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
   });
@@ -255,8 +259,8 @@ async function accessGranted(req, res, next) {
   return true;
 }
 
-function showMessage({id}) {
-  let message = MESSAGES[id];
+function showMessage({message}) {
+  message = MESSAGES[message];
   if ( ! message ) {
     message = 'Unknown message';
   }
