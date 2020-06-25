@@ -47,8 +47,13 @@ import {_getTable, getItem} from '../db_helpers.js';
           break;
         case !!req.params.selection:
           active = `selection/${req.params.selection}`;
+          break;
         case !!req.params.message:
           active = `message/${req.params.message}`;
+          break;
+        default:
+          active = ':root';
+          break;
       }
 
       let id, _id;

@@ -4,12 +4,12 @@ import {stylists} from './style.js';
 
 const _ = null;
 
-export function init() {
-  App();
-  initializeDSS({}, stylists);
+export function init({state: state = {}} = {}) {
+  App(state);
+  initializeDSS(state, stylists);
 }
 
-function App() {
+function App(state) {
   return w`
     main ${_} ${"holyGrid"},
       header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
@@ -18,11 +18,8 @@ function App() {
           li a ${{href:'#how'}}  :text ${"How it works"}  .
           li a ${{href:'#questions'}} :text ${"Questions"}.
           li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
-          li,
-            form ${{action:'/signup.html'}} button ${{class:''}} :text ${"Sign Up"}.
-          .
-          li,
-            form ${{action:'/login.html'}} button ${{class:''}} :text ${"Login"}.
+          li, 
+            :comp ${state} ${profileOrLogin}.
           .
         .
       .
@@ -61,5 +58,18 @@ function App() {
   `(
     document.body
   );
+}
+
+function profileOrLogin(state) {
+  if ( state.authorization && state.authorization.session ) {
+    return w`
+      form ${{action:`/form/selection/profile/${state.authorization.session.userid}`}} button ${{class:''}} :text ${"Profile"}.
+    `;
+  } else {
+    return w`
+      form ${{action:'/signup.html'}} button ${{class:''}} :text ${"Sign Up"}.
+      form ${{action:'/login.html'}} button ${{class:''}} :text ${"Login"}.
+    `;
+  }
 }
 

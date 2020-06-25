@@ -18,6 +18,12 @@ const Perms = [
 
   // permissions for standard auth actions signup, login, logout
     [
+      `${NOUSER_ID}::root`,
+      {
+        view: true
+      }
+    ],
+    [
       `${NOUSER_ID}:selection/app`,
       {
         view:true, 
@@ -54,6 +60,12 @@ const Perms = [
       }
     ],
     [
+      `group/nousers:message/cancel_payment`,
+      {
+        view: true
+      }
+    ],
+    [
       `group/users:action/logout`,
       {
         create:true, 
@@ -81,6 +93,18 @@ const Perms = [
       `group/users:selection/app`,
       {
         view:true, 
+      }
+    ],
+    [
+      `group/users:message/cancel_payment`,
+      {
+        view: true
+      }
+    ],
+    [
+      `group/users::root`,
+      {
+        view: true
       }
     ],
   

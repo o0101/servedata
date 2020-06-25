@@ -16,8 +16,9 @@ const Tags = [
 ];
 
 
-export default function notImplemented() {
-  throw new Error(`Error is not implemented as a standard view`);
+export default function notImplemented(state) {
+  //throw new Error(`Error is not implemented as a standard view`);
+  return ErrorView(state);
 }
 
 export async function ErrorView(state) {

@@ -48,6 +48,7 @@
 // paths dispatch
   const DISPATCH = {
     // forms
+      'GET /': landing,
       'GET /redirected/message/:message/with/:view': withView(showMessage),
       'GET /form/table/:table/:id/with/:view': withView(getItem),
       'GET /form/list/table/:table/with/:view/': withView(getList),
@@ -108,6 +109,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
     //set type
       if ( req.path.startsWith('/form')) {
         res.type('html');
+      } else if ( req.path.startsWith('/redirect') ) {
+        res.type('html');
       } else if ( req.path.startsWith('/json')) {
         res.type('json');
       }
@@ -118,7 +121,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
   app.use(cookieParser());
   app.use(express.urlencoded({extended:true, limit:MAX_REQUEST_SIZE}));
   app.use(express.json({limit:MAX_REQUEST_SIZE}));
-  app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
+  app.use(express.static(STATIC, {extensions:['html'], fallthrough:true, index: false}));
   app.use(getSession);
 
   // JSON
@@ -157,6 +160,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
 
   // other
     app.get('/redirected/message/:message/with/:view', X);
+    app.get('/', X);
 
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
@@ -204,7 +208,7 @@ async function X(req, res, next) {
   let result;
 
   try {
-    if ( req.path.includes('/action/') ) {
+    if ( req.path.includes('/action/') || req.path == '/' ) {
       result = await DISPATCH[way](data, req, res);
     } else {
       result = await DISPATCH[way](data);
@@ -266,6 +270,25 @@ function showMessage({message}) {
   }
 
   return {message};
+}
+
+function landing(nothing, req, res) {
+  res.type('html');
+  const state = {
+    authorization: req.authorization
+  };
+  res.end(`
+    <html lang=en>
+      <meta charset=utf-8>
+      <meta name=viewport content="width=device-width, initial-scale=1">
+      <title>Capi.Click</title>
+      <link rel=stylesheet href=/static/style.css>
+      <script type=module>
+        import {init} from '/src/app.js'
+        init(${JSON.stringify({state})});
+      </script>
+    </html>
+  `);
 }
 
 export function toSelection(f) {
