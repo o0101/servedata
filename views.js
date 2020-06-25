@@ -21,6 +21,7 @@ import {VIEWS} from './common.js';
         return tempJsonView;
       **/
 
+      console.log(View, viewFileName)
       const renderedView = await View(raw);
       return renderedView;
     };

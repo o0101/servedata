@@ -10,14 +10,14 @@ export function init() {
   initializeDSS({}, stylists);
 }
 
-function ErrorPage({state:{error, gifUrl}}) {
+function ErrorPage({state:{error, message, gifUrl}}) {
   return w`
     main,
       article ${_} ${"error"},
         :comp ${Header}. 
         section ${{class:'message'}},
-          h1 ${"An Error occurred"}.
-          pre code ${error}.
+          h1 ${message || "An Error occurred"}.
+          pre code ${error || ''}.
         .
         hr.
       .

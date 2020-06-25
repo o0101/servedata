@@ -68,6 +68,8 @@ export function init({_getTable, config}) {
 
     // add perms
 
+    DEBUG.INFO && console.log({Perms});
+
     for( const [scope, perm] of Perms ) {
       ptable.put(scope, perm);
     }

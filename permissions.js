@@ -125,6 +125,12 @@ const Perms = [
           create:true, 
         }
       ],
+      [
+        `group/users:action/pay`,
+        {
+          create:true, 
+        }
+      ],
 
     // user admin role
       [

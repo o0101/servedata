@@ -8,10 +8,10 @@
 
   export const DEBUG = {
     BUILD: process.env.SD_MODE == 'dev' ? 'src' : 'dist',
-    CONSOLE_ERROR: false,
-    WARN: false,
+    CONSOLE_ERROR: true,
+    WARN: true,
     ERROR: true,
-    INFO: false
+    INFO: true
   };
 
 // constants
@@ -40,5 +40,8 @@
   export const NOUSER_ID = 'nouser';
 
 // payment related constants
-  export const PAYMENT_MODE = 'prod';
+  export const PAYMENT_MODE = 'live';
   export const SYSTEM_PAYMENT_ACCOUNT = 'system_class_payment_account';
+  export const PAYMENT_TYPES = [
+    "card",
+  ];

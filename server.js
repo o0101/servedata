@@ -42,6 +42,7 @@
 // paths dispatch
   const DISPATCH = {
     // forms
+      'GET /redirected/message/:id/with/:view': withView(showMessage),
       'GET /form/table/:table/:id/with/:view': withView(getItem),
       'GET /form/list/table/:table/with/:view/': withView(getList),
       'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
@@ -52,6 +53,7 @@
       'POST /form/table/:table/new/with/:view': withView(newItem),
       'POST /form/table/:table/:id/with/:view': withView(setItem),
       'POST /form/action/:action/with/:view': withView(runStoredAction),
+      'POST /form/action/:action': runStoredAction,
       'POST /form/action/:action/redir/:selection': toSelection(runStoredAction),
 
     // JSON API
@@ -143,6 +145,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.post('/form/table/:table/:id/with/:view', X);
     // stored procedure
       app.get('/form/query/:query/with/:view', X);
+      app.post('/form/action/:action', X);
       app.post('/form/action/:action/with/:view', X);
       app.post('/form/action/:action/redir/:selection', X);
 
@@ -211,7 +214,6 @@ async function X(req, res, next) {
 }
 
 async function accessGranted(req, res, next) {
-  // sometimes we do an action through get because 'links'
   if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
     next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
     return false;
@@ -237,6 +239,15 @@ async function accessGranted(req, res, next) {
   }
 
   return true;
+}
+
+function showMessage({id}) {
+  let message = MESSAGES[id];
+  if ( ! message ) {
+    message = 'Unknown message';
+  }
+
+  return {message};
 }
 
 export function toSelection(f) {

@@ -231,7 +231,7 @@
   export async function runStoredAction({action, item}, req, res, greenlights) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
     const {default:Action} = await import(actionFileName);
-    const result = Action(item, {_getTable, newItem, setItem, getSearchResult}, req, res, greenlights);
+    const result = Action(item, {_getTable, getItem, newItem, setItem, getSearchResult}, req, res, greenlights);
     return result;
   }
 

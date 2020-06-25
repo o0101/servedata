@@ -182,18 +182,28 @@ function Purchases() {
       h1 ${"Credits & Subscriptions"}.
       hr.
       section ${{class:'shrink-fit'}},
-        form ${{class:'full-width'}} ${'form'},
+        form ${{
+            class:'full-width',
+            method: 'POST',
+            action: '/form/action/pay/with/tocheckout'
+          }} ${'form'},
           fieldset,
             legend ${"Subscription purchase"}.
+            :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
               option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"Capi.Click Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .
         .
-        form ${{class:'full-width'}} ${'form'},
+        form ${{
+            class:'full-width',
+            method: 'POST',
+            action: '/form/action/pay/with/tocheckout'
+          }} ${'form'},
           fieldset,
             legend ${"Credit pack purchase"}.
+            :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
               option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
               option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
