@@ -1,0 +1,36 @@
+language,filename,blank,comment,code,"github.com/AlDanial/cloc v 1.81  T=0.02 s (1730.9 files/s, 67861.1 lines/s)"
+JavaScript,./server.js,26,23,132
+JavaScript,./db_helpers.js,21,4,129
+JavaScript,./_middlewares/permission.js,19,0,92
+JavaScript,./permissions.js,6,6,89
+JavaScript,./_actions/signup.js,11,9,87
+JavaScript,./helpers.js,16,3,73
+JavaScript,./_middlewares/session.js,13,2,64
+JavaScript,./_actions/login.js,9,0,44
+JavaScript,./sd_init.js,9,5,39
+HTML,./public/index.html,1,0,33
+JavaScript,./_actions/loginwithlink.js,9,0,32
+JavaScript,./_middlewares/error.js,2,0,31
+JavaScript,./common.js,4,5,26
+JavaScript,./_actions/newbox.js,1,0,22
+JavaScript,./types.js,8,5,22
+JavaScript,./views.js,5,5,18
+JavaScript,./_views/pencil_list.js,2,0,14
+JavaScript,./_schemas/users.js,2,0,13
+JavaScript,./secrets/dosycorp.com-gsuite-email-key.js,1,0,13
+JavaScript,./_schemas/permissions.js,2,0,12
+JavaScript,./_views/newbox.js,0,0,11
+JavaScript,./_schemas/loginlinks.js,3,0,11
+JavaScript,./_schemas/sessions.js,2,0,10
+JavaScript,./_actions/logout.js,1,0,10
+JavaScript,./_views/loginlink.js,0,0,8
+JavaScript,./_views/verify.js,0,0,8
+JavaScript,./_views/pencil.js,0,0,8
+JavaScript,./_views/session_test.js,0,0,7
+JavaScript,./_views/app.js,0,0,7
+JavaScript,./start.js,2,0,6
+Markdown,./README.md,6,0,5
+JavaScript,./_schemas/deposits.js,1,0,4
+Bourne Shell,./run.sh,0,0,2
+JavaScript,./index.js,0,0,2
+SUM,,182,67,1084

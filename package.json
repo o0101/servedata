@@ -1,0 +1,75 @@
+{
+  "name": "servedata",
+  "version": "1.4.2",
+  "description": "server for data.",
+  "main": "index.js",
+  "scripts": {
+    "dev-db": "export SD_MODE=dev&&export SD_PORT=8080&& nodemon -r esm start.js",
+    "db": "sudo -- bash -c 'export SD_MODE=prod&& node -r esm start.js'",
+    "dev-site": "./dev_views.sh && npm run pack && npm run dev-db",
+    "site": "./prod_views.sh && npm run pack && npm run db",
+    "static": "npm run pack && serve -p 8080 public",
+    "dev": "npm run dev-site",
+    "start": "npm run site",
+    "test-api": "export SD_MODE=dev&& export SD_PORT=8080&& node -r esm functionTest.js",
+    "test-speed": "export SD_MODE=dev&& export SD_PORT=8080&& node -r esm speedTest.js",
+    "test": "npm run dev",
+    "tests": "npm run test-api",
+    "speed": "npm run test-speed",
+    "pack": "npx snowpack --include \"public/src/**/*.js\" --dest public/src/web_modules",
+    "up": "rm package-lock.json && rm -rf node_modules && npm upgrade && npm i && npm run pack",
+    "tscheck-client": "tsc --types node,./node_modules/@stripe/stripe-js/types --target ES2020 --checkJs --allowJs --outFile typetests/client.js --module System public/src/*.js public/src/decs.d.ts public/src/web_modules/decs.d.ts",
+    "tscheck-server": "tsc --target ES2020 --checkJs --allowJs --outFile typetests/server.js --module System server.js decs.d.ts",
+    "tscheck": "npm run tscheck-server && npm run tscheck-client",
+    "lint": "npx eslint *.js && npx eslint public/src/*.js",
+    "clean": "./clean.sh",
+    "check": "( npm run tscheck || : ) && npm run lint"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "db-servedata/**"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cris691/servedata.git"
+  },
+  "keywords": [
+    "server",
+    "data"
+  ],
+  "author": "@dosy",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cris691/servedata/issues"
+  },
+  "homepage": "https://github.com/cris691/servedata#readme",
+  "dependencies": {
+    "@stripe/stripe-js": "^1.5.0",
+    "beamsplitter": "latest",
+    "bepis": "latest",
+    "cookie-parser": "^1.4.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "helmet": "^3.23.1",
+    "jtype-system": "^1.2.2",
+    "node-fetch": "^2.6.0",
+    "nodemailer": "^6.4.10",
+    "stripe": "^8.64.0",
+    "stubdb": "latest",
+    "style.dss": "latest"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/esm": "^3.2.0",
+    "@types/express": "^4.17.6",
+    "@types/form-data": "^2.5.0",
+    "@types/helmet": "0.0.47",
+    "@types/node": "^14.0.13",
+    "@types/node-fetch": "^2.5.7",
+    "eslint": "^7.3.0",
+    "nodemon": "^2.0.4",
+    "snowpack": "1.7.1",
+    "typescript": "^3.9.5"
+  }
+}

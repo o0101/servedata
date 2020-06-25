@@ -1,0 +1,34 @@
+<title>ServeData Console</title>
+<style>
+  form {
+    display: table;
+    margin: 0 auto;
+  }
+</style>
+<h1>Signup / Login / Logout Tests</h1>
+<form target=auth_tests method=POST>
+  <input type=email name=email placeholder=email>
+  <input type=password name=password placeholder=password>
+  <input type=username name=username placeholder=username>
+  <button formaction=/form/action/signup/with/check_your_email>Signup</button>
+  <button formaction=/form/action/login/with/profile>Login</button>
+  <button formaction=/form/action/logout/with/app>Logout</button>
+</form>
+<iframe src=about:blank name=auth_tests></iframe>
+<hr>
+<h1>Deposit Gets</h1>
+<form target=deposit_gets method=GET>
+  <input type=date name=from_date placeholder=from_date>
+  <input type=date name=to_date placeholder=to_date>
+  <input type=text name=bank_name placeholder=bank_name>
+  <input type=number name=deposit_min placeholder=deposit_min>
+  <input type=number name=deposit_max placeholder=deposit_max>
+  <button formaction=/form/query/filter_deposits>Filter deposits</button>
+  <button formaction=/form/list/table/deposit>List deposits</button>
+</form>
+<iframe src=about:blank name=deposit_gets></iframe>
+<hr>
+<h1>Post Tests</h1>
+<form target=post_response method=POST>
+</form>
+

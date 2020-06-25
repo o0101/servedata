@@ -1,0 +1,54 @@
+language,filename,blank,comment,code,"github.com/AlDanial/cloc v 1.81  T=0.10 s (533.2 files/s, 25109.5 lines/s)"
+JavaScript,./public/src/style.js,41,0,269
+JavaScript,./server.js,34,27,177
+JavaScript,./db_helpers.js,23,6,147
+JavaScript,./tests.js,13,1,133
+JavaScript,./permissions.js,6,6,113
+JavaScript,./_middlewares/permission.js,21,0,88
+JavaScript,./public/src/login.js,4,0,87
+JavaScript,./_actions/signup.js,11,5,82
+JavaScript,./helpers.js,16,3,82
+JavaScript,./public/src/profile.js,6,0,69
+JavaScript,./_middlewares/session.js,12,2,63
+JavaScript,./public/src/app.js,4,0,59
+JavaScript,./_middlewares/error.js,2,0,48
+JavaScript,./_actions/login.js,9,0,41
+JavaScript,./public/src/check_your_email.js,4,0,39
+JavaScript,./sd_init.js,9,5,39
+HTML,./public/dev-console.html,1,0,33
+JavaScript,./public/src/signup.js,4,0,33
+JavaScript,./_actions/loginwithlink.js,9,0,29
+JavaScript,./common.js,4,5,27
+JavaScript,./public/src/fields.js,0,0,25
+JavaScript,./_actions/newbox.js,1,0,22
+Markdown,./_selections/README.md,19,0,22
+JavaScript,./types.js,7,5,22
+JavaScript,./_views/profile.js,4,0,21
+JavaScript,./_views/check_your_email.js,4,0,21
+JavaScript,./views.js,5,5,19
+JavaScript,./_views/app.js,3,0,16
+JavaScript,./_schemas/users.js,3,0,16
+JavaScript,./_actions/sendloginemail.js,7,0,15
+JavaScript,./_schemas/permissions.js,3,0,15
+JavaScript,./_selections/profile.js,3,0,15
+CSS,./public/static/style.css,2,0,14
+JavaScript,./_schemas/sessions.js,3,0,14
+JavaScript,./_schemas/loginlinks.js,4,0,14
+JavaScript,./_selections/app.js,3,0,13
+JavaScript,./secrets/dosycorp.com-gsuite-email-key.js,0,0,13
+HTML,./public/index.html,0,0,10
+HTML,./public/email-login.html,0,0,10
+HTML,./public/login.html,1,0,10
+HTML,./public/signup.html,1,0,10
+JavaScript,./_actions/logout.js,5,0,8
+JavaScript,./_views/loginlink.js,0,0,8
+JavaScript,./_schemas/onetimepayments.js,2,0,7
+JavaScript,./_schemas/subscriptions.js,2,0,7
+JavaScript,./_schemas/transactions.js,2,0,7
+Bourne Shell,./prod_views.sh,0,0,6
+JavaScript,./start.js,2,0,6
+Markdown,./README.md,6,0,5
+JavaScript,./index.js,0,0,2
+Bourne Shell,./run.sh,0,0,2
+Bourne Shell,./dev_views.sh,0,0,1
+SUM,,325,70,2054
