@@ -1,7 +1,7 @@
 // imports 
-	// nodejs builtins
-	  import path from 'path';	
-	  import fs from 'fs';	
+  // nodejs builtins
+    import path from 'path';  
+    import fs from 'fs';  
     import https from 'https';
 
   // 3rd party dependencies
@@ -284,7 +284,7 @@ function landing(nothing, req, res) {
       <title>Capi.Click</title>
       <link rel=stylesheet href=/static/style.css>
       <script type=module>
-        import {init} from '/src/app.js'
+        import {init} from '/${DEBUG.BUILD}/app.js'
         init(${JSON.stringify({state})});
       </script>
     </html>

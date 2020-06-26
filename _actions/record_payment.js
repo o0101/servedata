@@ -1,3 +1,5 @@
+// this is the action received by the webhook checkout.session.completed
+
 // imports
   import stripe from 'stripe';
   import nodemailer from 'nodemailer';

@@ -104,7 +104,7 @@
       }
 
       * a.brand-link {
-        font-size: 2em;
+        font-size: larger;
       }
 
       * .button-like {
@@ -181,7 +181,7 @@
       }
 
       * a.brand-link {
-        font-size: 2em;
+        font-size: larger;
       }
 
       * .button-like {
@@ -218,6 +218,10 @@
         color: var(--white);
         font-variant: small-caps;
         text-decoration: none;
+      }
+
+      * a.brand-link {
+        font-size: larger;
       }
     `;
   }

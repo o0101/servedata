@@ -9,18 +9,31 @@ export function init({state: state = {}} = {}) {
   initializeDSS(state, stylists);
 }
 
+const Nav = [
+  {href:'#', class:'brand-link', text: "Capi.Click"},
+  {href:'#how', text:"How it works"},
+  {href:'#questions', text:"Questions"},
+  {href:'/documentation,html', text: "Documentation"},
+];
+
+const LoggedInNav = ({userid}) => [
+  {action:`/form/selection/profile/${userid}`, text: "Profile"}
+];
+
+const SignedOutNav = [
+  {action: '/signup.html', text: 'Sign Up'},
+  {action: '/login.html', text: 'Log In'},
+];
+
 function App(state) {
+  const session = state.authorization && state.authorization.session;
+  const loggedIn = session && session.userid && session.userid != 'nouser';
+
   return w`
     main ${_} ${"holyGrid"},
       header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"Capi.Click"}  .
-          li a ${{href:'#how'}}  :text ${"How it works"}  .
-          li a ${{href:'#questions'}} :text ${"Questions"}.
-          li a ${{href:'/documentation.html'}}  :text ${"Documentation"}  .
-          li, 
-            :comp ${state} ${profileOrLogin}.
-          .
+          :map ${loggedIn ? Nav.concat(LoggedInNav(session)) : Nav.concat(SignedOutNav) } ${NavItem}.
         .
       .
       section ${{class:'content'}} ${"content"},
@@ -60,16 +73,17 @@ function App(state) {
   );
 }
 
-function profileOrLogin(state) {
-  if ( state.authorization && state.authorization.session ) {
+function NavItem({action, href, text, ...rest}) {
+  if ( action ) {
     return w`
-      form ${{action:`/form/selection/profile/${state.authorization.session.userid}`}} button ${{class:''}} :text ${"Profile"}.
+      li form ${{action, ...rest}} button ${rest} :text ${text}.
+    `;
+  } else if ( href ) {
+    return w`
+      li a ${{href, ...rest}} :text ${text}.
     `;
   } else {
-    return w`
-      form ${{action:'/signup.html'}} button ${{class:''}} :text ${"Sign Up"}.
-      form ${{action:'/login.html'}} button ${{class:''}} :text ${"Login"}.
-    `;
+    throw new TypeError(`NavItem must provide either action or href as URL to navigate to.`);
   }
 }
 

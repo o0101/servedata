@@ -54,7 +54,7 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'#', class:'brand-link'}}  :text ${"Capi.Click"}  .
+          li a ${{href:'/', class:'brand-link'}}  :text ${"Capi.Click"}  .
           li button ${{form:'logout', class:'button-like'}} :text ${"Logout"}.
         .
       .

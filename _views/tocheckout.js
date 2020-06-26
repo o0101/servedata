@@ -1,5 +1,5 @@
 import {DEBUG, PAYMENT_MODE} from '../common.js';
-import stripeKey from '../publicStripeKey.js';
+import stripeKey from '../stripeKeyPublic.js';
 
 export default async function ToCheckoutView(state) {
   return `
@@ -8,7 +8,7 @@ export default async function ToCheckoutView(state) {
       <meta name=viewport content="width=device-width, initial-scale=1">
       <title>Capi.Click - Redirectring to Checkout</title>
       <script type=module>
-        import {loadStripe} from '/${DEBUG.BUILD}/web_modules/@stripe/stripe-js.js';
+        import {loadStripe} from '/src/web_modules/@stripe/stripe-js.js';
 
         init();
 
