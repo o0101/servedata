@@ -1,4 +1,4 @@
-# [ServeData](https://github.com/cris691/servedata) ![downloads](https://img.shields.io/npm/dt/servedata) ![version](https://img.shields.io/npm/v/servedata?label=version)
+# :crystal_ball: [ServeData](https://github.com/cris691/servedata) ![downloads](https://img.shields.io/npm/dt/servedata) ![version](https://img.shields.io/npm/v/servedata?label=version)
 
 **Around 3000 source lines of code** (see stats folder)
 
