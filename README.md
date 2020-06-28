@@ -1,4 +1,4 @@
-# ServeData 
+# ServeData ![downloads](https://img.shields.io/npm/dt/servedata)
 
 **Around 3000 source lines of code** (see stats folder)
 
