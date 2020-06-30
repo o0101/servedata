@@ -250,9 +250,6 @@ function ActiveContent(state) {
     case "usage":
       view = Usage;
       break;
-    case "freecredits":
-      view = FreeCredits;
-      break;
     case "onetimepayments":
     case "subscriptions":
       view = Purchases;

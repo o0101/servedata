@@ -17,10 +17,12 @@ const Nav = [
 ];
 
 const LoggedInNav = ({userid}) => [
+  ...Nav,
   {action:`/form/selection/profile/${userid}`, text: "Profile"}
 ];
 
 const SignedOutNav = [
+  ...Nav,
   {action: '/signup.html', text: 'Sign Up'},
   {action: '/login.html', text: 'Log In'},
 ];
@@ -33,7 +35,7 @@ function App(state) {
     main ${_} ${"holyGrid"},
       header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          :map ${loggedIn ? Nav.concat(LoggedInNav(session)) : Nav.concat(SignedOutNav) } ${NavItem}.
+          :map ${loggedIn ? LoggedInNav(session) : SignedOutNav } ${NavItem}.
         .
       .
       section ${{class:'content'}} ${"content"},
@@ -73,7 +75,7 @@ function App(state) {
   );
 }
 
-function NavItem({action, href, text, ...rest}) {
+function NavItem({text, action: action = null, href: href = null, ...rest}) {
   if ( action ) {
     return w`
       li form ${{action, ...rest}} button ${rest} :text ${text}.
