@@ -1,5 +1,5 @@
 {
-  "name": "servedata",
+  "name": "@dosy-private/capi.click",
   "version": "1.4.2",
   "description": "server for data.",
   "main": "index.js",
