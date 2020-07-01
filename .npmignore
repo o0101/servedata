@@ -1,4 +1,6 @@
-secrets
-db-servedata
+sslcerts
+typetests
 public/src/web_modules
 public/dist
+secrets
+db-servedata

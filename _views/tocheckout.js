@@ -6,7 +6,7 @@ export default async function ToCheckoutView(state) {
     <html lang=en>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width, initial-scale=1">
-      <title>Capi.Click - Redirectring to Checkout</title>
+      <title>ServeData - Redirectring to Checkout</title>
       <script type=module>
         import {loadStripe} from '/src/web_modules/@stripe/stripe-js.js';
 

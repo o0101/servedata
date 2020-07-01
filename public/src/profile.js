@@ -41,7 +41,7 @@ export function Header() {
   return w`
     header ${_} ${"header"}, 
       nav ul ${_} ${"responsiveList"},
-        li a ${{href:'/', class:'brand-link'}}  :text ${"Capi.Click"}  .
+        li a ${{href:'/', class:'brand-link'}}  :text ${"ServeData"}  .
       .
     .
 
@@ -54,14 +54,14 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
     main ${_} ${"profileGrid"},
       header ${_} ${"header"}, 
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'/', class:'brand-link'}}  :text ${"Capi.Click"}  .
+          li a ${{href:'/', class:'brand-link'}}  :text ${"ServeData"}  .
           li button ${{form:'logout', class:'button-like'}} :text ${"Logout"}.
         .
       .
       section ${{class:'vertical-tabs'}} ${"verticalTabs"},
         ul,
           li a ${{href:'#profile'}} :text ${`My Profile`}.
-          li a ${{href:'#account'}}:text  ${`Capi.Click account`}.
+          li a ${{href:'#account'}}:text  ${`ServeData account`}.
           li a ${{href:'#subscriptions'}} :text ${`Purchase`}.
           li a ${{href:'#billing'}} :text ${`Billing account`}.
           li a ${{href:'#usage'}} :text ${`Usage`}.
@@ -102,7 +102,7 @@ function NewEmail(state) {
 function Account(state) {
   return w`
     article,
-      h1 ${`My Capi.Click Account`}.
+      h1 ${`My ServeData Account`}.
       hr.
       dl,
         dt ${"Username"}.
@@ -191,7 +191,7 @@ function Purchases() {
             legend ${"Subscription purchase"}.
             :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"Capi.Click Monthly Subscription"}.
+              option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"ServeData Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .

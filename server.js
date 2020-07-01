@@ -300,7 +300,7 @@ function landing(nothing, req, res) {
     <html lang=en>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width, initial-scale=1">
-      <title>Capi.Click</title>
+      <title>ServeData</title>
       <link rel=stylesheet href=/static/style.css>
       <script type=module>
         import {init} from '/${DEBUG.BUILD}/app.js'
