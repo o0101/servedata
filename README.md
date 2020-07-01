@@ -2,8 +2,6 @@
 
 **Around 3000 source lines of code** (see stats folder)
 
-## Version 1.4.0
-
 A simple server based on [stubdb](https://github.com/cris691/stubdb) for serving all types of data, while attempting to meet [ROCA](https://roca-style.org/) guidelines.
 
 Already includes schemas and users, and groups, and authentication, and authorization and permissions. 
