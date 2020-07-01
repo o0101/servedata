@@ -324,6 +324,7 @@ export function toSelection(f) {
 function reAuth(req, res, next) {
   console.log(req.path);
   if ( req.path.startsWith("/form") ) {
+    res.clearCookie(COOKIE_NAME);
     res.redirect('/login.html?');
   } else if ( req.path.startsWith("/json") ) {
     res.type("json");
