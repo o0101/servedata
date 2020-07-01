@@ -201,7 +201,7 @@ async function X(req, res, next) {
     case "permissions-attached":
       break;
     case "re-auth-required":
-      return reAuth(req, res, next);
+      return reAuth(req, res);
     default:
       throw new Error(`Unknown result of attachPermission ${permissionResult}`);
   }
@@ -328,14 +328,14 @@ export function toSelection(f) {
   };
 }
 
-function reAuth(req, res, next) {
+function reAuth(req, res) {
   console.log(req.path);
   if ( req.path.startsWith("/form") ) {
     res.clearCookie(COOKIE_NAME);
     res.redirect('/login.html?');
   } else if ( req.path.startsWith("/json") ) {
     res.type("json");
-    red.end(JSON.stringify({error:'Need to reauthenticate'}));
+    res.end(JSON.stringify({error:'Need to reauthenticate'}));
   } else if ( req.path == "/" ) {
     res.clearCookie(COOKIE_NAME);
     return landing(null, req, res);
