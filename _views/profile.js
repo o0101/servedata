@@ -17,6 +17,7 @@ export default function Profile({username, email, newEmail, _id, error}) {
             self.location = \`/form/selection/profile/${_id}\`;
           }
         </script>
+        <script src=/src/disable_on_submit.js></script>
         <link rel=stylesheet href=/static/style.css>
         <script type=module>
           import {init} from '/${DEBUG.BUILD}/profile.js';
