@@ -5,7 +5,7 @@ export default function App(state) {
     <html lang=en>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width, initial-scale=1">
-      <title>Dosyago</title>
+      <title>Capi.Click</title>
       <link rel=stylesheet href=/static/style.css>
       <script type=module>
         import {init} from '/${DEBUG.BUILD}/app.js';

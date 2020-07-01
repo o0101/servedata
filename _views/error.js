@@ -16,8 +16,9 @@ const Tags = [
 ];
 
 
-export default function notImplemented() {
-  throw new Error(`Error is not implemented as a standard view`);
+export default function notImplemented(state) {
+  //throw new Error(`Error is not implemented as a standard view`);
+  return ErrorView(state);
 }
 
 export async function ErrorView(state) {
@@ -31,12 +32,13 @@ export async function ErrorView(state) {
     <html lang=en>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width, initial-scale=1">
-      <title>Dosyago</title>
+      <title>Capi.Click</title>
       <link rel=stylesheet href=/static/style.css>
       <style>
         :root {
           background-color: #e4ff6d;
           background-image: linear-gradient(319deg, #e4ff6d 0%, #ffad42 37%, #e4ff6d 100%);
+          background-attachment: fixed;
           min-height: 100%;
           height: 100%;
         }

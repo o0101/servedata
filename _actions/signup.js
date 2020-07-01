@@ -1,8 +1,11 @@
 // imports
+  import stripe from 'stripe';
   import nodemailer from 'nodemailer';
 
   import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
+  import stripeKey from '../secrets/stripe-key.js';
   import {
+    PAYMENT_MODE,
     USER_TABLE, 
     MAIL_SENDER, 
     MAIL_HOST, MAIL_PORT,
@@ -11,6 +14,9 @@
   import {
     addUser, route
   } from '../helpers.js';
+
+// constants
+  const Stripe = stripe(stripeKey[PAYMENT_MODE], {apiVersion: ''});
 
 export default async function action({username, password, email2, email}, {_getTable, newItem, getSearchResult}, req, res) {
   if ( email != email2 ) {
@@ -21,14 +27,15 @@ export default async function action({username, password, email2, email}, {_getT
     throw {status: 401, error: `Username ${username} already exists.`};
   }
 
-  const user = addUser({username, email, password, verified: false}, 'users');
+  const {id:stripeCustomerID} = await createStripeCustomer({email});
+
+  const user = addUser({username, email, stripeCustomerID, password, verified: false}, 'users');
 
   const loginLink = newItem({table: _getTable(LOGINLINK_TABLE), userid: user._id, item: {userid:user._id}});
 
   await sendLoginMail({email, loginLink, req});
 
-  // email the loginLink to email
-  console.log({emailTask:loginLink});
+  console.log({loginLink});
 
   return {username, email};
 }
@@ -100,3 +107,7 @@ function newLoginLink(req, loginId) {
   };
 }
 
+async function createStripeCustomer({email}) {
+  const customer = await Stripe.customers.create({email});
+  return customer;
+}

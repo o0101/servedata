@@ -1,4 +1,10 @@
 // imports 
+  // nodejs builtins
+    import path from 'path';  
+    import fs from 'fs';  
+    import http from 'http';
+    import https from 'https';
+
   // 3rd party dependencies
     import helmet from 'helmet';
     import express from 'express';
@@ -10,7 +16,9 @@
   // internal modules
     import './types.js';
     import {
+      MESSAGES,
       MAX_REQUEST_SIZE,
+      COOKIE_NAME,
       STATIC, 
       DEBUG,
       PORT
@@ -33,15 +41,20 @@
       setItem,
       getItem,
       _getTable,
+      dbCleanup,
     } from './db_helpers.js';
     import {getSession} from './_middlewares/session.js';
-    import {getPermission} from './_middlewares/permission.js';
+    import {attachPermission} from './_middlewares/permission.js';
     import {catchError} from './_middlewares/error.js';
     import {withView} from './views.js';
 
 // paths dispatch
   const DISPATCH = {
+    // landing
+      'GET /': landing,
+
     // forms
+      'GET /redirected/message/:message/with/:view': withView(showMessage),
       'GET /form/table/:table/:id/with/:view': withView(getItem),
       'GET /form/list/table/:table/with/:view/': withView(getList),
       'GET /form/list/table/:table/with/:view/sort/:prop': withView(getListSorted),
@@ -52,6 +65,7 @@
       'POST /form/table/:table/new/with/:view': withView(newItem),
       'POST /form/table/:table/:id/with/:view': withView(setItem),
       'POST /form/action/:action/with/:view': withView(runStoredAction),
+      'POST /form/action/:action': runStoredAction,
       'POST /form/action/:action/redir/:selection': toSelection(runStoredAction),
 
     // JSON API
@@ -81,7 +95,7 @@ export async function initializeDB() {
   await initialize();
 }
 
-export function servedata({callConfig: callConfig = false} = {}) {
+export function servedata({callConfig: callConfig = false, secure: secure = true} = {}) {
   if ( callConfig ) {
     DEBUG.WARN && console.warn("Calling config in servedata with default DB_ROOT");
     config({root:DB_ROOT});
@@ -100,6 +114,8 @@ export function servedata({callConfig: callConfig = false} = {}) {
     //set type
       if ( req.path.startsWith('/form')) {
         res.type('html');
+      } else if ( req.path.startsWith('/redirect') ) {
+        res.type('html');
       } else if ( req.path.startsWith('/json')) {
         res.type('json');
       }
@@ -110,7 +126,7 @@ export function servedata({callConfig: callConfig = false} = {}) {
   app.use(cookieParser());
   app.use(express.urlencoded({extended:true, limit:MAX_REQUEST_SIZE}));
   app.use(express.json({limit:MAX_REQUEST_SIZE}));
-  app.use(express.static(STATIC, {extensions:['html'], fallthrough:true}));
+  app.use(express.static(STATIC, {extensions:['html'], fallthrough:true, index: false}));
   app.use(getSession);
 
   // JSON
@@ -143,24 +159,52 @@ export function servedata({callConfig: callConfig = false} = {}) {
       app.post('/form/table/:table/:id/with/:view', X);
     // stored procedure
       app.get('/form/query/:query/with/:view', X);
+      app.post('/form/action/:action', X);
       app.post('/form/action/:action/with/:view', X);
       app.post('/form/action/:action/redir/:selection', X);
+
+  // other
+    app.get('/redirected/message/:message/with/:view', X);
+    app.get('/', X);
 
   app.get('*', (req, res, next) => {
     next(new Error("404 not found"));
   });
   app.use(catchError);
 
-  return app.listen(PORT, err => {
+  const server = (secure ? https : http).createServer(secure ? {
+    key: fs.readFileSync(path.resolve('sslcerts', 'privkey.pem')),
+    cert: fs.readFileSync(path.resolve('sslcerts', 'fullchain.pem')),
+    ca: fs.readFileSync(path.resolve('sslcerts', 'chain.pem')),
+  } : {}, app);
+
+  server.on('close', () => {
+    console.log("Server closing");
+    dbCleanup();
+  });
+
+
+  server.listen(PORT, err => {
     if ( err ) {
       throw err;
     }
     Log({serverUp:{port:PORT, up:Date.now()}});
   });
+
+  return server;
 }
 
 async function X(req, res, next) {
-  getPermission(req, res);
+  const permissionResult = attachPermission(req, res);
+
+  switch ( permissionResult ) {
+    case "permissions-attached":
+      break;
+    case "re-auth-required":
+      return reAuth(req, res);
+    default:
+      throw new Error(`Unknown result of attachPermission ${permissionResult}`);
+  }
 
   if ( ! req.authorization ) {
     next({status: 401, error: '401 Not authorized. No valid user identified.'});
@@ -183,7 +227,7 @@ async function X(req, res, next) {
   let result;
 
   try {
-    if ( req.path.includes('/action/') ) {
+    if ( req.path.includes('/action/') || req.path == '/' ) {
       result = await DISPATCH[way](data, req, res);
     } else {
       result = await DISPATCH[way](data);
@@ -211,7 +255,6 @@ async function X(req, res, next) {
 }
 
 async function accessGranted(req, res, next) {
-  // sometimes we do an action through get because 'links'
   if ( req.method == 'GET' && !req.params.action && !req.authorization.permissions.view ) {
     next({status:401, error: '401 Not authorized. User has no view permission on this scope.'});
     return false;
@@ -239,6 +282,34 @@ async function accessGranted(req, res, next) {
   return true;
 }
 
+function showMessage({message}) {
+  message = MESSAGES[message];
+  if ( ! message ) {
+    message = 'Unknown message';
+  }
+
+  return {message};
+}
+
+function landing(nothing, req, res) {
+  res.type('html');
+  const state = {
+    authorization: req.authorization
+  };
+  res.end(`
+    <html lang=en>
+      <meta charset=utf-8>
+      <meta name=viewport content="width=device-width, initial-scale=1">
+      <title>Capi.Click</title>
+      <link rel=stylesheet href=/static/style.css>
+      <script type=module>
+        import {init} from '/${DEBUG.BUILD}/app.js'
+        init(${JSON.stringify({state})});
+      </script>
+    </html>
+  `);
+}
+
 export function toSelection(f) {
   return async (...args) => {
     const raw = await f(...args);
@@ -255,4 +326,20 @@ export function toSelection(f) {
 
     return {pathname}
   };
+}
+
+function reAuth(req, res) {
+  console.log(req.path);
+  if ( req.path.startsWith("/form") ) {
+    res.clearCookie(COOKIE_NAME);
+    res.redirect('/login.html?');
+  } else if ( req.path.startsWith("/json") ) {
+    res.type("json");
+    res.end(JSON.stringify({error:'Need to reauthenticate'}));
+  } else if ( req.path == "/" ) {
+    res.clearCookie(COOKIE_NAME);
+    return landing(null, req, res);
+  } else {
+    throw new Error(`The session was invalid. Reuathenticaiton required.`);
+  }
 }

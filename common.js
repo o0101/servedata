@@ -10,7 +10,7 @@
     BUILD: process.env.SD_MODE == 'dev' ? 'src' : 'dist',
     CONSOLE_ERROR: false,
     WARN: false,
-    ERROR: true,
+    ERROR: false,
     INFO: false
   };
 
@@ -38,3 +38,15 @@
   export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
   export const DEPOSIT_TABLE = process.env.SD_DEPOSIT_TABLE ? process.env.SD_DEPOSIT_TABLE : "deposits";
   export const NOUSER_ID = 'nouser';
+
+// payment related constants
+  export const PAYMENT_MODE = 'prod';
+  export const SYSTEM_PAYMENT_ACCOUNT = 'system_class_payment_account';
+  export const PAYMENT_TYPES = [
+    "card",
+  ];
+
+// messages
+  export const MESSAGES = {
+    cancel_payment: `Your payment was cancelled.`
+  };

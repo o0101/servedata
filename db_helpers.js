@@ -50,6 +50,7 @@
     };
 
 // scope
+  const Timeouts = new Set();
   let IndexProps;
 
 // database helpers and adapters 
@@ -231,7 +232,7 @@
   export async function runStoredAction({action, item}, req, res, greenlights) {
     const actionFileName = path.resolve(ACTIONS, `${action}.js`); 
     const {default:Action} = await import(actionFileName);
-    const result = Action(item, {_getTable, newItem, setItem, getSearchResult}, req, res, greenlights);
+    const result = Action(item, {_getTable, getItem, newItem, setItem, getSearchResult}, req, res, greenlights);
     return result;
   }
 
@@ -240,7 +241,27 @@
       const props = IndexProps.get(table);
       DEBUG.INFO && console.log(props, IndexProps, table);
       Tables.set(table, getIndexedTable(table, IndexProps.get(table)));
+      // tables refresh every 30 seconds
+        // the reason we do this is, if there's some problem and 
+        // say the table directory has been deleted (um, ok)
+        // re getting the table reconstructs a new table directory
+        // obviously we might want to know about this situation, instead of 
+        // just making it silently fix here
+        // but I think monitoring on disk deletions could be purview of another process, not the server,
+        // and adding a check if the directory exists into every access only increases load on the ops we do
+        // so just removing a table after 30 seconds from the cache, so it can be refreshed on next db op is a good idea
+        // this makes the table cache self healing and helps increase the reliability of the server
+        // without adding undue pressure to any ops
+      const to = setTimeout(() => {
+        Timeouts.delete(to);
+        Tables.delete(table);
+      }, 30000);
+      Timeouts.add(to);
     }
     return Tables.get(table);
+  }
+
+  export function dbCleanup() {
+    [...Timeouts.keys()].forEach(clearTimeout);
   }
 
