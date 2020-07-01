@@ -17,6 +17,7 @@
     import {
       MESSAGES,
       MAX_REQUEST_SIZE,
+      COOKIE_NAME,
       STATIC, 
       DEBUG,
       PORT
@@ -41,14 +42,16 @@
       _getTable,
     } from './db_helpers.js';
     import {getSession} from './_middlewares/session.js';
-    import {getPermission} from './_middlewares/permission.js';
+    import {attachPermission} from './_middlewares/permission.js';
     import {catchError} from './_middlewares/error.js';
     import {withView} from './views.js';
 
 // paths dispatch
   const DISPATCH = {
-    // forms
+    // landing
       'GET /': landing,
+
+    // forms
       'GET /redirected/message/:message/with/:view': withView(showMessage),
       'GET /form/table/:table/:id/with/:view': withView(getItem),
       'GET /form/list/table/:table/with/:view/': withView(getList),
@@ -185,7 +188,16 @@ export function servedata({callConfig: callConfig = false} = {}) {
 }
 
 async function X(req, res, next) {
-  getPermission(req, res);
+  const permissionResult = attachPermission(req, res);
+
+  switch ( permissionResult ) {
+    case "permissions-attached":
+      break;
+    case "re-auth-required":
+      return reAuth(req, res, next);
+    default:
+      throw new Error(`Unknown result of attachPermission ${permissionResult}`);
+  }
 
   if ( ! req.authorization ) {
     next({status: 401, error: '401 Not authorized. No valid user identified.'});
@@ -307,4 +319,19 @@ export function toSelection(f) {
 
     return {pathname}
   };
+}
+
+function reAuth(req, res, next) {
+  console.log(req.path);
+  if ( req.path.startsWith("/form") ) {
+    res.redirect('/login.html?');
+  } else if ( req.path.startsWith("/json") ) {
+    res.type("json");
+    red.end(JSON.stringify({error:'Need to reauthenticate'}));
+  } else if ( req.path == "/" ) {
+    res.clearCookie(COOKIE_NAME);
+    return landing(null, req, res);
+  } else {
+    throw new Error(`The session was invalid. Reuathenticaiton required.`);
+  }
 }

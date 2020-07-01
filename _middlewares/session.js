@@ -58,10 +58,10 @@ import {_getTable} from '../db_helpers.js';
       token, 
       session, 
       noSessionClaim,
-      tokenIsInvalid,
       sessionIsExpired,
       // as an object, 'permissions' properties are *not* frozen
-      permissions: noPerms()
+      permissions: noPerms(),
+      errors: {present: false, tokenIsInvalid}
     };
 
     Object.freeze(authorization);
