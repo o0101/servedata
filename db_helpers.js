@@ -50,6 +50,7 @@
     };
 
 // scope
+  const Timeouts = new Set();
   let IndexProps;
 
 // database helpers and adapters 
@@ -251,8 +252,16 @@
         // so just removing a table after 30 seconds from the cache, so it can be refreshed on next db op is a good idea
         // this makes the table cache self healing and helps increase the reliability of the server
         // without adding undue pressure to any ops
-      setTimeout(() => Tables.delete(table), 30000);
+      const to = setTimeout(() => {
+        Timeouts.delete(to);
+        Tables.delete(table);
+      }, 30000);
+      Timeouts.add(to);
     }
     return Tables.get(table);
+  }
+
+  export function dbCleanup() {
+    [...Timeouts.keys()].forEach(clearTimeout);
   }
 

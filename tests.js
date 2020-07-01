@@ -63,6 +63,7 @@ let publicIP;
 
 export async function functionTest() {
   await testAll(Tests);
+  console.log("Function test done");
 }
 
 export async function speedTest() {
@@ -71,11 +72,12 @@ export async function speedTest() {
     tests.push(CreateDepositTest()); 
   }
   await testAll(tests);
+  console.log("Speed test done");
 }
 
 async function testAll(tests, silent = false) {
   await initializeDB();
-  const server = await servedata();
+  const server = await servedata({secure: false});
 
   publicIP = await fetch('http://ifconfig.me/ip').then(r => r.text());
   await loadSchemas();

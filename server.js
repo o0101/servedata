@@ -2,6 +2,7 @@
   // nodejs builtins
     import path from 'path';  
     import fs from 'fs';  
+    import http from 'http';
     import https from 'https';
 
   // 3rd party dependencies
@@ -40,6 +41,7 @@
       setItem,
       getItem,
       _getTable,
+      dbCleanup,
     } from './db_helpers.js';
     import {getSession} from './_middlewares/session.js';
     import {attachPermission} from './_middlewares/permission.js';
@@ -93,7 +95,7 @@ export async function initializeDB() {
   await initialize();
 }
 
-export function servedata({callConfig: callConfig = false} = {}) {
+export function servedata({callConfig: callConfig = false, secure: secure = true} = {}) {
   if ( callConfig ) {
     DEBUG.WARN && console.warn("Calling config in servedata with default DB_ROOT");
     config({root:DB_ROOT});
@@ -170,11 +172,16 @@ export function servedata({callConfig: callConfig = false} = {}) {
   });
   app.use(catchError);
 
-  const server = https.createServer({
+  const server = (secure ? https : http).createServer(secure ? {
     key: fs.readFileSync(path.resolve('sslcerts', 'privkey.pem')),
     cert: fs.readFileSync(path.resolve('sslcerts', 'fullchain.pem')),
     ca: fs.readFileSync(path.resolve('sslcerts', 'chain.pem')),
-  }, app);
+  } : {}, app);
+
+  server.on('close', () => {
+    console.log("Server closing");
+    dbCleanup();
+  });
 
 
   server.listen(PORT, err => {
