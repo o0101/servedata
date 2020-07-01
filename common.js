@@ -37,6 +37,7 @@
   export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
   export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
   export const DEPOSIT_TABLE = process.env.SD_DEPOSIT_TABLE ? process.env.SD_DEPOSIT_TABLE : "deposits";
+  export const TRANSACTION_TABLE = process.env.SD_TRANSACTION_TABLE ? process.env.SD_TRANSACTION_TABLE : "transactions";
   export const NOUSER_ID = 'nouser';
 
 // payment related constants
