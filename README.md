@@ -15,6 +15,8 @@ You need to populate the secrets directory, with a G Suite/GMail API key with se
 
 Also right now there's some places in the templates where I used my email (cris@dosycorp.com), so you probably want to replace that.
 
+Also to use payments, you need Stripe keys. 
+
 
 ## Use cases
 
