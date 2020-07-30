@@ -41,6 +41,7 @@ function App(state) {
       section ${{class:'content'}} ${"content"},
         section ${{class:'banner'}} ${"section"},
           h1 ${"BrowserGap"}.
+          a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank"}} :text ${"Live Demo"}.
         .
         section ${{class:'pricing'}} ${"section"},
           h1 ${"Pricing"}.

@@ -1,2 +1,3 @@
 #!/bin/bash
-node -r esm start.js
+
+npm run start

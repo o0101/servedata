@@ -6,7 +6,7 @@
   "scripts": {
     "preinstall": "./clean.sh",
     "dev-db": "export SD_MODE=dev&&export SD_PORT=8080&& nodemon -r esm start.js",
-    "db": "export SD_MODE=prod&&export SD_PORT=8080&& node -r esm start.js",
+    "db": "export SD_MODE=prod&&export SD_PORT=443&& node -r esm start.js",
     "dev-site": "./dev_views.sh && npm run pack && npm run dev-db",
     "site": "./prod_views.sh && npm run pack && npm run db",
     "static": "npm run pack && serve -p 8080 public",
