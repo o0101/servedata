@@ -40,8 +40,48 @@ function App(state) {
       .
       section ${{class:'content'}} ${"content"},
         section ${{class:'banner'}} ${"section"},
-          h1 ${"BrowserGap"}.
-          a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank"}} :text ${"Live Demo"}.
+          h1 ${"BrowserGap - Embeddable Remote Browser"}.
+          section ${{class:'card-stack'}} ${"section"},
+            section ${{class:'transparent'}} ${"card"},
+              h1 ${"Free Live Demo"}.
+              p,
+                a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank", title:"Click through to a free live demo"}},
+                  img ${{
+                    style: 'filter: contrast(1.2) saturate(1.3) brightness(1.05)',
+                    src:'https://j.gifs.com/E8yzLv.gif', 
+                    class: 'card-border'
+                  }}.
+                .
+              .
+              p,
+                a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank"}} :text ${"Click through to a live demo."}.
+              .
+            .
+            section ${{class:'transparent'}} ${"card"},
+              h1 ${{style:"font-size: 3.5vw; text-align: right;"}} :text ${"BrowserGap is a secure browser you embed in your webapp."}.
+            .
+        .
+        section ${{class:'about'}} ${"section"},
+          h1 ${"About"}.
+          section ${{class:'card-stack'}} ${"section"},
+            section ${_} ${"card"},
+              h1 ${"What can BrowserGap do?"}.
+              ul,
+                li ${"Live stream the browser remotely."}.
+                li ${"Embed a browser in another web application to integrate user flows."}.
+                li ${"Perform remote browser isolation for security and automation."}.
+                li ${"Run your browsers anywhere and connect to them from anywhera."}.
+                li ${"Isolate your network from the risks of the public internet by running browsers in a remote machine."}.
+                li ${"Connect to Chrome headless with a Browser User Interface."}.
+              .
+            .
+            section ${_} ${"card"},
+              h1 ${"What is BrowserGap?"}.
+              p ${`
+                BrowserGap is a feature-complete, clientless, remote browser isolation product, in HTML/JavaScript that runs right in your browser. Integrated with a secure document viewer (available on request), this can provide safe remote browser isolation at deployments of any size. It also saves you bandwidth (on the last hop, anyway).
+              `}.
+            .
+          .
         .
         section ${{class:'pricing'}} ${"section"},
           h1 ${"Pricing"}.
