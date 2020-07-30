@@ -6,6 +6,7 @@
     nav,
     footer,
     section, 
+    card,
     content,
     profileContent,
     error,
@@ -277,6 +278,7 @@
       * {
         flex-grow: 1;
         min-height: 300px;
+        padding: 2rem 0;
       }
 
       *:nth-of-type(2n) {
@@ -285,6 +287,46 @@
 
       * h1 {
         text-align: center;
+      }
+      
+      *.card-stack {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    `;
+  }
+
+  function card() {
+    return `
+      * {
+        background: var(--white);
+        box-sizing: border-box;
+        max-width: 555px;
+        min-width: 280px;
+        width: 45vw;
+        margin: 2vw;
+        padding: 0 1rem 0.5rem;
+        border: thin solid var(--grey);
+        box-shadow: 3px 3px 3px var(--grey);
+      }
+
+      * img {
+        display: block;
+        max-width: 100%;
+      }
+
+      *.card-border, * .card-border {
+        border: thin solid var(--grey);
+        box-shadow: 3px 3px 3px var(--grey);
+      }
+
+      *.transparent {
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: transparent;
       }
     `;
   }
