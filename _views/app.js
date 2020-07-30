@@ -5,7 +5,7 @@ export default function App(state) {
     <html lang=en>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width, initial-scale=1">
-      <title>Capi.Click</title>
+      <title>BrowserGap</title>
       <link rel=stylesheet href=/static/style.css>
       <script src=/src/disable_on_submit.js></script>
       <script type=module>

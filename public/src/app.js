@@ -10,7 +10,7 @@ export function init({state: state = {}} = {}) {
 }
 
 const Nav = [
-  {href:'#', class:'brand-link', text: "Capi.Click"},
+  {href:'#', class:'brand-link', text: "BrowserGap"},
   {href:'#how', text:"How it works"},
   {href:'#questions', text:"Questions"},
   {href:'/documentation,html', text: "Documentation"},
@@ -40,7 +40,7 @@ function App(state) {
       .
       section ${{class:'content'}} ${"content"},
         section ${{class:'banner'}} ${"section"},
-          h1 ${"Capi.Click"}.
+          h1 ${"BrowserGap"}.
         .
         section ${{class:'pricing'}} ${"section"},
           h1 ${"Pricing"}.
