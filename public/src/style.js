@@ -212,7 +212,7 @@
       * {
         grid-area: header;
         background: linear-gradient(to right, var(--left), var(--right));
-        padding: 0 var(--pad2);
+        padding: 1rem;
       }
 
       * a {
@@ -301,15 +301,20 @@
   function card() {
     return `
       * {
-        background: var(--white);
+        background: var(--left);
+        color: var(--white);
         box-sizing: border-box;
         max-width: 555px;
         min-width: 280px;
         width: 45vw;
         margin: 2vw;
         padding: 0 1rem 0.5rem;
-        border: thin solid var(--grey);
-        box-shadow: 3px 3px 3px var(--grey);
+        border: thin solid var(--left);
+        box-shadow: 3px 3px 3px var(--right);
+      }
+
+      *.block {
+        box-shadow: 6px 6px 0px var(--right);
       }
 
       * img {
@@ -323,6 +328,7 @@
       }
 
       *.transparent {
+        color: var(--black);
         padding: 0;
         border: none;
         box-shadow: none;
