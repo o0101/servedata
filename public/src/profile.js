@@ -191,7 +191,7 @@ function Purchases() {
             legend ${"Subscription purchase"}.
             :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"BrowserGap Monthly Subscription"}.
+              option ${{value:"price_1HAwYlBKxtsqOlorXdyWWjQG"}} :text ${"BrowserGap Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .
@@ -202,9 +202,9 @@ function Purchases() {
             action: '/form/action/pay/with/tocheckout'
           }} ${'form'},
           fieldset,
-            legend ${"Credit pack purchase"}.
+            legend ${"Credit pack purchase (not available yet)"}.
             :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
-            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
+            p label ${{innerText:"Purchase option "}} select ${{name:'price' disabled:true}},
               option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
               option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
               option ${{value:"price_1GxoLcBKxtsqOlor6lT2W0na"}} :text ${"Task Run Credits Recharge 750 Pack"}.
