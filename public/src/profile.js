@@ -204,7 +204,7 @@ function Purchases() {
           fieldset,
             legend ${"Credit pack purchase (not available yet)"}.
             :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
-            p label ${{innerText:"Purchase option "}} select ${{name:'price' disabled:true}},
+            p label ${{innerText:"Purchase option "}} select ${{name:'price', disabled:true}},
               option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
               option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
               option ${{value:"price_1GxoLcBKxtsqOlor6lT2W0na"}} :text ${"Task Run Credits Recharge 750 Pack"}.
