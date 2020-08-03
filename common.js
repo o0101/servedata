@@ -15,6 +15,7 @@
   };
 
 // constants
+  export const SD_MODE = process.env.SD_MODE;
   export const DEFAULT_PORT = 80;
   export const PORT = process.env.SD_PORT || Number(process.argv[2] || DEFAULT_PORT);
   export const APP_ROOT = path.dirname(fileURLToPath(import.meta.url));

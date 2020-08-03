@@ -16,6 +16,8 @@
   // internal modules
     import './types.js';
     import {
+      SD_MODE, 
+      DEFAULT_PORT,
       MESSAGES,
       MAX_REQUEST_SIZE,
       COOKIE_NAME,
@@ -47,6 +49,10 @@
     import {attachPermission} from './_middlewares/permission.js';
     import {catchError} from './_middlewares/error.js';
     import {withView} from './views.js';
+
+// constants
+  const CANON = 'browsergap.dosyago.com'; // the canonical host name
+  const S_CANON = 'https://' + CANON;
 
 // paths dispatch
   const DISPATCH = {
@@ -100,9 +106,46 @@ export function servedata({callConfig: callConfig = false, secure: secure = true
     DEBUG.WARN && console.warn("Calling config in servedata with default DB_ROOT");
     config({root:DB_ROOT});
   }
+
+  let rappserver;
+
+  if ( SD_MODE == 'prod' ) {
+    const rapp = express();
+    rapp.use(helmet());
+    rapp.use((req,res,next) => {
+      const {host:hostp = ''} = req.headers;
+      const [host,port] = hostp.split(':');
+
+      if ( host == CANON ) {
+        next();
+      } else {
+        res.redirect(302, S_CANON);
+      }
+    });
+    rappserver = rapp.listen(DEFAULT_PORT, err => {
+      if ( err ) {
+        throw err;
+      }
+      Log({redirect_serverUp:{port:DEFAULT_PORT, up:Date.now()}});
+    });
+  }
+
   const app = express();
 
   app.use(helmet());
+
+  app.use((req,res,next) => {
+    const {host:hostp = ''} = req.headers;
+    const [host,port] = hostp.split(':');
+
+    if ( host == CANON ) {
+      next();
+    } else if ( port ) {
+      res.redirect(302, S_CANON + ":" + port);
+    } else {
+      res.redirect(302, S_CANON);
+    }
+  });
 
   app.set('etag', false);
   app.set('trust proxy', true);
@@ -180,6 +223,9 @@ export function servedata({callConfig: callConfig = false, secure: secure = true
 
   server.on('close', () => {
     console.log("Server closing");
+    if ( rappserver ) {
+      rappserver.close();
+    }
     dbCleanup();
   });
 
