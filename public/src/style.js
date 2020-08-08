@@ -104,10 +104,6 @@
         color: var(--blue);
       }
 
-      * a.brand-link {
-        font-size: larger;
-      }
-
       * .button-like {
         padding: var(--pad1);
         border: 0.25em solid;
@@ -181,10 +177,6 @@
         color: var(--blue);
       }
 
-      * a.brand-link {
-        font-size: larger;
-      }
-
       * .button-like {
         padding: 0;
         padding: var(--pad1);
@@ -215,14 +207,15 @@
         padding: 1rem;
       }
 
+      * nav {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
       * a {
         color: var(--white);
         font-variant: small-caps;
         text-decoration: none;
-      }
-
-      * a.brand-link {
-        font-size: larger;
       }
     `;
   }
@@ -345,7 +338,7 @@
         margin: 0;
         padding: 0;
         padding: var(--pad1);
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
         flex-wrap: wrap;
       }
@@ -359,6 +352,7 @@
       }
 
       * li {
+        margin: 0 0.5rem;
       }
     `;
   }

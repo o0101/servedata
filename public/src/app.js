@@ -11,17 +11,15 @@ export function init({state: state = {}} = {}) {
 
 const Nav = [
   {href:'#', class:'brand-link', text: "BrowserGap"},
-  {href:'#questions', text:"Questions"},
-  {href:'https://github.com/dosyago/BrowserGap', text: "Documentation"},
+  {href:'#questions', text:"FAQ"},
+  {href:'https://github.com/dosyago/BrowserGap', text: "Docs"},
 ];
 
 const LoggedInNav = ({userid}) => [
-  ...Nav,
   {action:`/form/selection/profile/${userid}`, text: "Profile"}
 ];
 
 const SignedOutNav = [
-  ...Nav,
   {action: '/signup.html', text: 'Sign Up'},
   {action: '/login.html', text: 'Log In'},
 ];
@@ -33,8 +31,13 @@ function App(state) {
   return w`
     main ${_} ${"holyGrid"},
       header ${{style:'position: sticky; top: 0;'}} ${"header"}, 
-        nav ul ${_} ${"responsiveList"},
-          :map ${loggedIn ? LoggedInNav(session) : SignedOutNav } ${NavItem}.
+        nav,
+          ul ${_} ${"responsiveList"},
+            :map ${Nav} ${NavItem}.
+          .
+          ul ${_} ${"responsiveList"},
+            :map ${loggedIn ? LoggedInNav : SignedOutNav} ${NavItem}.
+          .
         .
       .
       section ${{class:'content'}} ${"content"},
