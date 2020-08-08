@@ -198,7 +198,7 @@
       }
 
       * a.author-cite {
-        color: var(--grey);
+        color: var(--black);
       }
     `;
   }
@@ -236,7 +236,22 @@
     return `
       * {
         grid-area: footer;
-        background: var(--smoke);
+        background: var(--left);
+        font-size: smaller;
+      }
+
+      @media screen and (min-width: 640px) {
+        * ul {
+          padding: 1rem;
+        }
+      }
+
+      * ul li {
+        margin: 0;
+      }
+
+      * ul li a {
+        color: var(--white);
       }
     `;
   }
@@ -279,7 +294,7 @@
       }
 
       *:nth-of-type(2n) {
-        background: var(--smoke);
+        background: var(--lightblue);
       }
 
       * h1 {
@@ -298,8 +313,9 @@
   function card() {
     return `
       * {
-        background: var(--left);
-        color: var(--white);
+        font-family: monospace;
+        background: var(--white);
+        color: var(--black);
         box-sizing: border-box;
         max-width: 555px;
         min-width: 280px;
@@ -308,6 +324,10 @@
         padding: 0 1rem 0.5rem;
         border: thin solid var(--left);
         box-shadow: 3px 3px 3px var(--right);
+      }
+
+      * ul {
+        list-style-type: circle;
       }
 
       *.block {

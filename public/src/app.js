@@ -142,6 +142,11 @@ function App(state) {
         nav ul ${_} ${"responsiveList"},
           li a ${{href:'https://dosyago.com', class:'author-cite', target:'_blank'}} :text ${"2020 DOSYAGO, Inc."}.
           li a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=Hello'}} :text ${"Email"}.
+          li a ${{
+            href:'https://dosyago.com', class:'author-cite', target:'_blank',
+            style: 'font-size: smaller;'
+          }} :text ${"© 2020 DOSYAGO, Inc."}.
+          li a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=Hello'}} :text ${"Email"}.
           li a ${{href:'https://github.com/dosyago', class:'social-icon', target:'_blank'}} :text ${"GitHub"}.
           li a ${{href:'https://www.youtube.com/channel/UCxyWgnYfo8TvSJWc9n_vVcQ', class:'social-icon', target:'_blank'}} :text ${"YouTube"}.
           li a ${{href:'https://twitter.com/browsergap', class:'social-icon', target:'_blank'}} :text ${"Twitter"}.
