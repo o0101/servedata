@@ -2,6 +2,7 @@
       font-family: Arial, sans-serif;
       --white: white;
       --smoke: whitesmoke;
+      --lightblue: aliceblue;
       --grey: silver;
       --left: dodgerblue;
       --right: mediumspringgreen;
@@ -16,10 +17,6 @@
     }
 
     /* attributes */
-
-    a[href^="mailto:"]::after {
-      content: " (\01f4e8\02197\0fe0f)";
-    }
 
     /* classes */
 
