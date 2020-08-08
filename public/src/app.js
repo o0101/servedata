@@ -140,8 +140,6 @@ function App(state) {
       .
       footer ${_} ${"footer"},
         nav ul ${_} ${"responsiveList"},
-          li a ${{href:'https://dosyago.com', class:'author-cite', target:'_blank'}} :text ${"2020 DOSYAGO, Inc."}.
-          li a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=Hello'}} :text ${"Email"}.
           li a ${{
             href:'https://dosyago.com', class:'author-cite', target:'_blank',
             style: 'font-size: smaller;'
