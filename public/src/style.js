@@ -117,10 +117,6 @@
         * a.button-like {
           margin: var(--pad1);
         }
-
-        * a.brand-link {
-          display: none;
-        }
       }
 
       * a.author-cite {
@@ -192,6 +188,10 @@
       }
 
       @media screen and (max-width: 640px) {
+        * header nav ul li a.brand-link {
+          display: none;
+        }
+
         * a.button-like {
           margin: var(--pad1);
         }
