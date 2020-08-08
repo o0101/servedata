@@ -43,7 +43,7 @@ function App(state) {
       section ${{class:'content'}} ${"content"},
         section ${{class:'card-stack'}} ${"section"},
           section ${{class:'transparent'}} ${"card"},
-            h1 ${"Free Live Demo"}.
+            h1 ${"BrowserGap"}.
             p,
               a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank", title:"Click through to a free live demo"}},
                 img ${{
