@@ -1,6 +1,5 @@
   export const stylists = {
     aux_page,
-    holyGrid,
     profileGrid,
     header,
     nav,
@@ -160,45 +159,6 @@
 
       * .v-gapped {
         margin: 1em 0;
-      }
-    `;
-  }
-
-  function holyGrid() {
-    return `
-      * {
-        display: grid;
-        grid-template-areas: 
-          "header header header"
-          "nav content aside"
-          "footer footer footer";
-        grid-template-columns: auto 1fr auto;
-        grid-template-rows: auto 1fr auto;
-        height: 100%;
-      }
-
-      * a {
-        color: var(--blue);
-      }
-
-      * .button-like {
-        padding: 0;
-        padding: var(--pad1);
-        border: 0.25em solid;
-        display: inline-block;
-        background: transparent;
-        color: var(--white);
-        font-variant: small-caps;
-      }
-
-      @media screen and (max-width: 640px) {
-        * a.button-like {
-          margin: var(--pad1);
-        }
-      }
-
-      * a.author-cite {
-        color: var(--grey);
       }
     `;
   }
