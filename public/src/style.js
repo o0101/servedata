@@ -117,6 +117,10 @@
         * a.button-like {
           margin: var(--pad1);
         }
+
+        * a.brand-link {
+          display: none;
+        }
       }
 
       * a.author-cite {
