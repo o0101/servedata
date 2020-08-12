@@ -27,6 +27,10 @@ const SignedOutNav = [
 function App(state) {
   const session = state.authorization && state.authorization.session;
   const loggedIn = session && session.userid && session.userid != 'nouser';
+  let userid;
+  if ( loggedIn ) {
+    ({userid} = session);
+  }
 
   return w`
     main ${_} ${"holyGrid"},
@@ -36,7 +40,7 @@ function App(state) {
             :map ${Nav} ${NavItem}.
           .
           ul ${_} ${"responsiveList"},
-            :map ${loggedIn ? LoggedInNav : SignedOutNav} ${NavItem}.
+            :map ${loggedIn ? LoggedInNav({userid}) : SignedOutNav} ${NavItem}.
           .
         .
       .
