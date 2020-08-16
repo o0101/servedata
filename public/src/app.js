@@ -138,7 +138,15 @@ function App(state) {
         section ${{id:'questions', class:'questions'}} ${"section"},
           h1 ${"Frequently Asked Questions"}.
             section ${{class:'block'}} ${"card"},
-              p ${"None so far!"}.
+              dl,
+                dt ${"Who can I contact if I need more info or help?"}.
+                dd,
+                  :text {"Please, "}.
+                  a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=BrowserGap%20Help'}} 
+                    :text ${"mail me"}.
+                  :text {" for assistance."}.
+                .
+              .
             .
         .
       .
