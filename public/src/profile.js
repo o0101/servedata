@@ -188,10 +188,10 @@ function Purchases() {
             action: '/form/action/pay/with/tocheckout'
           }} ${'form'},
           fieldset,
-            legend ${"Subscription purchase"}.
+            legend ${"API Key purchase"}.
             :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1HAwYlBKxtsqOlorXdyWWjQG"}} :text ${"BrowserGap Monthly Subscription"}.
+              option ${{value:"price_1HGo49BKxtsqOlorz6WK1Qh3"}} :text ${"BG API Key 2560"}.
             .
             p button ${"Buy Now"}.
           .
@@ -202,10 +202,10 @@ function Purchases() {
             action: '/form/action/pay/with/tocheckout'
           }} ${'form'},
           fieldset,
-            legend ${"API Key purchase"}.
+            legend ${"Subscription purchase"}.
             :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1HGo49BKxtsqOlorz6WK1Qh3"}} :text ${"BG API Key 2560"}.
+              option ${{value:"price_1HAwYlBKxtsqOlorXdyWWjQG"}} :text ${"BrowserGap Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .
@@ -221,18 +221,8 @@ function Default() {
       h1 ${`My profile`}.
       hr.
       dl,
-        dt ${"Active Purchases"}.
-        dd ${"Some Credit Pack"}.
-        dd ${"Some Subscription"}.
-      .
-      dl,
-        dt ${"Current Balance"}.
-        dd ${"50 Credits."}.
-      .
-      dl,
-        dt ${"Services Uses"}.
-        dd ${"RemoteView"}.
-        dd ${"22120"}.
+        dt ${"Services Available"}.
+        dd ${"BrowserGap"}.
       .
     .
   `
