@@ -50,5 +50,6 @@
 
 // messages
   export const MESSAGES = {
-    cancel_payment: `Your payment was cancelled.`
+    cancel_payment: `Your payment was cancelled.`,
+    success_payment: `Your payment was successful! I will email you soon with your API key. You have a 3 day free trial starting now.`
   };
