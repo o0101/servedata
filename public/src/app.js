@@ -125,6 +125,14 @@ function App(state) {
               .
             .
             section ${{class:'block'}} ${"card"},
+              h1 ${"API Key Usage"}.
+              ul,
+                li ${"Support available."}.
+                li ${"Simple pricing, a couple thousand URL opens per month."}.
+                li ${"Easy integration via SDK."}.
+              .
+            .
+            section ${{class:'block'}} ${"card"},
               h1 ${"SaaS Seat License"}.
               ul,
                 li ${"Fully managed."}.
