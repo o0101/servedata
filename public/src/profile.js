@@ -63,8 +63,6 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
           li a ${{href:'#profile'}} :text ${`My Profile`}.
           li a ${{href:'#account'}}:text  ${`BrowserGap account`}.
           li a ${{href:'#subscriptions'}} :text ${`Purchase`}.
-          li a ${{href:'#billing'}} :text ${`Billing account`}.
-          li a ${{href:'#usage'}} :text ${`Usage`}.
         .
       .
       section ${{class:'content'}} ${"profileContent"},
