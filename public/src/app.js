@@ -141,9 +141,9 @@ function App(state) {
               dl,
                 dt ${"Who can I contact if I need more info or help?"}.
                 dd,
-                  :text {"Please, "}.
+                  :text ${"Please, "}.
                   a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=BrowserGap%20Help'}} :text ${"mail me"}.
-                  :text {" for assistance."}.
+                  :text ${" for assistance."}.
                 .
               .
             .
