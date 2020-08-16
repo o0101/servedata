@@ -192,6 +192,7 @@ function Purchases() {
               option ${{value:"price_1HGo49BKxtsqOlorz6WK1Qh3"}} :text ${"BG API Key 2560"}.
             .
             p button ${"Buy Now"}.
+            p small ${"This API key gives you 2,560 URL opens in a secure context per month."}.
           .
         .
         form ${{
