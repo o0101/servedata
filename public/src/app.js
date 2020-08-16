@@ -27,6 +27,10 @@ const SignedOutNav = [
 function App(state) {
   const session = state.authorization && state.authorization.session;
   const loggedIn = session && session.userid && session.userid != 'nouser';
+  let userid;
+  if ( loggedIn ) {
+    ({userid} = session);
+  }
 
   return w`
     main ${_} ${"holyGrid"},
@@ -36,14 +40,14 @@ function App(state) {
             :map ${Nav} ${NavItem}.
           .
           ul ${_} ${"responsiveList"},
-            :map ${loggedIn ? LoggedInNav : SignedOutNav} ${NavItem}.
+            :map ${loggedIn ? LoggedInNav({userid}) : SignedOutNav} ${NavItem}.
           .
         .
       .
       section ${{class:'content'}} ${"content"},
         section ${{class:'card-stack'}} ${"section"},
           section ${{class:'transparent'}} ${"card"},
-            h1 ${"Free Live Demo"}.
+            h1 ${"BrowserGap"}.
             p,
               a ${{href:'https://demo.browsergap.dosyago.com', target:"_blank", title:"Click through to a free live demo"}},
                 img ${{
@@ -144,7 +148,7 @@ function App(state) {
             href:'https://dosyago.com', class:'author-cite', target:'_blank',
             style: 'font-size: smaller;'
           }} :text ${"© 2020 DOSYAGO, Inc."}.
-          li a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=Hello'}} :text ${"Contact"}.
+          li a ${{href:'mailto:cris@dosycorp.com?body=Hi%20Cris&subject=Hello'}} :text ${"Email"}.
           li a ${{href:'https://github.com/dosyago', class:'social-icon', target:'_blank'}} :text ${"GitHub"}.
           li a ${{href:'https://www.youtube.com/channel/UCxyWgnYfo8TvSJWc9n_vVcQ', class:'social-icon', target:'_blank'}} :text ${"YouTube"}.
           li a ${{href:'https://twitter.com/browsergap', class:'social-icon', target:'_blank'}} :text ${"Twitter"}.
