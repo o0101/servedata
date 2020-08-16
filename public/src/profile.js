@@ -202,12 +202,10 @@ function Purchases() {
             action: '/form/action/pay/with/tocheckout'
           }} ${'form'},
           fieldset,
-            legend ${"Credit pack purchase (not available yet)"}.
+            legend ${"API Key purchase"}.
             :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
-            p label ${{innerText:"Purchase option "}} select ${{name:'price', disabled:true}},
-              option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
-              option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
-              option ${{value:"price_1GxoLcBKxtsqOlor6lT2W0na"}} :text ${"Task Run Credits Recharge 750 Pack"}.
+            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
+              option ${{value:"price_1HGo49BKxtsqOlorz6WK1Qh3"}} :text ${"BG API Key 2560"}.
             .
             p button ${"Buy Now"}.
           .
