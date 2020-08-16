@@ -177,7 +177,7 @@ function Usage() {
 function Purchases() {
   return w`
     article,
-      h1 ${"Credits & Subscriptions"}.
+      h1 ${"Keys & Subscriptions"}.
       hr.
       section ${{class:'shrink-fit'}},
         form ${{
