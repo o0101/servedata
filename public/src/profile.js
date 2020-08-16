@@ -203,7 +203,7 @@ function Purchases() {
           }} ${'form'},
           fieldset,
             legend ${"API Key purchase"}.
-            :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
+            :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
               option ${{value:"price_1HGo49BKxtsqOlorz6WK1Qh3"}} :text ${"BG API Key 2560"}.
             .
