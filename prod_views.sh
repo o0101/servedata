@@ -1,4 +1,4 @@
-find public/*.html -type f -exec sed -i "s/from '\/\w\+\//from '\/dist\//g" {} +
+find public/*.html -type f -exec sed -i "s/from '\/\w\+\//from '\/dist\//g;" {} +
 for path in public/src/*.js
 do
   file=$(basename $path)

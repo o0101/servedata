@@ -4,7 +4,7 @@
   "description": "server for data.",
   "main": "index.js",
   "scripts": {
-    "preinstall": "./clean.sh",
+    "preinstall": "./clean.sh && mkdir -p secrets && cp dummy_secrets/* secrets/",
     "dev-db": "export SD_MODE=dev&&export SD_PORT=8080&& nodemon -r esm start.js",
     "db": "export SD_MODE=prod&&export SD_PORT=8080&& node -r esm start.js",
     "dev-site": "./dev_views.sh && npm run pack && npm run dev-db",

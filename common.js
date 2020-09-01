@@ -40,7 +40,7 @@
   export const NOUSER_ID = 'nouser';
 
 // payment related constants
-  export const PAYMENT_MODE = 'prod';
+  export const PAYMENT_MODE = 'live';
   export const SYSTEM_PAYMENT_ACCOUNT = 'system_class_payment_account';
   export const PAYMENT_TYPES = [
     "card",

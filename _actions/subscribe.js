@@ -2,7 +2,7 @@
 	import stripe from 'stripe';
   import nodemailer from 'nodemailer';
 
-  import mailKey from '../secrets/dosycorp.com-gsuite-email-key.js';
+  import mailKey from '../secrets/domain-gsuite-email-key.js';
   import {
     USER_TABLE, 
     MAIL_SENDER, 
