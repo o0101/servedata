@@ -5,7 +5,7 @@ public/dist
 secrets
 secrets/*.js*
 secrets/**/*.js*
-db-servedata
+# db-servedata
 *.swp
 
 # Logs
