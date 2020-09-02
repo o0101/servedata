@@ -2,8 +2,6 @@ sslcerts
 typetests
 public/src/web_modules
 public/dist
-secrets/*.js*
-secrets/**/*.js*
 db-servedata
 *.swp
 
