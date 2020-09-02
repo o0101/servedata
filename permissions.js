@@ -66,6 +66,12 @@ const Perms = [
       }
     ],
     [
+      `group/nousers:message/success_payment`,
+      {
+        view: true
+      }
+    ],
+    [
       `group/users:action/logout`,
       {
         create:true, 
@@ -97,6 +103,12 @@ const Perms = [
     ],
     [
       `group/users:message/cancel_payment`,
+      {
+        view: true
+      }
+    ],
+    [
+      `group/users:message/success_payment`,
       {
         view: true
       }

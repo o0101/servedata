@@ -3,7 +3,9 @@
   import nodemailer from 'nodemailer';
 
   import mailKey from '../secrets/domain-gsuite-email-key.js';
+  import stripeKey from '../secrets/stripe-key.js'
   import {
+    PAYMENT_MODE,
     USER_TABLE, 
     MAIL_SENDER, 
     MAIL_HOST, MAIL_PORT,
@@ -19,7 +21,7 @@
   };
 
 export default async function action({priceName}, {getTable, newItem, getSearchResult}, req, res) {
-	const stripe = (await import('stripe'))('sk_test_4Pr8nKV0ECK71hNaRG7BBdp100I1jZxzl5');
+	const stripe = (await import('stripe'))(stripeKey[PAYMENT_MODE]);
   const priceId = PRICE[priceName];
 	const session = await stripe.checkout.sessions.create({
 		payment_method_types: ['card'],

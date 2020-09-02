@@ -44,7 +44,7 @@ async function createStripeCheckoutSession({stripeCustomerID, price, mode, useri
       quantity: 1
     }],
     payment_method_types: PAYMENT_TYPES,
-    success_url: route(req, `/form/selection/profile/${userid}`),
+    success_url: route(req, `/redirected/message/success_payment/with/success_payment`),
     cancel_url: route(req, `/redirected/message/cancel_payment/with/error`)
   });
 

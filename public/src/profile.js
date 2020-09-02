@@ -41,7 +41,7 @@ export function Header() {
   return w`
     header ${_} ${"header"}, 
       nav ul ${_} ${"responsiveList"},
-        li a ${{href:'/', class:'brand-link'}}  :text ${"ServeData"}  .
+        li a ${{href:'/', class:'brand-link'}}  :text ${"BrowserGap"}  .
       .
     .
 
@@ -63,8 +63,6 @@ export function Profile({newEmail: newEmail = null, username:username = null, em
           li a ${{href:'#profile'}} :text ${`My Profile`}.
           li a ${{href:'#account'}}:text  ${`ServeData account`}.
           li a ${{href:'#subscriptions'}} :text ${`Purchase`}.
-          li a ${{href:'#billing'}} :text ${`Billing account`}.
-          li a ${{href:'#usage'}} :text ${`Usage`}.
         .
       .
       section ${{class:'content'}} ${"profileContent"},
@@ -179,9 +177,24 @@ function Usage() {
 function Purchases() {
   return w`
     article,
-      h1 ${"Credits & Subscriptions"}.
+      h1 ${"Keys & Subscriptions"}.
       hr.
       section ${{class:'shrink-fit'}},
+        form ${{
+            class:'full-width',
+            method: 'POST',
+            action: '/form/action/pay/with/tocheckout'
+          }} ${'form'},
+          fieldset,
+            legend ${"API Key purchase"}.
+            :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
+            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
+              option ${{value:"price_your stripe price"}} :text ${"ServeData API Key"}.
+            .
+            p button ${"Buy Now"}.
+            p small ${"This API key gives you some number of unique usages a month."}.
+          .
+        .
         form ${{
             class:'full-width',
             method: 'POST',
@@ -191,23 +204,7 @@ function Purchases() {
             legend ${"Subscription purchase"}.
             :comp ${{name:'mode', value:"subscription"}} ${hiddenInput}.
             p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1GxoLaBKxtsqOlor5Dr9pXR1"}} :text ${"ServeData Monthly Subscription"}.
-            .
-            p button ${"Buy Now"}.
-          .
-        .
-        form ${{
-            class:'full-width',
-            method: 'POST',
-            action: '/form/action/pay/with/tocheckout'
-          }} ${'form'},
-          fieldset,
-            legend ${"Credit pack purchase"}.
-            :comp ${{name:'mode', value:"payment"}} ${hiddenInput}.
-            p label ${{innerText:"Purchase option "}} select ${{name:'price'}},
-              option ${{value:"price_1GxoLbBKxtsqOlor1N2goLyw"}} :text ${"Task Run Credits Recharge 9100 Pack"}.
-              option ${{value:"price_1GxoLcBKxtsqOlorY0TVJahM"}} :text ${"Task Run Credits Recharge 2400 Pack"}.
-              option ${{value:"price_1GxoLcBKxtsqOlor6lT2W0na"}} :text ${"Task Run Credits Recharge 750 Pack"}.
+              option ${{value:"price_another stripe price"}} :text ${"ServeData Monthly Subscription"}.
             .
             p button ${"Buy Now"}.
           .
@@ -223,18 +220,8 @@ function Default() {
       h1 ${`My profile`}.
       hr.
       dl,
-        dt ${"Active Purchases"}.
-        dd ${"Some Credit Pack"}.
-        dd ${"Some Subscription"}.
-      .
-      dl,
-        dt ${"Current Balance"}.
-        dd ${"50 Credits."}.
-      .
-      dl,
-        dt ${"Services Uses"}.
-        dd ${"RemoteView"}.
-        dd ${"22120"}.
+        dt ${"Services Available"}.
+        dd ${"BrowserGap"}.
       .
     .
   `

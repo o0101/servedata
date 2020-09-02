@@ -15,6 +15,7 @@
   };
 
 // constants
+  export const SD_MODE = process.env.SD_MODE;
   export const DEFAULT_PORT = 80;
   export const PORT = process.env.SD_PORT || Number(process.argv[2] || DEFAULT_PORT);
   export const APP_ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -37,10 +38,11 @@
   export const GROUP_TABLE = process.env.SD_GROUP_TABLE ? process.env.SD_GROUP_TABLE : "groups";
   export const LOGINLINK_TABLE = process.env.SD_LOGINLINK_TABLE ? process.env.SD_LOGINLINK_TABLE : "loginlinks";
   export const DEPOSIT_TABLE = process.env.SD_DEPOSIT_TABLE ? process.env.SD_DEPOSIT_TABLE : "deposits";
+  export const TRANSACTION_TABLE = process.env.SD_TRANSACTION_TABLE ? process.env.SD_TRANSACTION_TABLE : "transactions";
   export const NOUSER_ID = 'nouser';
 
 // payment related constants
-  export const PAYMENT_MODE = 'live';
+  export const PAYMENT_MODE = 'live'; // test
   export const SYSTEM_PAYMENT_ACCOUNT = 'system_class_payment_account';
   export const PAYMENT_TYPES = [
     "card",
@@ -48,5 +50,6 @@
 
 // messages
   export const MESSAGES = {
-    cancel_payment: `Your payment was cancelled.`
+    cancel_payment: `Your payment was cancelled.`,
+    success_payment: `Your payment was successful! I will email you soon with your API key. You have a 3 day free trial starting now.`
   };

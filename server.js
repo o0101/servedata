@@ -16,6 +16,8 @@
   // internal modules
     import './types.js';
     import {
+      SD_MODE, 
+      DEFAULT_PORT,
       MESSAGES,
       MAX_REQUEST_SIZE,
       COOKIE_NAME,
@@ -47,6 +49,8 @@
     import {attachPermission} from './_middlewares/permission.js';
     import {catchError} from './_middlewares/error.js';
     import {withView} from './views.js';
+
+// constants
 
 // paths dispatch
   const DISPATCH = {
@@ -100,10 +104,10 @@ export function servedata({callConfig: callConfig = false, secure: secure = true
     DEBUG.WARN && console.warn("Calling config in servedata with default DB_ROOT");
     config({root:DB_ROOT});
   }
+
   const app = express();
 
   app.use(helmet());
-
   app.set('etag', false);
   app.set('trust proxy', true);
 

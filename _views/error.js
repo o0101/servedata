@@ -3,8 +3,9 @@ import fetch from 'node-fetch';
 import {DEBUG} from '../common.js';
 import SECRET from '../secrets/giphy-key.js';
 
-
 const {GIPHY_KEY} = SECRET;
+
+
 const Tags = [
   '404',
   'uh oh',

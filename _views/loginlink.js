@@ -13,6 +13,7 @@ export default function LoginLink({_id, error}) {
         <meta name=viewport content="width=device-width, initial-scale=1">
         <title>ServeData</title>
         <link rel=stylesheet href=/static/style.css>
+        <script src=/src/disable_on_submit.js></script>
         <script type=module>
           import {init} from '/${DEBUG.BUILD}/loginlink.js';
 

@@ -6,7 +6,7 @@
   "scripts": {
     "preinstall": "./clean.sh && mkdir -p secrets && cp dummy_secrets/* secrets/",
     "dev-db": "export SD_MODE=dev&&export SD_PORT=8080&& nodemon -r esm start.js",
-    "db": "export SD_MODE=prod&&export SD_PORT=8080&& node -r esm start.js",
+    "db": "export SD_MODE=prod&&export SD_PORT=443&& node -r esm start.js",
     "dev-site": "./dev_views.sh && npm run pack && npm run dev-db",
     "site": "./prod_views.sh && npm run pack && npm run db",
     "static": "npm run pack && serve -p 8080 public",
@@ -53,7 +53,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.23.3",
-    "jtype-system": "^1.2.2",
+    "jtype-system": "^1.3.0",
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.10",
     "stripe": "^8.67.0",
