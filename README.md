@@ -6,7 +6,7 @@
 
 A simple server based on [SirDB](https://github.com/cris691/stubdb) with a [schema-driven](https://buf.build/blog/api-design-is-stuck-in-the-past) API, for serving all types of data, while attempting to meet [ROCA](https://roca-style.org/) guidelines.
 
-Already includes schemas, users, groups, authentication, authorization and permissions. 
+Already includes schemas, users, groups, authentication, authorization, permissions and payments. 
 
 
 ## Using this template
