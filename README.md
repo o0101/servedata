@@ -4,9 +4,9 @@
 
 ## What is ServeData / Capi.click?
 
-A simple server based on [stubdb](https://github.com/cris691/stubdb) for serving all types of data, while attempting to meet [ROCA](https://roca-style.org/) guidelines.
+A simple server based on [SirDB](https://github.com/cris691/stubdb) with a [schema-driven] (https://buf.build/blog/api-design-is-stuck-in-the-past) API, for serving all types of data, while attempting to meet [ROCA](https://roca-style.org/) guidelines.
 
-Already includes schemas and users, and groups, and authentication, and authorization and permissions. 
+Already includes schemas, users, groups, authentication, authorization and permissions. 
 
 
 ## Using this template
@@ -20,7 +20,7 @@ Also to use payments, you need Stripe keys.
 
 ## Use cases
 
-This uses stbudb as a database. This would be acceptable for user account related use cases for a moderate number of users (up to 100k), or for user content and data related use cases for a smaller number of less frequent users (up to 5k). Mitigations such as vertical scaling, and using a ramdisk (with scheduled saves to hard disk) can increase performance.
+This uses the SirDB as a database. This would be acceptable for user account related use cases for a moderate number of users (up to 100k), or for user content and data related use cases for a smaller number of less frequent users (up to 5k). Mitigations such as vertical scaling, and using a ramdisk (with scheduled saves to hard disk) can increase performance.
 
 For apps with a large number of users performing many operations on data and content, a separate database for content and data (separate to user account data) will be good.
 
