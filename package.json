@@ -26,6 +26,7 @@
     "tscheck": "npm run tscheck-server && npm run tscheck-client",
     "lint": "npx eslint *.js && npx eslint public/src/*.js",
     "clean": "./clean.sh",
+    "postinstall": "./start.sh",
     "check": "( npm run tscheck || : ) && npm run lint"
   },
   "nodemonConfig": {
