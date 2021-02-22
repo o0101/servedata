@@ -1,0 +1,66 @@
+    :root {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      --white: white;
+      --smoke: whitesmoke;
+      --lightblue: aliceblue;
+      --grey: silver;
+      --left: dodgerblue;
+      --right: mediumspringgreen;
+      --blue: darkturquoise;
+
+      --pad1: 0.25rem;
+      --pad2: 0.5rem;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    /* attributes */
+
+    /* classes */
+
+    button.transparent {
+      opacity: 0.8;
+    }
+
+    button, input, select, textarea {
+      font-size: inherit;
+    }
+
+    button.special {
+      font-size: larger;
+      font-weight: bold;
+      border-radius: 0.3em;
+      border-color: inherit;
+    }
+
+    button.buy {
+      background: linear-gradient(to top right, darkgreen, mediumspringgreen);
+      transition: 0.3s linear all;
+      color: white;
+    }
+
+    button.buy:hover,
+    button.buy:active {
+      background: linear-gradient(to bottom left, darkgreen, mediumspringgreen);
+    }
+
+    button.info {
+      background: linear-gradient(to top right, cornflowerblue, lightskyblue);
+      color: white;
+    }
+
+    button.info:hover,
+    button.info:active {
+      background: linear-gradient(to bottom left, cornflowerblue, lightskyblue);
+    }
+
+    p {
+      max-width: 400px;
+    }
+
+    label {
+      white-space: nowrap;
+    }

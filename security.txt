@@ -1,0 +1,4 @@
+Responsible Disclosure
+Contact: cris@dosycorp.com
+Reports: https://github.com/dosyago/vulnerability-reports
+

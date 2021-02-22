@@ -1,0 +1,3 @@
+{
+  "ignore": ["db-servedata", "dev-db-servedata"]
+}

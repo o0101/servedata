@@ -1,0 +1,91 @@
+language,filename,blank,comment,code,"github.com/AlDanial/cloc v 1.82  T=0.07 s (1319.5 files/s, 74235.1 lines/s)"
+JavaScript,./public/src/style.js,72,0,426
+JavaScript,./public/src/profile.js,23,1,298
+JavaScript,./server.js,50,30,292
+JavaScript,./permissions.js,7,7,259
+JavaScript,./db_helpers.js,29,20,218
+JavaScript,./public/src/app.js,9,0,190
+JavaScript,./_middlewares/permission.js,39,4,183
+JavaScript,./_actions/record_payment.js,28,6,179
+JavaScript,./tests.js,16,1,172
+JavaScript,./public/src/archivist1.js,9,0,134
+JavaScript,./public/src/login.js,3,0,99
+JavaScript,./helpers.js,24,3,97
+JavaScript,./_actions/signup.js,14,7,94
+JavaScript,./sd_init.js,15,8,66
+JavaScript,./_middlewares/session.js,12,2,63
+JavaScript,./_middlewares/error.js,2,0,61
+CSS,./public/static/style.css,13,2,51
+JavaScript,./_views/error.js,9,1,51
+JavaScript,./_views/success_payment.js,6,1,50
+JavaScript,./public/src/signup.js,3,0,48
+JavaScript,./_schemas/users.js,11,0,46
+JavaScript,./public/src/check_your_email.js,6,0,46
+JavaScript,./public/src/documentation.js,4,0,45
+JavaScript,./_schemas/transactions.js,13,3,45
+JavaScript,./_actions/pay.js,13,2,45
+JavaScript,./_actions/loginwithlink.js,9,2,42
+JavaScript,./_actions/login.js,10,0,42
+JavaScript,./common.js,7,7,41
+JavaScript,./types.js,17,12,39
+JavaScript,./public/src/fields.js,2,0,37
+HTML,./public/dev-console.html,1,0,33
+JavaScript,./public/src/loginlink.js,4,0,32
+JavaScript,./_views/profile.js,4,0,28
+JavaScript,./public/src/disable_on_submit.js,6,5,28
+JavaScript,./public/src/success.js,4,0,26
+JavaScript,./public/src/error.js,4,0,26
+JavaScript,./_actions/update_email.js,11,2,23
+JavaScript,./_views/loginlink.js,4,0,23
+JavaScript,./_views/check_your_email.js,3,0,22
+JavaScript,./_views/tocheckout.js,5,0,22
+Markdown,./_selections/README.md,19,0,22
+JavaScript,./_actions/update_password.js,10,2,21
+Markdown,./README.md,18,0,20
+JavaScript,./_selections/profile.js,5,0,18
+JavaScript,./_views/archivist1.js,3,0,17
+JavaScript,./_views/app.js,3,0,17
+JavaScript,./_selections/signup.js,3,0,17
+JavaScript,./_selections/app.js,2,0,17
+JavaScript,./_selections/archivist1.js,3,0,17
+JavaScript,./_selections/login.js,3,0,17
+JavaScript,./_views/signup.js,3,0,17
+JavaScript,./views.js,5,5,17
+JavaScript,./_selections/email-login.js,3,0,17
+JavaScript,./_views/login.js,3,0,17
+JavaScript,./_schemas/loginlinks.js,4,0,16
+JavaScript,./_actions/sendloginemail.js,7,0,15
+JavaScript,./_schemas/permissions.js,3,0,15
+JavaScript,./_schemas/sessions.js,3,0,15
+JavaScript,./secrets/domain-gsuite-email-key.js,0,0,12
+HTML,./public/login.html,1,0,11
+HTML,./public/signup.html,1,0,11
+HTML,./public/index.html,0,0,11
+HTML,./public/email-login.html,0,0,11
+HTML,./public/documentation.html,0,0,10
+Bourne Shell,./deployutils/listportredirects.sh,3,0,9
+JavaScript,./start.js,3,0,9
+JavaScript,./_actions/logout.js,5,0,8
+JavaScript,./secrets/stripe-key.js,1,0,8
+Bourne Shell,./clean.sh,1,0,7
+JavaScript,./public/src/session_helpers.js,2,0,7
+JavaScript,./public/src/preCheckout.js,2,0,6
+Bourne Shell,./prod_views.sh,0,0,6
+Bourne Shell,./merge_template_changes.sh,3,0,5
+JavaScript,./stripeKeyPublic.js,0,0,5
+Markdown,./SECURITY.md,7,0,4
+TypeScript,./decs.d.ts,2,2,4
+Markdown,./secrets/README.md,3,0,2
+JavaScript,./speedTest.js,1,0,2
+TypeScript,./public/src/decs.d.ts,3,3,2
+Bourne Shell,./deployutils/portredirect.sh,2,0,2
+JavaScript,./functionTest.js,1,0,2
+Bourne Shell,./run.sh,1,0,2
+JavaScript,./index.js,0,2,2
+Markdown,./sslcerts/README.md,2,0,2
+TypeScript,./public/src/wmdecs.d.ts,0,0,2
+Bourne Shell,./dev_views.sh,0,0,1
+JavaScript,./secrets/giphy-key.js,0,0,1
+XML,./public/browserconfig.xml,0,0,1 
+YAML,./.github/FUNDING.yml,1,1,1
+SUM,,666,141,4200
